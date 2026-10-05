@@ -45,7 +45,7 @@
       user-select: none;
     }
 
-    /* Tela para as patinhas e efeitos */
+    /* Tela para as patinhas e corações */
     #fx-canvas {
       position: fixed;
       inset: 0;
@@ -62,31 +62,31 @@
       opacity: 0;
     }
     .border-peeker.left {
-      left: -65px;
+      left: -70px;
       top: 30%;
       transform: rotate(90deg);
     }
     .border-peeker.left.active {
-      transform: translateX(65px) rotate(90deg);
-      opacity: 0.9;
+      transform: translateX(70px) rotate(90deg);
+      opacity: 0.95;
     }
     .border-peeker.right {
-      right: -65px;
+      right: -70px;
       bottom: 25%;
       transform: rotate(-90deg);
     }
     .border-peeker.right.active {
-      transform: translateX(-65px) rotate(-90deg);
-      opacity: 0.9;
+      transform: translateX(-70px) rotate(-90deg);
+      opacity: 0.95;
     }
     .border-peeker.bottom {
-      bottom: -65px;
-      left: 75%;
+      bottom: -70px;
+      left: 72%;
       transform: rotate(0deg);
     }
     .border-peeker.bottom.active {
-      transform: translateY(-65px) rotate(0deg);
-      opacity: 0.9;
+      transform: translateY(-70px) rotate(0deg);
+      opacity: 0.95;
     }
 
     /* Palco Central */
@@ -167,7 +167,7 @@
       transform: scale(0.97);
     }
 
-    /* SVG do Gatinho */
+    /* SVG do Gatinho Central */
     .cat-svg {
       width: 100%;
       height: 100%;
@@ -317,56 +317,61 @@
   <!-- Canvas das patinhas no fundo -->
   <canvas id="fx-canvas"></canvas>
 
-  <!-- Gatinhos espiando nas bordas -->
+  <!-- Gatinhos espreitando nas bordas com o design anterior original -->
   <div class="border-peeker left" id="peeker-left">
-    <svg width="60" height="50" viewBox="0 0 100 80">
-      <path d="M 15,80 Q 20,40 50,40 Q 80,40 85,80 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
-      <polygon points="20,50 10,15 35,35" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round"/>
-      <polygon points="80,50 90,15 65,35" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round"/>
-      <circle cx="38" cy="55" r="7" fill="#2b2725"/>
-      <circle cx="62" cy="55" r="7" fill="#2b2725"/>
-      <circle cx="36" cy="53" r="2" fill="#fff"/>
-      <circle cx="60" cy="53" r="2" fill="#fff"/>
+    <svg width="74" height="64" viewBox="0 0 100 80">
+      <!-- Cabeça com contorno suave de gatinho espreitando -->
+      <path d="M 12,80 C 8,50 14,35 24,38 C 36,43 54,62 70,62 C 86,62 104,43 116,38 C 126,35 132,50 128,80 Z" 
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- Olhos de grafite espreitando com brilho -->
+      <ellipse cx="44" cy="62" rx="13" ry="12" fill="#2b2725"/>
+      <ellipse cx="76" cy="62" rx="13" ry="12" fill="#2b2725"/>
+      <circle cx="48" cy="58" r="3.2" fill="#ffffff"/>
+      <circle cx="80" cy="58" r="3.2" fill="#ffffff"/>
+      <!-- Patinhas a segurar a borda -->
+      <ellipse cx="28" cy="78" rx="8" ry="6" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+      <ellipse cx="92" cy="78" rx="8" ry="6" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
     </svg>
   </div>
 
   <div class="border-peeker right" id="peeker-right">
-    <svg width="60" height="50" viewBox="0 0 100 80">
-      <path d="M 15,80 Q 20,40 50,40 Q 80,40 85,80 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
-      <polygon points="20,50 10,15 35,35" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round"/>
-      <polygon points="80,50 90,15 65,35" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round"/>
-      <circle cx="38" cy="55" r="7" fill="#2b2725"/>
-      <circle cx="62" cy="55" r="7" fill="#2b2725"/>
-      <circle cx="36" cy="53" r="2" fill="#fff"/>
-      <circle cx="60" cy="53" r="2" fill="#fff"/>
+    <svg width="74" height="64" viewBox="0 0 100 80">
+      <path d="M 12,80 C 8,50 14,35 24,38 C 36,43 54,62 70,62 C 86,62 104,43 116,38 C 126,35 132,50 128,80 Z" 
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <ellipse cx="44" cy="62" rx="13" ry="12" fill="#2b2725"/>
+      <ellipse cx="76" cy="62" rx="13" ry="12" fill="#2b2725"/>
+      <circle cx="48" cy="58" r="3.2" fill="#ffffff"/>
+      <circle cx="80" cy="58" r="3.2" fill="#ffffff"/>
+      <ellipse cx="28" cy="78" rx="8" ry="6" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+      <ellipse cx="92" cy="78" rx="8" ry="6" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
     </svg>
   </div>
 
   <div class="border-peeker bottom" id="peeker-bottom">
-    <svg width="60" height="50" viewBox="0 0 100 80">
-      <path d="M 15,80 Q 20,40 50,40 Q 80,40 85,80 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
-      <polygon points="20,50 10,15 35,35" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round"/>
-      <polygon points="80,50 90,15 65,35" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round"/>
-      <circle cx="38" cy="55" r="7" fill="#2b2725"/>
-      <circle cx="62" cy="55" r="7" fill="#2b2725"/>
-      <circle cx="36" cy="53" r="2" fill="#fff"/>
-      <circle cx="60" cy="53" r="2" fill="#fff"/>
+    <svg width="74" height="64" viewBox="0 0 100 80">
+      <path d="M 12,80 C 8,50 14,35 24,38 C 36,43 54,62 70,62 C 86,62 104,43 116,38 C 126,35 132,50 128,80 Z" 
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <ellipse cx="44" cy="62" rx="13" ry="12" fill="#2b2725"/>
+      <ellipse cx="76" cy="62" rx="13" ry="12" fill="#2b2725"/>
+      <circle cx="48" cy="58" r="3.2" fill="#ffffff"/>
+      <circle cx="80" cy="58" r="3.2" fill="#ffffff"/>
+      <ellipse cx="28" cy="78" rx="8" ry="6" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+      <ellipse cx="92" cy="78" rx="8" ry="6" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
     </svg>
   </div>
 
   <!-- Cenário Principal -->
   <main class="stage">
     
-    <!-- Balão com o texto exato -->
+    <!-- Balão de instrução original -->
     <div class="speech-bubble" id="speech-bubble" onclick="openLetter()">
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Gatinho desenhado a grafite (sketchbook style) -->
+    <!-- Gatinho central desenhado a lápis/grafite -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="openLetter()">
       <svg class="cat-svg" viewBox="0 0 200 200">
         <defs>
-          <!-- Máscara de recorte estrita para conter o brilho dentro dos olhos -->
           <clipPath id="left-eye-clip">
             <ellipse cx="68" cy="98" rx="26" ry="24"/>
           </clipPath>
@@ -375,11 +380,11 @@
           </clipPath>
         </defs>
 
-        <!-- Cauda arredondada com traço de grafite -->
+        <!-- Cauda de grafite -->
         <path d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" 
               fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
 
-        <!-- Corpo e patinhas traseiras em curvas 'U' contínuas e arredondadas -->
+        <!-- Corpo e patinhas traseiras em arco 'U' contínuas e arredondadas -->
         <path d="M 64,136 
                  C 58,150 56,168 68,172 
                  C 78,175 84,164 88,152 
@@ -388,7 +393,7 @@
                  C 142,168 140,150 134,136 Z" 
               fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Cabeça com orelhinhas pontiagudas estilizadas -->
+        <!-- Cabeça com traço de esboço -->
         <path d="M 44,82 
                  C 40,54 44,38 52,42 
                  C 64,48 82,70 98,70 
@@ -398,71 +403,58 @@
                  C 54,138 36,112 44,82 Z" 
               fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- OLHOS REGULARES (Grandes, com hachura e brilho em coração) -->
+        <!-- OLHOS REGULARES -->
         <g id="regular-eyes">
-          <!-- Olho Esquerdo -->
           <ellipse cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
           <g clip-path="url(#left-eye-clip)">
-            <!-- Brilho em coração estritamente dentro da pupila -->
             <path d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
-            <!-- Pequeno ponto de luz circular -->
             <circle cx="76" cy="103" r="2.8" fill="#ffffff"/>
           </g>
 
-          <!-- Olho Direito -->
           <ellipse cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
           <g clip-path="url(#right-eye-clip)">
-            <!-- Brilho em coração estritamente dentro da pupila -->
             <path d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
-            <!-- Pequeno ponto de luz circular -->
             <circle cx="130" cy="103" r="2.8" fill="#ffffff"/>
           </g>
 
-          <!-- Focinho e Boquinha -->
           <path d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
         </g>
 
-        <!-- OLHOS FELIZES / CARINHO (^ ‿ ^) ocultos inicialmente -->
+        <!-- OLHOS DE CARINHO (^ ‿ ^) -->
         <g id="happy-eyes" style="display: none;">
           <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
-          <!-- Boquinha alegre -->
           <path d="M 90,114 Q 95,123 99,117 Q 103,123 108,114" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round"/>
         </g>
 
-        <!-- ENVELOPE TOTALMENTE FECHADO (Sem nada escrito) -->
+        <!-- ENVELOPE LACRADO -->
         <g id="closed-letter">
-          <!-- Corpo do envelope -->
           <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
-          <!-- Dobras do envelope fechado -->
           <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
           <path d="M 70,166 L 90,146" fill="none" stroke="#2b2725" stroke-width="2"/>
           <path d="M 126,166 L 106,146" fill="none" stroke="#2b2725" stroke-width="2"/>
-          <!-- Selo de cera em formato de coração vintage âmbar -->
           <path d="M 98,145 C 98,143 96,141 94,142 C 92,143 92,145 94,147 L 98,151 L 102,147 C 104,145 104,143 102,142 C 100,141 98,143 98,145 Z" 
                 fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
         </g>
 
-        <!-- Patinhas dianteiras segurando a cartinha -->
+        <!-- Patinhas a segurar o envelope -->
         <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
         <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
       </svg>
     </div>
 
-    <!-- Botão de Acariciar limpo, sem subtítulo -->
+    <!-- Botão de Acariciar -->
     <button class="pet-btn" id="pet-btn" onclick="petTheCat(event)">
       <span>Acariciar o gatinho</span> 🐾
     </button>
   </main>
 
-  <!-- Modal com a Carta Aberta -->
+  <!-- Carta Aberta -->
   <div class="letter-modal" id="letter-modal">
     <div class="letter-paper">
       <button class="close-letter-btn" onclick="closeLetter()" aria-label="Fechar">✕</button>
       <div class="letter-stamp">💌</div>
-      <div class="letter-text" id="letter-content">
-        <!-- O texto dinâmico será injetado aqui -->
-      </div>
+      <div class="letter-text" id="letter-content"></div>
       <div class="letter-footer">
         Com todo o meu amor, para ti ♡
       </div>
@@ -471,7 +463,7 @@
 
   <script>
     /* =========================================================
-       1. SAUDAÇÃO DINÂMICA CONFORME O HORÁRIO
+       1. SAUDAÇÃO DINÂMICA
     ========================================================= */
     function getDynamicGreeting() {
       const hour = new Date().getHours();
@@ -492,7 +484,7 @@
     }
 
     /* =========================================================
-       2. SISTEMA DE ÁUDIO (ARQUIVO gato_1.mp3 + FALLBACK)
+       2. REPRODUÇÃO DE ÁUDIO
     ========================================================= */
     let catAudio = null;
     try {
@@ -501,7 +493,6 @@
       catAudio = null;
     }
 
-    // Sintetizador Web Audio API caso o arquivo não seja encontrado
     let audioCtx = null;
     function playSynthesizedMeow() {
       try {
@@ -519,7 +510,6 @@
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(1600, now);
 
-        // Curva de entonação de miado meee-owww
         osc.frequency.setValueAtTime(450, now);
         osc.frequency.exponentialRampToValueAtTime(780, now + 0.16);
         osc.frequency.exponentialRampToValueAtTime(400, now + 0.55);
@@ -534,9 +524,7 @@
 
         osc.start(now);
         osc.stop(now + 0.6);
-      } catch (err) {
-        console.warn("Áudio indisponível:", err);
-      }
+      } catch (err) {}
     }
 
     function playMeowSound() {
@@ -550,7 +538,6 @@
       }
     }
 
-    /* Som suave de papel ao abrir a carta */
     function playPaperSound() {
       try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -585,7 +572,7 @@
     }
 
     /* =========================================================
-       3. INTERAÇÕES: ABRIR CARTA E ACARICIAR
+       3. INTERAÇÕES
     ========================================================= */
     const letterModal = document.getElementById('letter-modal');
     const letterContent = document.getElementById('letter-content');
@@ -613,12 +600,10 @@
       event.stopPropagation();
       playMeowSound();
 
-      // Olhos dengosos e vibração alegre
       regularEyes.style.display = 'none';
       happyEyes.style.display = 'block';
       catWrapper.classList.add('petting');
 
-      // Solta corações desenhados sobre a cabeça do gatinho
       const rect = catWrapper.getBoundingClientRect();
       createFloatingHearts(rect.left + rect.width / 2, rect.top + 50, 6);
 
@@ -631,7 +616,7 @@
     }
 
     /* =========================================================
-       4. RASTROS DE PATINHAS E CORAÇÕES NO CANVAS
+       4. PATINHAS E CORAÇÕES NO CANVAS
     ========================================================= */
     const canvas = document.getElementById('fx-canvas');
     const ctx = canvas.getContext('2d');
@@ -646,7 +631,6 @@
     const paws = [];
     const hearts = [];
 
-    // Desenha uma patinha de gato estilo carimbo de grafite
     function drawPaw(x, y, angle, alpha, scale = 1) {
       ctx.save();
       ctx.translate(x, y);
@@ -654,12 +638,10 @@
       ctx.scale(scale, scale);
       ctx.fillStyle = `rgba(68, 62, 58, ${alpha})`;
 
-      // Almofadinha principal
       ctx.beginPath();
       ctx.ellipse(0, 0, 7.5, 6, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // 4 dedos arredondados
       const toes = [
         { dx: -7.5, dy: -8.5, r: 2.8 },
         { dx: -2.8, dy: -11.5, r: 3.2 },
@@ -674,7 +656,6 @@
       ctx.restore();
     }
 
-    // Desenha coração com estilo de grafite/âmbar
     function drawHeart(x, y, size, alpha, color) {
       ctx.save();
       ctx.translate(x, y);
@@ -705,7 +686,6 @@
       }
     }
 
-    // Gerador de trilhas de patinhas contínuas e simultâneas
     class PawTrail {
       constructor() {
         this.reset();
@@ -724,7 +704,6 @@
           this.delay--;
           return;
         }
-        // Desvio lateral para alternar pata esquerda e direita
         const lateralDist = 8 * this.side;
         const px = this.x + Math.cos(this.angle + Math.PI / 2) * lateralDist;
         const py = this.y + Math.sin(this.angle + Math.PI / 2) * lateralDist;
@@ -750,25 +729,19 @@
       }
     }
 
-    // Cria 3 trilhas simultâneas de gatinhos caminhando
     const trails = [new PawTrail(), new PawTrail(), new PawTrail()];
 
-    // Ciclo de renderização
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Avança as trilhas ativas
       trails.forEach(t => t.step());
 
-      // Renderiza e desvanece as patinhas
       for (let i = paws.length - 1; i >= 0; i--) {
         const p = paws[i];
         drawPaw(p.x, p.y, p.angle, p.alpha, p.scale);
-        p.alpha -= 0.0035; // some suavemente após ~2.5 segundos
+        p.alpha -= 0.0035;
         if (p.alpha <= 0) paws.splice(i, 1);
       }
 
-      // Renderiza corações flutuantes
       for (let i = hearts.length - 1; i >= 0; i--) {
         const h = hearts[i];
         drawHeart(h.x, h.y, h.size, h.alpha, h.color);
@@ -783,7 +756,7 @@
     animate();
 
     /* =========================================================
-       5. GATINHOS ESPIANDO ALEATORIAMENTE NAS BORDAS
+       5. GATINHOS ESPIANDO NAS BORDAS
     ========================================================= */
     const peekers = [
       document.getElementById('peeker-left'),
