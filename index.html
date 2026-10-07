@@ -545,7 +545,7 @@
       <span id="auto-time-icon">⏰</span>
       <span id="auto-time-text">Tema Auto: ON</span>
     </button>
-    <div class="coin-badge" onclick="openShop()">
+    <div class="coin-badge" onclick="openShop(event)">
       <span>🐟</span>
       <span id="coin-counter">0</span>
     </div>
@@ -592,12 +592,10 @@
   </div>
 
   <main class="stage">
-    <!-- Balão de fala único -->
     <div class="speech-bubble" id="speech-bubble" onclick="openLetter(event)">
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Gatinho -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="openLetter(event)">
       <svg class="cat-svg" viewBox="0 0 200 200">
         <defs>
@@ -609,49 +607,64 @@
           </clipPath>
         </defs>
 
+        <!-- Cauda -->
         <path id="cat-tail" d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" 
               fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
 
+        <!-- Corpo e patinhas traseiras -->
         <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" 
               fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
+        <!-- Cabeça -->
         <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" 
               fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- RAÇAS DE GATOS REAIS -->
+        <!-- MANCHAS / RAÇAS DE GATOS REAIS FIÉIS ÀS IMAGENS -->
         <g id="breed-markings">
+          <!-- Siamês: Corpo creme, máscara marrom e orelhas marrons -->
           <g id="breed-siamese" style="display: none;">
-            <path d="M 80,105 Q 98,90 116,105 Q 98,130 80,105 Z" fill="#6d5448" opacity="0.85"/>
-            <path d="M 44,42 L 52,42 L 48,58 Z" fill="#6d5448"/>
-            <path d="M 148,42 L 140,42 L 144,58 Z" fill="#6d5448"/>
+            <path d="M 68,110 Q 98,82 128,110 Q 98,136 68,110 Z" fill="#4a3528" opacity="0.95"/>
+            <!-- Orelhas escuras -->
+            <polygon points="44,82 40,54 52,42 70,64" fill="#4a3528"/>
+            <polygon points="152,82 156,54 144,42 126,64" fill="#4a3528"/>
           </g>
+
+          <!-- Frajola: Máscara preta cobrindo as laterais e orelhas, centro branco -->
           <g id="breed-tuxedo" style="display: none;">
-            <path d="M 44,82 C 40,54 44,38 52,42 L 75,70 Q 55,85 50,110 Z" fill="#2b2725"/>
-            <path d="M 152,82 C 156,54 152,38 144,42 L 121,70 Q 141,85 146,110 Z" fill="#2b2725"/>
+            <!-- Lado esquerdo da máscara preta -->
+            <path d="M 44,82 C 40,54 44,38 52,42 L 72,66 L 76,92 Q 60,94 48,112 Z" fill="#2b2725"/>
+            <!-- Lado direito da máscara preta -->
+            <path d="M 152,82 C 156,54 152,38 144,42 L 124,66 L 120,92 Q 136,94 148,112 Z" fill="#2b2725"/>
+            <!-- Topo da cabeça preto -->
+            <path d="M 72,66 Q 98,62 124,66 Q 98,72 72,66 Z" fill="#2b2725"/>
           </g>
+
+          <!-- Laranja Listrado: Focinho rosado com listras expressivas -->
           <g id="breed-orange" style="display: none;">
-            <path d="M 94,52 L 102,52 L 98,64 Z" fill="#d97a36"/>
-            <path d="M 82,56 L 88,56 L 87,66 Z" fill="#d97a36"/>
-            <path d="M 114,56 L 108,56 L 109,66 Z" fill="#d97a36"/>
-            <path d="M 48,94 L 58,90 L 52,100 Z" fill="#d97a36"/>
-            <path d="M 148,94 L 138,90 L 144,100 Z" fill="#d97a36"/>
-          </g>
-          <g id="breed-calico" style="display: none;">
-            <path d="M 46,40 Q 64,52 60,70 L 44,60 Z" fill="#d97a36"/>
-            <path d="M 144,40 Q 126,52 130,70 L 150,60 Z" fill="#2b2725"/>
-            <ellipse cx="120" cy="148" rx="10" ry="8" fill="#d97a36"/>
+            <!-- Listras na testa -->
+            <path d="M 95,48 L 101,48 L 98,62 Z" fill="#b8531d"/>
+            <path d="M 84,52 L 90,52 L 87,64 Z" fill="#b8531d"/>
+            <path d="M 112,52 L 106,52 L 109,64 Z" fill="#b8531d"/>
+            <!-- Listras nas bochechas -->
+            <path d="M 45,90 L 58,86 L 50,96 Z" fill="#b8531d"/>
+            <path d="M 46,102 L 58,100 L 52,108 Z" fill="#b8531d"/>
+            <path d="M 151,90 L 138,86 L 146,96 Z" fill="#b8531d"/>
+            <path d="M 150,102 L 138,100 L 144,108 Z" fill="#b8531d"/>
+            <!-- Manchinhas no corpo -->
+            <path d="M 62,145 L 74,142 L 68,150 Z" fill="#b8531d"/>
+            <path d="M 134,145 L 122,142 L 128,150 Z" fill="#b8531d"/>
           </g>
         </g>
 
         <!-- Olhos Regulares -->
         <g id="regular-eyes">
-          <ellipse cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
           <g clip-path="url(#left-eye-clip)">
             <path d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
             <circle cx="76" cy="103" r="2.8" fill="#ffffff"/>
           </g>
 
-          <ellipse cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
           <g clip-path="url(#right-eye-clip)">
             <path d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
             <circle cx="130" cy="103" r="2.8" fill="#ffffff"/>
@@ -692,10 +705,16 @@
           <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
         </g>
 
+        <!-- Óculos com hastes laterais e aros maiores que o olho -->
         <g id="cosmetic-glasses" style="display: none;">
-          <circle id="glasses-left" cx="68" cy="98" r="23" fill="none" stroke="#2b2725" stroke-width="3.5"/>
-          <circle id="glasses-right" cx="122" cy="98" r="23" fill="none" stroke="#2b2725" stroke-width="3.5"/>
-          <path id="glasses-bridge" d="M 91,98 Q 95,92 99,98" fill="none" stroke="#2b2725" stroke-width="3.5"/>
+          <!-- Hastes dos óculos estendendo até os cantos da cabeça -->
+          <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+          <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+          <!-- Aros ampliados -->
+          <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+          <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+          <!-- Ponte do nariz -->
+          <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
         </g>
 
         <g id="cosmetic-flower" style="display: none;">
@@ -742,12 +761,15 @@
     <div class="shop-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)" aria-label="Fechar">✕</button>
       <h2 class="shop-title">Lojinha & Cosméticos 🐟</h2>
-      <p class="shop-subtitle">Use suas moedas diárias para personalizar tudo!</p>
+      <p class="shop-subtitle">Personalize os cosméticos, cores dos olhos e pelagens!</p>
 
       <div class="shop-section-title">Acessórios & Tintas Coloridas</div>
       <div class="shop-items-grid" id="shop-accessories-grid"></div>
 
-      <div class="shop-section-title">Temas de Raças Reais</div>
+      <div class="shop-section-title">Cores dos Olhos 👀</div>
+      <div class="shop-items-grid" id="shop-eyes-grid"></div>
+
+      <div class="shop-section-title">Temas de Raças Reais 🐾</div>
       <div class="shop-items-grid" id="shop-breeds-grid"></div>
 
       <div class="shop-section-title">Paletas de Cores do Site</div>
@@ -849,7 +871,7 @@
     }
 
     /* =========================================================
-       3. LOJINHA E COSMÉTICOS
+       3. LOJINHA, CORES DE OLHOS E ITENS
     ========================================================= */
     const SHOP_CONFIG = {
       colorPalette: [
@@ -857,6 +879,13 @@
         { id: 'amber', hex: '#c48b36', name: 'Âmbar' },
         { id: 'ruby', hex: '#7a2d2d', name: 'Vinho' },
         { id: 'moss', hex: '#40533b', name: 'Musgo' }
+      ],
+      eyeColors: [
+        { id: 'eye_charcoal', name: 'Grafite Preto', hex: '#2b2725', price: 0, icon: '👁️' },
+        { id: 'eye_blue', name: 'Azul Safira (Siamês)', hex: '#3466b0', price: 2, icon: '💎' },
+        { id: 'eye_amber', name: 'Âmbar Dourado', hex: '#c47d25', price: 2, icon: '🍯' },
+        { id: 'eye_emerald', name: 'Verde Esmeralda', hex: '#2e6b3e', price: 3, icon: '🌿' },
+        { id: 'eye_amethyst', name: 'Ametista Violeta', hex: '#633974', price: 3, icon: '🔮' }
       ],
       accessories: [
         { 
@@ -868,11 +897,13 @@
                 </svg>`
         },
         { 
-          id: 'glasses', name: 'Óculos Redondos', price: 2, elId: 'cosmetic-glasses',
-          svg: `<svg viewBox="0 0 70 35" width="50" height="25">
-                  <circle cx="20" cy="18" r="14" fill="none" stroke="COLOR" stroke-width="3"/>
-                  <circle cx="50" cy="18" r="14" fill="none" stroke="COLOR" stroke-width="3"/>
-                  <path d="M 34,18 Q 35,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/>
+          id: 'glasses', name: 'Óculos com Hastes', price: 2, elId: 'cosmetic-glasses',
+          svg: `<svg viewBox="0 0 76 35" width="54" height="26">
+                  <line x1="4" y1="14" x2="18" y2="18" stroke="COLOR" stroke-width="2.5"/>
+                  <line x1="72" y1="14" x2="58" y2="18" stroke="COLOR" stroke-width="2.5"/>
+                  <circle cx="28" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/>
+                  <circle cx="48" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/>
+                  <path d="M 40,18 Q 38,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/>
                 </svg>`
         },
         { 
@@ -895,11 +926,10 @@
         }
       ],
       breeds: [
-        { id: 'breed_default', name: 'Gato Branco', price: 0, elId: null, icon: '⚪' },
-        { id: 'breed_siamese', name: 'Siamês', price: 3, elId: 'breed-siamese', icon: '🤎' },
-        { id: 'breed_tuxedo', name: 'Frajola', price: 3, elId: 'breed-tuxedo', icon: '🖤' },
-        { id: 'breed_orange', name: 'Laranja Listrado', price: 4, elId: 'breed-orange', icon: '🧡' },
-        { id: 'breed_calico', name: 'Calico / Tricolor', price: 4, elId: 'breed-calico', icon: '🤍' }
+        { id: 'breed_default', name: 'Branco Clássico', price: 0, icon: '⚪' },
+        { id: 'breed_siamese', name: 'Siamês Real', price: 3, icon: '🤎' },
+        { id: 'breed_tuxedo', name: 'Frajola Real', price: 3, icon: '🖤' },
+        { id: 'breed_orange', name: 'Laranja Listrado', price: 4, icon: '🧡' }
       ],
       themes: [
         { id: 'theme_default', name: 'Pergaminho', price: 0, icon: '📜', class: '' },
@@ -914,9 +944,10 @@
     };
 
     let userCoins = parseInt(localStorage.getItem('cat_coins') || '0', 10);
-    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "bowtie_color_classic", "glasses_color_classic", "flower_color_amber", "crown_color_amber"]');
+    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "bowtie_color_classic", "glasses_color_classic", "flower_color_amber", "crown_color_amber"]');
     let equippedItems = JSON.parse(localStorage.getItem('cat_equipped') || '["fx_hearts"]');
     let itemColors = JSON.parse(localStorage.getItem('cat_item_colors') || '{"bowtie":"#2b2725","glasses":"#2b2725","flower":"#c48b36","crown":"#ecd29b"}');
+    let activeEyeColor = localStorage.getItem('cat_active_eye_color') || '#2b2725';
     let activeBreed = localStorage.getItem('cat_active_breed') || 'breed_default';
     let activeTheme = localStorage.getItem('cat_active_theme') || 'theme_default';
     let activeEffect = localStorage.getItem('cat_active_effect') || 'heart';
@@ -926,12 +957,14 @@
       localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
       localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
       localStorage.setItem('cat_item_colors', JSON.stringify(itemColors));
+      localStorage.setItem('cat_active_eye_color', activeEyeColor);
       localStorage.setItem('cat_active_breed', activeBreed);
       localStorage.setItem('cat_active_theme', activeTheme);
       localStorage.setItem('cat_active_effect', activeEffect);
       document.getElementById('coin-counter').innerText = userCoins;
       applyEquippedCosmetics();
       applyBreeds();
+      applyEyeColor();
       if (!autoTimeEnabled) applyManualTheme();
     }
 
@@ -960,16 +993,52 @@
       if (found && found.class) document.body.classList.add(found.class);
     }
 
+    function applyEyeColor() {
+      const leftEye = document.getElementById('eye-bg-left');
+      const rightEye = document.getElementById('eye-bg-right');
+      if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
+      if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
+    }
+
     function applyBreeds() {
-      SHOP_CONFIG.breeds.forEach(b => {
-        if (b.elId) {
-          const el = document.getElementById(b.elId);
-          if (el) el.style.display = (activeBreed === b.id) ? 'block' : 'none';
-        }
+      const bodyPath = document.getElementById('cat-body');
+      const headPath = document.getElementById('cat-head');
+      const tailPath = document.getElementById('cat-tail');
+
+      // Ocultar marcações
+      ['breed-siamese', 'breed-tuxedo', 'breed-orange'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
       });
+
+      // Cores padrão (gato branco sketch)
+      bodyPath.setAttribute('fill', '#fffdf9');
+      headPath.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('fill', 'none');
+      tailPath.setAttribute('stroke', '#2b2725');
+
+      if (activeBreed === 'breed_siamese') {
+        // Corpo creme/bege e cauda marrom escura conforme foto
+        bodyPath.setAttribute('fill', '#e4cfb6');
+        headPath.setAttribute('fill', '#e4cfb6');
+        tailPath.setAttribute('stroke', '#4a3528');
+        document.getElementById('breed-siamese').style.display = 'block';
+      } else if (activeBreed === 'breed_tuxedo') {
+        // Frajola
+        bodyPath.setAttribute('fill', '#fffdf9');
+        headPath.setAttribute('fill', '#fffdf9');
+        document.getElementById('breed-tuxedo').style.display = 'block';
+      } else if (activeBreed === 'breed_orange') {
+        // Laranja listrado quente conforme foto
+        bodyPath.setAttribute('fill', '#f5aa67');
+        headPath.setAttribute('fill', '#f5aa67');
+        tailPath.setAttribute('stroke', '#b8531d');
+        document.getElementById('breed-orange').style.display = 'block';
+      }
     }
 
     function applyEquippedCosmetics() {
+      // Gravatinha
       const bowtie = document.getElementById('cosmetic-bowtie');
       if (bowtie) {
         bowtie.style.display = equippedItems.includes('bowtie') ? 'block' : 'none';
@@ -978,6 +1047,7 @@
         document.getElementById('bowtie-right').setAttribute('fill', c);
       }
 
+      // Óculos com hastes
       const glasses = document.getElementById('cosmetic-glasses');
       if (glasses) {
         glasses.style.display = equippedItems.includes('glasses') ? 'block' : 'none';
@@ -985,8 +1055,11 @@
         document.getElementById('glasses-left').setAttribute('stroke', c);
         document.getElementById('glasses-right').setAttribute('stroke', c);
         document.getElementById('glasses-bridge').setAttribute('stroke', c);
+        document.getElementById('glasses-leg-left').setAttribute('stroke', c);
+        document.getElementById('glasses-leg-right').setAttribute('stroke', c);
       }
 
+      // Florzinha
       const flower = document.getElementById('cosmetic-flower');
       if (flower) {
         flower.style.display = equippedItems.includes('flower') ? 'block' : 'none';
@@ -994,6 +1067,7 @@
         document.getElementById('flower-center').setAttribute('fill', c);
       }
 
+      // Coroa
       const crown = document.getElementById('cosmetic-crown');
       if (crown) {
         crown.style.display = equippedItems.includes('crown') ? 'block' : 'none';
@@ -1003,6 +1077,7 @@
     }
 
     function renderShop() {
+      // 1. Acessórios
       const accGrid = document.getElementById('shop-accessories-grid');
       accGrid.innerHTML = '';
 
@@ -1045,6 +1120,27 @@
         accGrid.appendChild(card);
       });
 
+      // 2. Cores dos Olhos
+      renderGenericGrid('shop-eyes-grid', SHOP_CONFIG.eyeColors,
+        eye => activeEyeColor === eye.hex,
+        eye => {
+          if (unlockedItems.includes(eye.id)) {
+            activeEyeColor = eye.hex;
+          } else if (userCoins >= eye.price) {
+            userCoins -= eye.price;
+            unlockedItems.push(eye.id);
+            activeEyeColor = eye.hex;
+            playPaperSound();
+          } else {
+            alert('Você ainda não tem peixinhos suficientes! Volte amanhã para ganhar mais 🐟');
+            return;
+          }
+          saveState();
+          renderShop();
+        }
+      );
+
+      // 3. Raças de gatos reais
       renderGenericGrid('shop-breeds-grid', SHOP_CONFIG.breeds,
         b => activeBreed === b.id,
         b => {
@@ -1064,6 +1160,7 @@
         }
       );
 
+      // 4. Temas
       renderGenericGrid('shop-themes-grid', SHOP_CONFIG.themes,
         t => activeTheme === t.id,
         t => {
@@ -1085,6 +1182,7 @@
         }
       );
 
+      // 5. Efeitos
       renderGenericGrid('shop-effects-grid', SHOP_CONFIG.effects,
         e => activeEffect === e.type,
         e => {
@@ -1189,6 +1287,7 @@
         cat_unlocked: unlockedItems,
         cat_equipped: equippedItems,
         cat_item_colors: itemColors,
+        cat_active_eye_color: activeEyeColor,
         cat_active_breed: activeBreed,
         cat_active_theme: activeTheme,
         cat_active_effect: activeEffect,
@@ -1218,6 +1317,7 @@
           if (Array.isArray(data.cat_unlocked)) unlockedItems = data.cat_unlocked;
           if (Array.isArray(data.cat_equipped)) equippedItems = data.cat_equipped;
           if (data.cat_item_colors) itemColors = data.cat_item_colors;
+          if (data.cat_active_eye_color) activeEyeColor = data.cat_active_eye_color;
           if (data.cat_active_breed) activeBreed = data.cat_active_breed;
           if (data.cat_active_theme) activeTheme = data.cat_active_theme;
           if (data.cat_active_effect) activeEffect = data.cat_active_effect;
@@ -1320,7 +1420,7 @@
     }
 
     /* =========================================================
-       6. INTERAÇÕES: ABRIR E FECHAR CARTA (COM BLOQUEIO DE PROPAGAÇÃO)
+       6. INTERAÇÕES: ABRIR E FECHAR CARTA
     ========================================================= */
     const letterModal = document.getElementById('letter-modal');
     const letterContent = document.getElementById('letter-content');
@@ -1330,7 +1430,7 @@
     const speechBubble = document.getElementById('speech-bubble');
 
     function openLetter(event) {
-      if (event) event.stopPropagation(); // Evita reabrir ou clicar no gato duas vezes
+      if (event) event.stopPropagation();
 
       const period = getPeriodName();
       const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
@@ -1341,7 +1441,7 @@
 
       playPaperSound();
       letterModal.classList.add('open');
-      speechBubble.style.opacity = '0'; // Esconde o balãozinho enquanto a carta está na frente
+      speechBubble.style.opacity = '0';
       createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
 
       const currentPeriod = getCurrentPeriodKey();
@@ -1350,7 +1450,7 @@
     }
 
     function closeLetter(event) {
-      if (event) event.stopPropagation(); // Impede o clique de vazar para o gato
+      if (event) event.stopPropagation();
       letterModal.classList.remove('open');
       speechBubble.style.opacity = '1';
     }
