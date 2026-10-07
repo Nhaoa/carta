@@ -101,7 +101,6 @@
       z-index: 1;
     }
 
-    /* Controles Superiores */
     .top-controls {
       position: fixed;
       top: 16px;
@@ -250,7 +249,7 @@
     .cat-svg {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(2px 5px 3px rgba(0, 0, 0, 0.12));
+      filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
     }
 
     .cat-wrapper.petting {
@@ -376,7 +375,6 @@
       padding-top: 12px;
     }
 
-    /* Botão X de Fechar Totalmente Acessível */
     .close-modal-btn {
       position: absolute;
       top: 12px;
@@ -394,7 +392,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: 1px 2px 0 rgba(0,0,0,0.2);
-      z-index: 20;
+      z-index: 30;
     }
     .close-modal-btn:hover {
       background: #f1e4d0;
@@ -465,7 +463,6 @@
       color: #fff;
     }
 
-    /* Painel de Backup */
     .backup-panel {
       display: flex;
       gap: 10px;
@@ -515,7 +512,6 @@
 
   <canvas id="fx-canvas"></canvas>
 
-  <!-- Controles Superiores -->
   <div class="top-controls">
     <button class="auto-time-toggle" id="auto-time-btn" onclick="toggleAutoTime()">
       <span id="auto-time-icon">⏰</span>
@@ -613,20 +609,20 @@
           <path d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
         </g>
 
-        <!-- Olhos de Carinho (^ ‿ ^) -->
+        <!-- Olhos de Carinho -->
         <g id="happy-eyes" style="display: none;">
           <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M 90,114 Q 95,123 99,117 Q 103,123 108,114" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round"/>
         </g>
 
-        <!-- Patinhas apoiadas na barriga (quando não está segurando a carta) -->
+        <!-- Patinhas de descanso (quando NÃO está segurando a carta) -->
         <g id="idle-paws" style="display: none;">
           <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
           <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
         </g>
 
-        <!-- Envelope Fechado (segurado pelo gato 1 vez por período) -->
+        <!-- Envelope Fechado (segurado apenas 1 vez por período) -->
         <g id="cat-letter-group">
           <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
           <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
@@ -634,24 +630,23 @@
           <path d="M 126,166 L 106,146" fill="none" stroke="#2b2725" stroke-width="2"/>
           <path d="M 98,145 C 98,143 96,141 94,142 C 92,143 92,145 94,147 L 98,151 L 102,147 C 104,145 104,143 102,142 C 100,141 98,143 98,145 Z" 
                 fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
-          <!-- Patinhas segurando o envelope -->
           <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
           <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
         </g>
 
-        <!-- ================= COSMÉTICOS DO GATO ================= -->
-        <!-- Gravatinha Borboleta (Posicionada acima, visível com ou sem a carta) -->
+        <!-- ================= COSMÉTICOS (RENDERIZADOS POR CIMA DE TUDO) ================= -->
+        <!-- Gravatinha Borboleta -->
         <g id="cosmetic-bowtie" style="display: none;">
-          <polygon points="85,124 85,138 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
-          <polygon points="111,124 111,138 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
-          <circle cx="98" cy="131" r="3.5" fill="#c48b36"/>
+          <polygon points="84,124 84,138 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+          <polygon points="112,124 112,138 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+          <circle cx="98" cy="131" r="4.2" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
         </g>
 
         <!-- Óculos -->
         <g id="cosmetic-glasses" style="display: none;">
-          <circle cx="68" cy="98" r="24" fill="none" stroke="#2b2725" stroke-width="3"/>
-          <circle cx="122" cy="98" r="24" fill="none" stroke="#2b2725" stroke-width="3"/>
-          <path d="M 92,98 Q 95,94 98,98" fill="none" stroke="#2b2725" stroke-width="3"/>
+          <circle cx="68" cy="98" r="23" fill="none" stroke="#2b2725" stroke-width="3.5"/>
+          <circle cx="122" cy="98" r="23" fill="none" stroke="#2b2725" stroke-width="3.5"/>
+          <path d="M 91,98 Q 95,92 99,98" fill="none" stroke="#2b2725" stroke-width="3.5"/>
         </g>
 
         <!-- Florzinha -->
@@ -687,7 +682,6 @@
   <!-- Modal da Carta Aberta -->
   <div class="letter-modal" id="letter-modal">
     <div class="letter-paper">
-      <!-- Botão de Fechar ✕ Totalmente funcional e acessível -->
       <button class="close-modal-btn" onclick="closeLetter()" aria-label="Fechar">✕</button>
       <div class="letter-stamp">💌</div>
       <div class="letter-text" id="letter-content"></div>
@@ -713,7 +707,6 @@
       <div class="shop-section-title">Efeitos de Carinho</div>
       <div class="shop-items-grid" id="shop-effects-grid"></div>
 
-      <!-- Backup e Restauração de Dados -->
       <div class="shop-section-title">Dados & Backup 💾</div>
       <div class="backup-panel">
         <button class="backup-btn" onclick="exportDataBackup()">📥 Salvar Backup</button>
@@ -745,21 +738,21 @@
       const idlePaws = document.getElementById('idle-paws');
       const bubble = document.getElementById('speech-bubble');
 
-      // Se ainda não abriu a carta deste período, o gato segura o envelope
-      if (lastOpenedPeriod !== currentPeriod) {
-        letterGroup.style.display = 'block';
-        idlePaws.style.display = 'none';
-        bubble.innerText = "Psst... o gatinho trouxe uma cartinha para você! 🐾";
-      } else {
-        // Já abriu neste período: gato solta a carta
+      if (lastOpenedPeriod === currentPeriod) {
+        // Já abriu no período atual -> esconde a carta
         letterGroup.style.display = 'none';
         idlePaws.style.display = 'block';
         bubble.innerText = "Toque no gatinho para reler a cartinha! 💌";
+      } else {
+        // Novo período -> entrega a carta
+        letterGroup.style.display = 'block';
+        idlePaws.style.display = 'none';
+        bubble.innerText = "Psst... o gatinho trouxe uma cartinha para você! 🐾";
       }
     }
 
     /* =========================================================
-       2. TEMA AUTOMÁTICO CONFORME O HORÁRIO
+       2. TEMA AUTOMÁTICO POR HORÁRIO
     ========================================================= */
     let autoTimeEnabled = localStorage.getItem('cat_auto_time') !== 'false';
 
@@ -804,7 +797,7 @@
     }
 
     /* =========================================================
-       3. LOJINHA, ITENS E BACKUP
+       3. LOJINHA & COSMÉTICOS
     ========================================================= */
     const SHOP_CONFIG = {
       accessories: [
@@ -1142,7 +1135,7 @@
       letterModal.classList.add('open');
       createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
 
-      // Marca o período atual como aberto e faz o gato soltar a carta
+      // Marca o período atual e faz o gato soltar a carta imediatamente
       const currentPeriod = getCurrentPeriodKey();
       localStorage.setItem('cat_last_opened_period', currentPeriod);
       updateLetterHoldingState();
@@ -1335,9 +1328,7 @@
     function triggerRandomPeeker() {
       const p = peekers[Math.floor(Math.random() * peekers.length)];
       p.classList.add('active');
-      setTimeout(() => {
-        p.classList.remove('active');
-      }, 2600);
+      setTimeout(() => p.classList.remove('active'), 2600);
       setTimeout(triggerRandomPeeker, Math.random() * 4500 + 3500);
     }
     setTimeout(triggerRandomPeeker, 2000);
@@ -1352,7 +1343,7 @@
       setInterval(() => {
         updateTimeTheme();
         updateLetterHoldingState();
-      }, 60000);
+      }, 30000); // Verifica a cada 30 segundos
     } else {
       document.getElementById('auto-time-btn').classList.remove('active');
       document.getElementById('auto-time-text').innerText = "Auto: OFF";
