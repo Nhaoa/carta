@@ -8,6 +8,1735 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
   <script src="mensagens.js"></script>
+  <script src="cosmeticos.js"></script>
+  <style>
+    :root {
+      --bg-paper: #f4ede1;
+      --paper-grid: #ded4c1;
+      --charcoal: #2b2725;
+      --pencil: #443e3a;
+      --pencil-light: #6e645e;
+      --amber: #c48b36;
+      --amber-soft: #ecd29b;
+      --card-bg: #fffdf9;
+    }
+
+    body.time-morning {
+      --bg-paper: #fbf6ec;
+      --paper-grid: #e6dcce;
+      --charcoal: #2b2725;
+      --card-bg: #ffffff;
+      --amber: #c88832;
+    }
+    body.time-afternoon {
+      --bg-paper: #f2e7d3;
+      --paper-grid: #d9caae;
+      --charcoal: #282422;
+      --card-bg: #fffaf0;
+      --amber: #b87a26;
+    }
+    body.time-evening {
+      --bg-paper: #322d2a;
+      --paper-grid: #423c38;
+      --charcoal: #f3ece1;
+      --pencil-light: #b0a49c;
+      --card-bg: #262220;
+      --amber: #d89f4b;
+    }
+    body.time-dawn {
+      --bg-paper: #1e1b19;
+      --paper-grid: #2c2724;
+      --charcoal: #e6ded4;
+      --pencil-light: #948b84;
+      --card-bg: #151312;
+      --amber: #cfa156;
+    }
+
+    body.theme-cafe {
+      --bg-paper: #eae0d0;
+      --paper-grid: #cfc2ad;
+      --charcoal: #302621;
+      --card-bg: #fdfaf5;
+      --amber: #a86c2e;
+    }
+    body.theme-night {
+      --bg-paper: #22252a;
+      --paper-grid: #32373e;
+      --charcoal: #e8ecf2;
+      --pencil-light: #9aa2ae;
+      --card-bg: #191c20;
+      --amber: #d2a149;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-paper);
+      background-image: 
+        radial-gradient(circle, var(--paper-grid) 1.2px, transparent 1.2px),
+        linear-gradient(to right, rgba(120, 110, 100, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120, 110, 100, 0.1) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px, 24px 24px;
+      font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      user-select: none;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .top-controls {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+    }
+
+    .auto-time-toggle, .coin-badge {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 1.05rem;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .auto-time-toggle:active, .coin-badge:active {
+      transform: scale(0.96);
+    }
+    .auto-time-toggle.active {
+      border-color: var(--amber);
+      background: #faf4e6;
+      color: #2b2725;
+    }
+
+    .border-peeker {
+      position: fixed;
+      pointer-events: none;
+      z-index: 2;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+      opacity: 0;
+    }
+    .border-peeker.left {
+      left: -55px;
+      top: 35%;
+      transform: rotate(90deg);
+    }
+    .border-peeker.left.active {
+      transform: translateX(55px) rotate(90deg);
+      opacity: 1;
+    }
+    .border-peeker.right {
+      right: -55px;
+      bottom: 30%;
+      transform: rotate(-90deg);
+    }
+    .border-peeker.right.active {
+      transform: translateX(-55px) rotate(-90deg);
+      opacity: 1;
+    }
+    .border-peeker.bottom {
+      bottom: -55px;
+      left: 70%;
+      transform: rotate(0deg);
+    }
+    .border-peeker.bottom.active {
+      transform: translateY(-55px) rotate(0deg);
+      opacity: 1;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .speech-bubble {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 26px;
+      padding: 10px 22px;
+      font-size: 1.25rem;
+      color: var(--charcoal);
+      box-shadow: 3px 4px 0px rgba(0, 0, 0, 0.15);
+      margin-bottom: 14px;
+      position: relative;
+      animation: floatBubble 3s ease-in-out infinite;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease, opacity 0.3s ease;
+    }
+    .speech-bubble:active {
+      transform: scale(0.96);
+    }
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 11px 11px 0;
+      border-style: solid;
+      border-color: var(--charcoal) transparent transparent;
+      display: block;
+      width: 0;
+    }
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 9px 9px 0;
+      border-style: solid;
+      border-color: var(--card-bg) transparent transparent;
+      display: block;
+      width: 0;
+      z-index: 1;
+    }
+
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .cat-wrapper {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s ease;
+    }
+    .cat-wrapper:active {
+      transform: scale(0.97);
+    }
+
+    .cat-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
+    }
+
+    .cat-wrapper.petting {
+      animation: catWiggle 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes catWiggle {
+      0% { transform: rotate(-3deg) scale(1.02); }
+      100% { transform: rotate(3deg) scale(1.02); }
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .pet-btn, .shop-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      font-family: inherit;
+      color: var(--charcoal);
+      cursor: pointer;
+      box-shadow: 2px 4px 0px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pet-btn:hover, .shop-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 2px 6px 0px rgba(0, 0, 0, 0.2);
+    }
+    .pet-btn:active, .shop-btn:active {
+      transform: translateY(2px);
+      box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .letter-modal, .shop-modal, .color-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .letter-modal.open, .shop-modal.open, .color-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .letter-paper, .shop-paper, .color-paper {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 18px;
+      max-width: 440px;
+      width: 100%;
+      padding: 34px 20px 20px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+      transform: translateY(25px) scale(0.92);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .letter-modal.open .letter-paper, .shop-modal.open .shop-paper, .color-modal.open .color-paper {
+      transform: translateY(0) scale(1);
+    }
+
+    .letter-stamp {
+      position: absolute;
+      top: 14px;
+      right: 56px;
+      width: 44px;
+      height: 48px;
+      border: 1.5px dashed var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transform: rotate(6deg);
+      background: rgba(236, 210, 155, 0.15);
+    }
+
+    .letter-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    .letter-footer {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.15rem;
+      color: var(--pencil-light);
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      border-top: 1px dashed var(--amber);
+      padding-top: 12px;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.2);
+      z-index: 30;
+    }
+    .close-modal-btn:hover {
+      background: #f1e4d0;
+      transform: scale(1.05);
+    }
+
+    /* MINI PREVIEW DO GATINHO NA LOJA */
+    .shop-preview-box {
+      width: 100%;
+      height: 90px;
+      background: #faf4e8;
+      border: 1.5px dashed var(--pencil-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .shop-preview-box svg {
+      width: 80px;
+      height: 80px;
+    }
+    .shop-preview-label {
+      position: absolute;
+      bottom: 4px;
+      right: 8px;
+      font-size: 0.85rem;
+      color: var(--pencil-light);
+    }
+
+    /* ABAS/CATEGORIAS DA LOJA */
+    .shop-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      border-bottom: 1.5px solid var(--pencil-light);
+      scrollbar-width: none;
+    }
+    .shop-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .shop-tab-btn {
+      padding: 6px 12px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 16px;
+      background: var(--card-bg);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .shop-tab-btn.active {
+      background: var(--amber);
+      color: #fff;
+      border-color: var(--charcoal);
+      font-weight: bold;
+    }
+
+    .shop-content-area {
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 4px;
+    }
+
+    .shop-items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .shop-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .shop-card-svg-preview {
+      width: 58px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .shop-card-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1px;
+      text-align: center;
+    }
+    .shop-card-price {
+      font-size: 0.85rem;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+
+    .item-action-btn {
+      width: 100%;
+      padding: 5px;
+      border-radius: 14px;
+      border: 1.5px solid var(--charcoal);
+      background: var(--card-bg);
+      font-family: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+      color: var(--charcoal);
+      margin-top: 4px;
+    }
+    .item-action-btn.equipped {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .palette-btn {
+      width: 100%;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1.5px dashed var(--charcoal);
+      background: #faf4e8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    /* MODAL DE INFINIDADE DE CORES */
+    .color-paper {
+      max-width: 360px;
+      z-index: 120;
+    }
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      overflow-y: auto;
+      max-height: 320px;
+      padding: 4px;
+    }
+    .color-swatch-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      background: #fffdf9;
+      position: relative;
+    }
+    .color-swatch-card.active {
+      box-shadow: 0 0 0 2.5px var(--amber);
+    }
+    .color-swatch-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,0,0,0.2);
+      margin-bottom: 4px;
+    }
+    .color-swatch-name {
+      font-size: 0.75rem;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .daily-toast {
+      position: fixed;
+      bottom: 24px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 20px;
+      padding: 10px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-size: 1.15rem;
+      z-index: 150;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .daily-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="fx-canvas"></canvas>
+
+  <div class="top-controls">
+    <button class="auto-time-toggle" id="auto-time-btn" onclick="toggleAutoTime()">
+      <span id="auto-time-icon">⏰</span>
+      <span id="auto-time-text">Tema Auto: ON</span>
+    </button>
+    <div class="coin-badge" onclick="openShop(event)">
+      <span>🐟</span>
+      <span id="coin-counter">0</span>
+    </div>
+  </div>
+
+  <div class="daily-toast" id="daily-toast">
+    🎁 Você ganhou sua moeda diária! (+1 🐟)
+  </div>
+
+  <div class="border-peeker left" id="peeker-left">
+    <svg width="70" height="60" viewBox="0 0 100 80">
+      <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="37" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="67" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="41" cy="49" r="4.2" fill="#ffffff"/>
+      <circle cx="71" cy="49" r="4.2" fill="#ffffff"/>
+      <path d="M 49,69 Q 52,72 55,69" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="border-peeker right" id="peeker-right">
+    <svg width="70" height="60" viewBox="0 0 100 80">
+      <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="37" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="67" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="41" cy="49" r="4.2" fill="#ffffff"/>
+      <circle cx="71" cy="49" r="4.2" fill="#ffffff"/>
+      <path d="M 49,69 Q 52,72 55,69" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="border-peeker bottom" id="peeker-bottom">
+    <svg width="70" height="60" viewBox="0 0 100 80">
+      <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="37" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="67" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="41" cy="49" r="4.2" fill="#ffffff"/>
+      <circle cx="71" cy="49" r="4.2" fill="#ffffff"/>
+      <path d="M 49,69 Q 52,72 55,69" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <main class="stage">
+    <div class="speech-bubble" id="speech-bubble" onclick="openLetter(event)">
+      Psst... toque no gatinho para abrir a cartinha!🐾
+    </div>
+
+    <div class="cat-wrapper" id="cat-wrapper" onclick="openLetter(event)">
+      <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
+        <defs>
+          <clipPath id="left-eye-clip">
+            <ellipse cx="68" cy="98" rx="26" ry="24"/>
+          </clipPath>
+          <clipPath id="right-eye-clip">
+            <ellipse cx="122" cy="98" rx="26" ry="24"/>
+          </clipPath>
+          <clipPath id="cat-head-clip">
+            <path d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z"/>
+          </clipPath>
+          <clipPath id="cat-body-clip">
+            <path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/>
+          </clipPath>
+        </defs>
+
+        <!-- Cauda -->
+        <path id="cat-tail" d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" 
+              fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- Corpo -->
+        <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" 
+              fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <g clip-path="url(#cat-body-clip)" id="body-markings">
+          <g id="body-tuxedo" style="display: none;">
+            <path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/>
+            <path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/>
+          </g>
+          <g id="body-orange" style="display: none;">
+            <path d="M 60,140 Q 75,145 70,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <path d="M 138,140 Q 123,145 128,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="98" cy="144" rx="14" ry="10" fill="#fffdf9"/>
+            <ellipse cx="76" cy="164" rx="10" ry="7" fill="#fffdf9"/>
+            <ellipse cx="122" cy="164" rx="10" ry="7" fill="#fffdf9"/>
+          </g>
+        </g>
+
+        <!-- Cabeça -->
+        <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" 
+              fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <g clip-path="url(#cat-head-clip)" id="breed-markings">
+          <g id="breed-siamese" style="display: none;">
+            <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
+            <polygon points="156,30 131,70 166,70" fill="#3d281d"/>
+            <path d="M 64,112 Q 98,78 132,112 Q 98,140 64,112 Z" fill="#3d281d"/>
+          </g>
+
+          <g id="breed-tuxedo" style="display: none;">
+            <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
+            <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
+            <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
+            <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
+          </g>
+
+          <g id="breed-orange" style="display: none;">
+            <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
+            <circle cx="98" cy="116" r="4" fill="#d98270"/>
+            <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 76,58 Q 80,68 74,78" stroke="#b3581d" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M 120,58 Q 116,68 122,78" stroke="#b3581d" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M 44,90 Q 60,92 68,98" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 44,102 Q 58,104 66,112" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 152,90 Q 136,92 128,98" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 152,102 Q 138,104 130,112" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 48,42 L 56,48" stroke="#b3581d" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 148,42 L 140,48" stroke="#b3581d" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </g>
+
+        <!-- Olhos e pupilas dinâmicas -->
+        <g id="regular-eyes">
+          <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <g clip-path="url(#left-eye-clip)">
+            <!-- Pupila / Brilho Esquerdo -->
+            <g id="pupil-left-group">
+              <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
+              <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
+              <!-- Fenda -->
+              <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+              <circle class="pupil-slit" cx="72" cy="92" r="3" fill="#ffffff" style="display: none;"/>
+              <!-- Brilhante Anime -->
+              <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              <circle class="pupil-sparkle" cx="74" cy="102" r="4" fill="#ffffff" style="display: none;"/>
+            </g>
+          </g>
+
+          <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <g clip-path="url(#right-eye-clip)">
+            <!-- Pupila / Brilho Direito -->
+            <g id="pupil-right-group">
+              <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
+              <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
+              <!-- Fenda -->
+              <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+              <circle class="pupil-slit" cx="126" cy="92" r="3" fill="#ffffff" style="display: none;"/>
+              <!-- Brilhante Anime -->
+              <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              <circle class="pupil-sparkle" cx="128" cy="102" r="4" fill="#ffffff" style="display: none;"/>
+            </g>
+          </g>
+
+          <path d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- Olhos de Carinho -->
+        <g id="happy-eyes" style="display: none;">
+          <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M 90,114 Q 95,123 99,117 Q 103,123 108,114" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round"/>
+        </g>
+
+        <g id="idle-paws" style="display: none;">
+          <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+        </g>
+
+        <g id="cat-letter-group">
+          <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+          <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M 70,166 L 90,146" fill="none" stroke="#2b2725" stroke-width="2"/>
+          <path d="M 126,166 L 106,146" fill="none" stroke="#2b2725" stroke-width="2"/>
+          <path d="M 98,145 C 98,143 96,141 94,142 C 92,143 92,145 94,147 L 98,151 L 102,147 C 104,145 104,143 102,142 C 100,141 98,143 98,145 Z" 
+                fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+        </g>
+
+        <!-- Cosméticos -->
+        <g id="cosmetic-bowtie" style="display: none;">
+          <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+          <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+          <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+        </g>
+
+        <g id="cosmetic-glasses" style="display: none;">
+          <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+          <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+          <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+          <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+          <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
+        </g>
+
+        <g id="cosmetic-flower" style="display: none;">
+          <circle class="flower-petal" cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          <circle class="flower-petal" cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          <circle class="flower-petal" cx="64" cy="52" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          <circle class="flower-petal" cx="56" cy="60" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          <circle class="flower-petal" cx="46" cy="56" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          <circle id="flower-center" cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
+        </g>
+
+        <g id="cosmetic-crown" style="display: none;">
+          <path id="crown-body" d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" 
+                fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle id="crown-gem" cx="98" cy="42" r="2.5" fill="#c48b36"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="action-row">
+      <button class="pet-btn" id="pet-btn" onclick="petTheCat(event)">
+        <span>Acariciar</span> 🐾
+      </button>
+      <button class="shop-btn" onclick="openShop(event)">
+        <span>Lojinha</span> 🐟
+      </button>
+    </div>
+  </main>
+
+  <!-- Modal da Carta -->
+  <div class="letter-modal" id="letter-modal" onclick="closeLetter(event)">
+    <div class="letter-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeLetter(event)" aria-label="Fechar">✕</button>
+      <div class="letter-stamp">💌</div>
+      <div class="letter-text" id="letter-content"></div>
+      <div class="letter-footer" id="letter-footer">
+        Com todo o meu amor, para você ♡
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal da Lojinha com Abas e Mini Preview -->
+  <div class="shop-modal" id="shop-modal" onclick="closeShop(event)">
+    <div class="shop-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeShop(event)" aria-label="Fechar">✕</button>
+      
+      <!-- Mini Preview do Gatinho em Tempo Real -->
+      <div class="shop-preview-box">
+        <div id="shop-mini-cat-container"></div>
+        <span class="shop-preview-label">Visualização ao Vivo 🐾</span>
+      </div>
+
+      <!-- Abas de Categorias -->
+      <div class="shop-tabs">
+        <button class="shop-tab-btn active" onclick="switchShopTab('acessorios')">Acessórios</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('pupilas')">Pupilas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('olhos')">Olhos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('racas')">Raças</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('temas')">Temas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('efeitos')">Efeitos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('backup')">Backup</button>
+      </div>
+
+      <!-- Conteúdo da Aba Selecionada -->
+      <div class="shop-content-area" id="shop-content-area"></div>
+    </div>
+  </div>
+
+  <!-- Modal dedicado para paleta completa de cores -->
+  <div class="color-modal" id="color-modal" onclick="closeColorModal(event)">
+    <div class="color-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
+      
+      <div class="color-grid" id="color-picker-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. IDENTIFICAÇÃO DO PERÍODO DO DIA
+    ========================================================= */
+    function getPeriodName() {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 12) return "manha";
+      if (hour >= 12 && hour < 18) return "tarde";
+      if (hour >= 18 && hour < 24) return "noite";
+      return "madrugada";
+    }
+
+    function getCurrentPeriodKey() {
+      const dateStr = new Date().toISOString().split('T')[0];
+      return `${dateStr}_${getPeriodName()}`;
+    }
+
+    function updateLetterHoldingState() {
+      const currentPeriod = getCurrentPeriodKey();
+      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
+      const letterGroup = document.getElementById('cat-letter-group');
+      const idlePaws = document.getElementById('idle-paws');
+      const bubble = document.getElementById('speech-bubble');
+
+      const period = getPeriodName();
+      const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+
+      if (lastOpenedPeriod === currentPeriod) {
+        letterGroup.style.display = 'none';
+        idlePaws.style.display = 'block';
+        bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Toque no gatinho para reler a cartinha! 💌";
+      } else {
+        letterGroup.style.display = 'block';
+        idlePaws.style.display = 'none';
+        bubble.innerText = config.balao || "Psst... o gatinho trouxe uma cartinha para você! 🐾";
+      }
+    }
+
+    /* =========================================================
+       2. TEMA AUTOMÁTICO
+    ========================================================= */
+    let autoTimeEnabled = localStorage.getItem('cat_auto_time') !== 'false';
+
+    function updateTimeTheme() {
+      if (!autoTimeEnabled) return;
+
+      const hour = new Date().getHours();
+      document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn', 'theme-cafe', 'theme-night');
+
+      let periodLabel = "";
+      if (hour >= 5 && hour < 12) {
+        document.body.classList.add('time-morning');
+        periodLabel = "Manhã ☀️";
+      } else if (hour >= 12 && hour < 18) {
+        document.body.classList.add('time-afternoon');
+        periodLabel = "Tarde 🌇";
+      } else if (hour >= 18 && hour < 24) {
+        document.body.classList.add('time-evening');
+        periodLabel = "Noite 🌙";
+      } else {
+        document.body.classList.add('time-dawn');
+        periodLabel = "Madrugada 🌌";
+      }
+
+      document.getElementById('auto-time-text').innerText = `Auto: ${periodLabel}`;
+    }
+
+    function toggleAutoTime() {
+      autoTimeEnabled = !autoTimeEnabled;
+      localStorage.setItem('cat_auto_time', autoTimeEnabled);
+
+      const btn = document.getElementById('auto-time-btn');
+      if (autoTimeEnabled) {
+        btn.classList.add('active');
+        updateTimeTheme();
+      } else {
+        btn.classList.remove('active');
+        document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
+        document.getElementById('auto-time-text').innerText = "Auto: OFF";
+        applyManualTheme();
+      }
+    }
+
+    /* =========================================================
+       3. ESTADO GLOBAL DOS ITENS
+    ========================================================= */
+    let userCoins = parseInt(localStorage.getItem('cat_coins') || '0', 10);
+    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "pupil_round", "bowtie_color_c_preto", "glasses_color_c_preto", "flower_color_c_ambar", "crown_color_c_ambar"]');
+    let equippedItems = JSON.parse(localStorage.getItem('cat_equipped') || '["fx_hearts"]');
+    let itemColors = JSON.parse(localStorage.getItem('cat_item_colors') || '{"bowtie":"#2b2725","glasses":"#2b2725","flower":"#c48b36","crown":"#ecd29b"}');
+    let activeEyeColor = localStorage.getItem('cat_active_eye_color') || '#2b2725';
+    let activePupil = localStorage.getItem('cat_active_pupil') || 'pupil_round';
+    let activeBreed = localStorage.getItem('cat_active_breed') || 'breed_default';
+    let activeTheme = localStorage.getItem('cat_active_theme') || 'theme_default';
+    let activeEffect = localStorage.getItem('cat_active_effect') || 'heart';
+    let currentShopTab = 'acessorios';
+
+    function saveState() {
+      localStorage.setItem('cat_coins', userCoins);
+      localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
+      localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
+      localStorage.setItem('cat_item_colors', JSON.stringify(itemColors));
+      localStorage.setItem('cat_active_eye_color', activeEyeColor);
+      localStorage.setItem('cat_active_pupil', activePupil);
+      localStorage.setItem('cat_active_breed', activeBreed);
+      localStorage.setItem('cat_active_theme', activeTheme);
+      localStorage.setItem('cat_active_effect', activeEffect);
+      document.getElementById('coin-counter').innerText = userCoins;
+      
+      applyEquippedCosmetics();
+      applyBreeds();
+      applyEyeColorAndPupils();
+      updateMiniPreview();
+      if (!autoTimeEnabled) applyManualTheme();
+    }
+
+    function checkDailyReward() {
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('cat_last_reward_date');
+
+      if (lastClaim !== today) {
+        userCoins += 1;
+        localStorage.setItem('cat_last_reward_date', today);
+        saveState();
+
+        setTimeout(() => {
+          const toast = document.getElementById('daily-toast');
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 3500);
+        }, 800);
+      } else {
+        saveState();
+      }
+    }
+
+    function applyManualTheme() {
+      document.body.classList.remove('theme-cafe', 'theme-night');
+      const cat = window.CATALOGO_COSMETICOS || {};
+      const found = (cat.temas || []).find(t => t.id === activeTheme);
+      if (found && found.class) document.body.classList.add(found.class);
+    }
+
+    function applyEyeColorAndPupils() {
+      const leftEye = document.getElementById('eye-bg-left');
+      const rightEye = document.getElementById('eye-bg-right');
+      if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
+      if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
+
+      ['pupil-normal', 'pupil-slit', 'pupil-sparkle'].forEach(cls => {
+        document.querySelectorAll('.' + cls).forEach(el => el.style.display = 'none');
+      });
+
+      if (activePupil === 'pupil_slit') {
+        document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
+      } else if (activePupil === 'pupil_sparkle') {
+        document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
+      } else {
+        document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
+      }
+    }
+
+    function applyBreeds() {
+      const bodyPath = document.getElementById('cat-body');
+      const headPath = document.getElementById('cat-head');
+      const tailPath = document.getElementById('cat-tail');
+
+      ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+
+      bodyPath.setAttribute('fill', '#fffdf9');
+      headPath.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('fill', 'none');
+      tailPath.setAttribute('stroke', '#2b2725');
+
+      if (activeBreed === 'breed_siamese') {
+        bodyPath.setAttribute('fill', '#ebdcc9');
+        headPath.setAttribute('fill', '#ebdcc9');
+        tailPath.setAttribute('stroke', '#3d281d');
+        document.getElementById('breed-siamese').style.display = 'block';
+      } else if (activeBreed === 'breed_tuxedo') {
+        bodyPath.setAttribute('fill', '#fffdf9');
+        headPath.setAttribute('fill', '#fffdf9');
+        tailPath.setAttribute('stroke', '#2b2725');
+        document.getElementById('breed-tuxedo').style.display = 'block';
+        document.getElementById('body-tuxedo').style.display = 'block';
+      } else if (activeBreed === 'breed_orange') {
+        bodyPath.setAttribute('fill', '#e58e45');
+        headPath.setAttribute('fill', '#e58e45');
+        tailPath.setAttribute('stroke', '#b3581d');
+        document.getElementById('breed-orange').style.display = 'block';
+        document.getElementById('body-orange').style.display = 'block';
+      }
+    }
+
+    function applyEquippedCosmetics() {
+      const bowtie = document.getElementById('cosmetic-bowtie');
+      if (bowtie) {
+        bowtie.style.display = equippedItems.includes('bowtie') ? 'block' : 'none';
+        const c = itemColors['bowtie'] || '#2b2725';
+        document.getElementById('bowtie-left').setAttribute('fill', c);
+        document.getElementById('bowtie-right').setAttribute('fill', c);
+      }
+
+      const glasses = document.getElementById('cosmetic-glasses');
+      if (glasses) {
+        glasses.style.display = equippedItems.includes('glasses') ? 'block' : 'none';
+        const c = itemColors['glasses'] || '#2b2725';
+        document.getElementById('glasses-left').setAttribute('stroke', c);
+        document.getElementById('glasses-right').setAttribute('stroke', c);
+        document.getElementById('glasses-bridge').setAttribute('stroke', c);
+        document.getElementById('glasses-leg-left').setAttribute('stroke', c);
+        document.getElementById('glasses-leg-right').setAttribute('stroke', c);
+      }
+
+      const flower = document.getElementById('cosmetic-flower');
+      if (flower) {
+        flower.style.display = equippedItems.includes('flower') ? 'block' : 'none';
+        const c = itemColors['flower'] || '#c48b36';
+        document.getElementById('flower-center').setAttribute('fill', c);
+      }
+
+      const crown = document.getElementById('cosmetic-crown');
+      if (crown) {
+        crown.style.display = equippedItems.includes('crown') ? 'block' : 'none';
+        const c = itemColors['crown'] || '#ecd29b';
+        document.getElementById('crown-body').setAttribute('fill', c);
+      }
+    }
+
+    function updateMiniPreview() {
+      const container = document.getElementById('shop-mini-cat-container');
+      const mainSvg = document.getElementById('main-cat-svg');
+      if (container && mainSvg) {
+        container.innerHTML = mainSvg.outerHTML;
+      }
+    }
+
+    /* =========================================================
+       4. NAVEGAÇÃO DE ABAS DA LOJA
+    ========================================================= */
+    function switchShopTab(tabKey) {
+      currentShopTab = tabKey;
+      document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.shop-tab-btn')).find(b => b.getAttribute('onclick').includes(tabKey));
+      if (activeBtn) activeBtn.classList.add('active');
+      renderCurrentShopTab();
+    }
+
+    function renderCurrentShopTab() {
+      const area = document.getElementById('shop-content-area');
+      area.innerHTML = '';
+      const cat = window.CATALOGO_COSMETICOS || {};
+
+      if (currentShopTab === 'acessorios') {
+        const grid = document.createElement('div');
+        grid.className = 'shop-items-grid';
+        (cat.acessorios || []).forEach(item => {
+          const isUnlocked = unlockedItems.includes(item.id);
+          const isEquipped = equippedItems.includes(item.id);
+          const currentColor = itemColors[item.id] || '#2b2725';
+          const card = document.createElement('div');
+          card.className = 'shop-card';
+
+          const svgRendered = item.svg.replace(/COLOR/g, currentColor);
+          card.innerHTML = `
+            <div class="shop-card-svg-preview">${svgRendered}</div>
+            <div class="shop-card-name">${item.nome}</div>
+            <div class="shop-card-price">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
+            ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${item.id}', event)">🎨 Mudar Cor</button>` : ''}
+            <button class="item-action-btn ${isEquipped ? 'equipped' : ''}" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
+              ${isUnlocked ? (isEquipped ? 'Equipado ✓' : 'Usar') : `Comprar`}
+            </button>
+          `;
+          grid.appendChild(card);
+        });
+        area.appendChild(grid);
+      } else if (currentShopTab === 'pupilas') {
+        renderGenericTabGrid(area, cat.pupilas || [], p => activePupil === p.id, p => {
+          if (unlockedItems.includes(p.id)) {
+            activePupil = p.id;
+          } else if (userCoins >= p.preco) {
+            userCoins -= p.preco;
+            unlockedItems.push(p.id);
+            activePupil = p.id;
+            playPaperSound();
+          } else {
+            alert('Você ainda não tem peixinhos suficientes! 🐟');
+            return;
+          }
+          saveState();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'olhos') {
+        renderGenericTabGrid(area, cat.olhos || [], o => activeEyeColor === o.hex, o => {
+          if (unlockedItems.includes(o.id)) {
+            activeEyeColor = o.hex;
+          } else if (userCoins >= o.preco) {
+            userCoins -= o.preco;
+            unlockedItems.push(o.id);
+            activeEyeColor = o.hex;
+            playPaperSound();
+          } else {
+            alert('Você ainda não tem peixinhos suficientes! 🐟');
+            return;
+          }
+          saveState();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'racas') {
+        renderGenericTabGrid(area, cat.racas || [], r => activeBreed === r.id, r => {
+          if (unlockedItems.includes(r.id)) {
+            activeBreed = r.id;
+          } else if (userCoins >= r.preco) {
+            userCoins -= r.preco;
+            unlockedItems.push(r.id);
+            activeBreed = r.id;
+            playPaperSound();
+          } else {
+            alert('Você ainda não tem peixinhos suficientes! 🐟');
+            return;
+          }
+          saveState();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'temas') {
+        renderGenericTabGrid(area, cat.temas || [], t => activeTheme === t.id, t => {
+          if (unlockedItems.includes(t.id)) {
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+          } else if (userCoins >= t.preco) {
+            userCoins -= t.preco;
+            unlockedItems.push(t.id);
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+            playPaperSound();
+          } else {
+            alert('Você ainda não tem peixinhos suficientes! 🐟');
+            return;
+          }
+          saveState();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'efeitos') {
+        renderGenericTabGrid(area, cat.efeitos || [], e => activeEffect === e.type, e => {
+          if (unlockedItems.includes(e.id)) {
+            activeEffect = e.type;
+          } else if (userCoins >= e.preco) {
+            userCoins -= e.preco;
+            unlockedItems.push(e.id);
+            activeEffect = e.type;
+            playPaperSound();
+          } else {
+            alert('Você ainda não tem peixinhos suficientes! 🐟');
+            return;
+          }
+          saveState();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'backup') {
+        area.innerHTML = `
+          <div style="padding: 10px 4px; text-align: center;">
+            <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados com segurança ou restaure seus peixinhos e roupinhas em outro aparelho:</p>
+            <div style="display: flex; gap: 10px;">
+              <button class="backup-btn" style="flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid var(--charcoal); cursor: pointer;" onclick="exportDataBackup()">📥 Salvar Backup</button>
+              <button class="backup-btn" style="flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid var(--charcoal); cursor: pointer;" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataBackup(event)">
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderGenericTabGrid(container, items, isSelectedFn, onSelect) {
+      const grid = document.createElement('div');
+      grid.className = 'shop-items-grid';
+      items.forEach(item => {
+        const isUnlocked = unlockedItems.includes(item.id);
+        const isSelected = isSelectedFn(item);
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+
+        card.innerHTML = `
+          <div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>
+          <div class="shop-card-name">${item.nome}</div>
+          <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${item.preco} 🐟`}</div>
+          <button class="item-action-btn ${isSelected ? 'equipped' : ''}">${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}</button>
+        `;
+        card.querySelector('button').onclick = () => onSelect(item);
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
+    }
+
+    function handleAccessoryClick(id, preco) {
+      if (unlockedItems.includes(id)) {
+        equippedItems = equippedItems.includes(id) ? equippedItems.filter(x => x !== id) : [...equippedItems, id];
+      } else if (userCoins >= preco) {
+        userCoins -= preco;
+        unlockedItems.push(id);
+        equippedItems.push(id);
+        playPaperSound();
+      } else {
+        alert('Você ainda não tem peixinhos suficientes! 🐟');
+        return;
+      }
+      saveState();
+      renderCurrentShopTab();
+    }
+
+    /* =========================================================
+       5. MODAL DE INFINIDADE DE CORES
+    ========================================================= */
+    let colorTargetItemId = null;
+
+    function openColorModal(itemId, event) {
+      if (event) event.stopPropagation();
+      colorTargetItemId = itemId;
+      const modal = document.getElementById('color-modal');
+      const grid = document.getElementById('color-picker-grid');
+      grid.innerHTML = '';
+
+      const cat = window.CATALOGO_COSMETICOS || {};
+      const tintas = cat.tintas || [];
+      const currentColor = itemColors[itemId] || '#2b2725';
+
+      tintas.forEach(t => {
+        const colorKey = `${itemId}_color_${t.id}`;
+        const isUnlocked = unlockedItems.includes(colorKey) || (t.id === 'c_preto' && itemId !== 'flower' && itemId !== 'crown') || (t.id === 'c_ambar' && (itemId === 'flower' || itemId === 'crown'));
+        const isActive = currentColor === t.hex;
+
+        const card = document.createElement('div');
+        card.className = `color-swatch-card ${isActive ? 'active' : ''}`;
+        card.innerHTML = `
+          <div class="color-swatch-circle" style="background: ${t.hex}"></div>
+          <div class="color-swatch-name">${t.nome}</div>
+          <div style="font-size: 0.7rem; color: var(--amber); margin-top: 2px;">${isUnlocked ? '✓' : '1 🐟'}</div>
+        `;
+
+        card.onclick = (e) => {
+          e.stopPropagation();
+          if (isUnlocked) {
+            itemColors[itemId] = t.hex;
+            saveState();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else if (userCoins >= 1) {
+            userCoins -= 1;
+            unlockedItems.push(colorKey);
+            itemColors[itemId] = t.hex;
+            playPaperSound();
+            saveState();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else {
+            alert('Você precisa de 1 peixinho para comprar esta tinta! 🐟');
+          }
+        };
+
+        grid.appendChild(card);
+      });
+
+      modal.classList.add('open');
+    }
+
+    function closeColorModal(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('color-modal').classList.remove('open');
+    }
+
+    function openShop(event) {
+      if (event) event.stopPropagation();
+      updateMiniPreview();
+      renderCurrentShopTab();
+      document.getElementById('shop-modal').classList.add('open');
+    }
+
+    function closeShop(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('shop-modal').classList.remove('open');
+    }
+
+    /* =========================================================
+       6. BACKUP EM ARQUIVO JSON
+    ========================================================= */
+    function exportDataBackup() {
+      const backupData = {
+        cat_coins: userCoins,
+        cat_unlocked: unlockedItems,
+        cat_equipped: equippedItems,
+        cat_item_colors: itemColors,
+        cat_active_eye_color: activeEyeColor,
+        cat_active_pupil: activePupil,
+        cat_active_breed: activeBreed,
+        cat_active_theme: activeTheme,
+        cat_active_effect: activeEffect,
+        cat_last_reward_date: localStorage.getItem('cat_last_reward_date'),
+        cat_last_opened_period: localStorage.getItem('cat_last_opened_period'),
+        backup_date: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_gatinho.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.cat_coins !== undefined) userCoins = data.cat_coins;
+          if (Array.isArray(data.cat_unlocked)) unlockedItems = data.cat_unlocked;
+          if (Array.isArray(data.cat_equipped)) equippedItems = data.cat_equipped;
+          if (data.cat_item_colors) itemColors = data.cat_item_colors;
+          if (data.cat_active_eye_color) activeEyeColor = data.cat_active_eye_color;
+          if (data.cat_active_pupil) activePupil = data.cat_active_pupil;
+          if (data.cat_active_breed) activeBreed = data.cat_active_breed;
+          if (data.cat_active_theme) activeTheme = data.cat_active_theme;
+          if (data.cat_active_effect) activeEffect = data.cat_active_effect;
+          if (data.cat_last_reward_date) localStorage.setItem('cat_last_reward_date', data.cat_last_reward_date);
+          if (data.cat_last_opened_period) localStorage.setItem('cat_last_opened_period', data.cat_last_opened_period);
+
+          saveState();
+          updateLetterHoldingState();
+          renderCurrentShopTab();
+          alert('Backup restaurado com sucesso! Seus dados e moedas voltaram.');
+        } catch (err) {
+          alert('Erro ao carregar o arquivo de backup.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* =========================================================
+       7. REPRODUÇÃO DE ÁUDIO
+    ========================================================= */
+    let catAudio = null;
+    try {
+      catAudio = new Audio('gato_1.mp3');
+    } catch(e) {
+      catAudio = null;
+    }
+
+    let audioCtx = null;
+    function playSynthesizedMeow() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc.type = 'triangle';
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1600, now);
+
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(780, now + 0.16);
+        osc.frequency.exponentialRampToValueAtTime(400, now + 0.55);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.25, now + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.6);
+      } catch (err) {}
+    }
+
+    function playMeowSound() {
+      if (catAudio) {
+        catAudio.currentTime = 0;
+        catAudio.play().catch(() => playSynthesizedMeow());
+      } else {
+        playSynthesizedMeow();
+      }
+    }
+
+    function playPaperSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const bufferSize = audioCtx.sampleRate * 0.15;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 1200;
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        noise.start(now);
+      } catch(e) {}
+    }
+
+    /* =========================================================
+       8. INTERAÇÕES: ABRIR E FECHAR CARTA
+    ========================================================= */
+    const letterModal = document.getElementById('letter-modal');
+    const letterContent = document.getElementById('letter-content');
+    const catWrapper = document.getElementById('cat-wrapper');
+    const regularEyes = document.getElementById('regular-eyes');
+    const happyEyes = document.getElementById('happy-eyes');
+    const speechBubble = document.getElementById('speech-bubble');
+
+    function openLetter(event) {
+      if (event) event.stopPropagation();
+
+      const period = getPeriodName();
+      const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+      const cartaCfg = cfg.carta || {};
+
+      letterContent.innerText = cartaCfg.texto || "Adoro o seu jeitinho. Seu sorriso me contagia de alegria.\n\nMeu pedaço de pecado, te amo!";
+      document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo o meu amor, para você ♡";
+
+      playPaperSound();
+      letterModal.classList.add('open');
+      speechBubble.style.opacity = '0';
+      createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
+
+      const currentPeriod = getCurrentPeriodKey();
+      localStorage.setItem('cat_last_opened_period', currentPeriod);
+      updateLetterHoldingState();
+    }
+
+    function closeLetter(event) {
+      if (event) event.stopPropagation();
+      letterModal.classList.remove('open');
+      speechBubble.style.opacity = '1';
+    }
+
+    let petTimeout = null;
+    function petTheCat(event) {
+      if (event) event.stopPropagation();
+      playMeowSound();
+
+      regularEyes.style.display = 'none';
+      happyEyes.style.display = 'block';
+      catWrapper.classList.add('petting');
+
+      const rect = catWrapper.getBoundingClientRect();
+      createFloatingParticles(rect.left + rect.width / 2, rect.top + 50, 6);
+
+      clearTimeout(petTimeout);
+      petTimeout = setTimeout(() => {
+        regularEyes.style.display = 'block';
+        happyEyes.style.display = 'none';
+        catWrapper.classList.remove('petting');
+      }, 1000);
+    }
+
+    /* =========================================================
+       9. RASTROS DE PATINHAS E PARTÍCULAS
+    ========================================================= */
+    const canvas = document.getElementById('fx-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const paws = [];
+    const particles = [];
+
+    function drawPaw(x, y, angle, alpha, scale = 1) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.scale(scale, scale);
+      ctx.fillStyle = `rgba(100, 90, 80, ${alpha * 0.5})`;
+
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 7.5, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      const toes = [
+        { dx: -7.5, dy: -8.5, r: 2.8 },
+        { dx: -2.8, dy: -11.5, r: 3.2 },
+        { dx: 3.2, dy: -11.5, r: 3.2 },
+        { dx: 7.8, dy: -8.5, r: 2.8 }
+      ];
+      toes.forEach(t => {
+        ctx.beginPath();
+        ctx.arc(t.dx, t.dy, t.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+
+    function createFloatingParticles(x, y, count = 5) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x + (Math.random() * 40 - 20),
+          y: y + (Math.random() * 20 - 10),
+          vx: Math.random() * 2 - 1,
+          vy: -(Math.random() * 2 + 1.5),
+          size: Math.random() * 12 + 10,
+          alpha: 0.9,
+          decay: Math.random() * 0.015 + 0.012,
+          type: activeEffect
+        });
+      }
+    }
+
+    function drawParticle(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.globalAlpha = p.alpha;
+
+      if (p.type === 'heart') {
+        ctx.fillStyle = '#c48b36';
+        ctx.beginPath();
+        const topH = p.size * 0.3;
+        ctx.moveTo(0, topH);
+        ctx.bezierCurveTo(0, 0, -p.size/2, 0, -p.size/2, topH);
+        ctx.bezierCurveTo(-p.size/2, (p.size+topH)/2, 0, p.size, 0, p.size);
+        ctx.bezierCurveTo(0, p.size, p.size/2, (p.size+topH)/2, p.size/2, topH);
+        ctx.bezierCurveTo(p.size/2, 0, 0, 0, 0, topH);
+        ctx.fill();
+      } else if (p.type === 'leaf') {
+        ctx.fillStyle = '#a86c2e';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size * 0.4, p.size * 0.8, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.type === 'star') {
+        ctx.fillStyle = '#d89f4b';
+        ctx.beginPath();
+        for (let i = 0; i < 4; i++) {
+          ctx.rotate(Math.PI / 2);
+          ctx.lineTo(p.size * 0.7, 0);
+          ctx.lineTo(p.size * 0.2, p.size * 0.2);
+        }
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    class PawTrail {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
+        this.angle = Math.random() * Math.PI * 2;
+        this.stepsLeft = Math.floor(Math.random() * 5) + 4;
+        this.stepDist = 24;
+        this.side = 1;
+        this.delay = Math.random() * 60;
+      }
+      step() {
+        if (this.delay > 0) { this.delay--; return; }
+        const px = this.x + Math.cos(this.angle + Math.PI / 2) * (8 * this.side);
+        const py = this.y + Math.sin(this.angle + Math.PI / 2) * (8 * this.side);
+
+        paws.push({ x: px, y: py, angle: this.angle + Math.PI / 2, alpha: 0.38, scale: 0.9 + Math.random() * 0.2 });
+
+        this.x += Math.cos(this.angle) * this.stepDist;
+        this.y += Math.sin(this.angle) * this.stepDist;
+        this.angle += (Math.random() * 0.4 - 0.2);
+        this.side *= -1;
+        this.stepsLeft--;
+        this.delay = 18;
+
+        if (this.stepsLeft <= 0 || this.x < -50 || this.x > window.innerWidth + 50 || this.y < -50 || this.y > window.innerHeight + 50) {
+          this.reset();
+        }
+      }
+    }
+
+    const trails = [new PawTrail(), new PawTrail(), new PawTrail()];
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      trails.forEach(t => t.step());
+
+      for (let i = paws.length - 1; i >= 0; i--) {
+        const p = paws[i];
+        drawPaw(p.x, p.y, p.angle, p.alpha, p.scale);
+        p.alpha -= 0.0035;
+        if (p.alpha <= 0) paws.splice(i, 1);
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        drawParticle(pt);
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.alpha -= pt.decay;
+        if (pt.alpha <= 0) particles.splice(i, 1);
+      }
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    const peekers = [
+      document.getElementById('peeker-left'),
+      document.getElementById('peeker-right'),
+      document.getElementById('peeker-bottom')
+    ];
+
+    function triggerRandomPeeker() {
+      const p = peekers[Math.floor(Math.random() * peekers.length)];
+      p.classList.add('active');
+      setTimeout(() => p.classList.remove('active'), 2600);
+      setTimeout(triggerRandomPeeker, Math.random() * 4500 + 3500);
+    }
+    setTimeout(triggerRandomPeeker, 2000);
+
+    /* Inicializações */
+    checkDailyReward();
+    updateLetterHoldingState();
+    saveState();
+
+    if (autoTimeEnabled) {
+      document.getElementById('auto-time-btn').classList.add('active');
+      updateTimeTheme();
+      setInterval(() => {
+        updateTimeTheme();
+        updateLetterHoldingState();
+      }, 30000);
+    } else {
+      document.getElementById('auto-time-btn').classList.remove('active');
+      document.getElementById('auto-time-text').innerText = "Auto: OFF";
+      applyManualTheme();
+    }
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uma Cartinha Para Você 🐾</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <script src="mensagens.js"></script>
   <style>
     :root {
       --bg-paper: #f4ede1;
