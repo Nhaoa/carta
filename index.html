@@ -227,7 +227,6 @@
       filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
     }
 
-    /* Animações e Posturas de Status */
     .cat-wrapper.sick {
       filter: grayscale(0.25) opacity(0.9);
       animation: shiver 0.25s infinite alternate;
@@ -362,7 +361,6 @@
       100% { transform: scale(0.8); opacity: 0; }
     }
 
-    /* CHANGELOG */
     .changelog-content {
       overflow-y: auto;
       padding-right: 6px;
@@ -391,7 +389,6 @@
       line-height: 1.4;
     }
 
-    /* MINI PREVIEW DA LOJA VIP */
     .shop-preview-box {
       width: 100%;
       height: 90px;
@@ -421,6 +418,7 @@
       margin-bottom: 10px;
       border-bottom: 1.5px solid var(--pencil-light);
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
     }
     .shop-tab-btn {
       flex: 0 0 auto;
@@ -451,6 +449,97 @@
       align-items: center;
       background: rgba(0, 0, 0, 0.03);
     }
+    .shop-card-svg-preview {
+      width: 58px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .shop-card-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1px;
+      text-align: center;
+    }
+    .shop-card-price {
+      font-size: 0.85rem;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .palette-btn {
+      width: 100%;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1.5px dashed var(--charcoal);
+      background: #faf4e8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .color-paper {
+      max-width: 360px;
+      z-index: 120;
+    }
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      overflow-y: auto;
+      max-height: 320px;
+      padding: 4px;
+    }
+    .color-swatch-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      background: #fffdf9;
+    }
+    .color-swatch-card.active {
+      box-shadow: 0 0 0 2.5px var(--amber);
+    }
+    .color-swatch-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,0,0,0.2);
+      margin-bottom: 4px;
+    }
+    .color-swatch-name {
+      font-size: 0.75rem;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .daily-toast {
+      position: fixed;
+      bottom: 24px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 20px;
+      padding: 10px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-size: 1.15rem;
+      z-index: 150;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .daily-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -480,7 +569,6 @@
   </div>
 
   <main class="stage">
-    <!-- Barras de Status -->
     <div class="status-card">
       <div class="status-row">
         <span class="status-label">🍖 Fome:</span>
@@ -500,12 +588,10 @@
       </div>
     </div>
 
-    <!-- Balão de Fala Dinâmico -->
     <div class="speech-bubble" id="speech-bubble" onclick="openLetter(event)">
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Gatinho Único -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
       <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
         <defs>
@@ -515,12 +601,9 @@
           <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
         </defs>
 
-        <!-- Cauda -->
         <path id="cat-tail" d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
-        <!-- Corpo -->
         <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Pelagem Corpo -->
         <g clip-path="url(#cat-body-clip)" id="body-markings">
           <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
           <g id="body-orange" style="display: none;">
@@ -530,10 +613,8 @@
           </g>
         </g>
 
-        <!-- Cabeça -->
         <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Pelagem Cabeça -->
         <g clip-path="url(#cat-head-clip)" id="breed-markings">
           <g id="breed-siamese" style="display: none;">
             <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
@@ -542,6 +623,8 @@
           </g>
           <g id="breed-tuxedo" style="display: none;">
             <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
+            <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
+            <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
             <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
           </g>
           <g id="breed-orange" style="display: none;">
@@ -552,7 +635,6 @@
           </g>
         </g>
 
-        <!-- OLHOS NORMAIS / EXPRESSÕES DINÂMICAS -->
         <g id="regular-eyes">
           <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
           <g clip-path="url(#left-eye-clip)">
@@ -572,30 +654,25 @@
           </g>
         </g>
 
-        <!-- Pálpebras de Sono (Energia Baixa) -->
         <g id="sleepy-eyelids" style="display: none;">
           <path d="M 42,94 Q 68,110 94,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
           <path d="M 96,94 Q 122,110 148,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
         </g>
 
-        <!-- Olhos Felizes (Carinho) -->
         <g id="happy-eyes" style="display: none;">
           <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
         </g>
 
-        <!-- Boquinhas Dinâmicas de Status -->
         <path id="mouth-normal" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
         <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
         <ellipse id="mouth-hungry" cx="98" cy="118" rx="4" ry="6" fill="#2b2725" style="display: none;"/>
 
-        <!-- Bochechas de Alta Felicidade -->
         <g id="happy-blush" style="display: none;">
           <ellipse cx="50" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
           <ellipse cx="146" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
         </g>
 
-        <!-- Band-aid / Febre (Saúde Baixa) -->
         <g id="sick-mark" style="display: none;">
           <rect x="130" y="60" width="16" height="7" rx="3" fill="#e5c898" stroke="#2b2725" stroke-width="1.5" transform="rotate(25 130 60)"/>
         </g>
@@ -612,7 +689,6 @@
           <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
         </g>
 
-        <!-- Cosméticos -->
         <g id="cosmetic-bowtie" style="display: none;">
           <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
           <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
@@ -640,7 +716,6 @@
       </svg>
     </div>
 
-    <!-- Botões de Ação -->
     <div class="action-row">
       <button class="action-btn" onclick="petTheCat(event)"><span>Fazer Festinha</span> 🐾</button>
       <button class="action-btn" onclick="openCareShop(event)"><span>Cuidar</span> 🍖</button>
@@ -658,7 +733,7 @@
     </div>
   </div>
 
-  <!-- MODAL: CUIDADOS (USANDO PATINHAS 🐾) -->
+  <!-- MODAL: CUIDADOS -->
   <div class="modal-backdrop" id="care-modal" onclick="closeCareShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeCareShop(event)">✕</button>
@@ -678,7 +753,7 @@
     </div>
   </div>
 
-  <!-- MODAL: LOJINHA VIP (USANDO PEIXINHOS 🐟) -->
+  <!-- MODAL: LOJINHA VIP COMPLETA -->
   <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
@@ -699,6 +774,16 @@
     </div>
   </div>
 
+  <!-- MODAL: PALETA DE CORES -->
+  <div class="modal-backdrop" id="color-modal" onclick="closeColorModal(event)">
+    <div class="modal-paper color-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
+      <div class="color-grid" id="color-picker-grid"></div>
+    </div>
+  </div>
+
   <!-- MODAL: HISTÓRICO / CHANGELOG -->
   <div class="modal-backdrop" id="changelog-modal" onclick="closeChangelog(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
@@ -706,30 +791,19 @@
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Atualizações 📜</h3>
       <div class="changelog-content">
         <div class="changelog-entry">
+          <div class="changelog-version">v2.6 - Catálogo Blindado & Multi-Abas</div>
+          <div class="changelog-date">07 de Outubro de 2026</div>
+          <ul class="changelog-list">
+            <li>Correção de renderização: todas as abas de cosméticos agora carregam instantaneamente.</li>
+            <li>Suporte à paleta de cores ampliada direto da aba Acessórios.</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
           <div class="changelog-version">v2.5 - Sistema de Estado & Expressões Dinâmicas</div>
           <div class="changelog-date">07 de Outubro de 2026</div>
           <ul class="changelog-list">
-            <li>O gatinho agora expressa cansaço, fome, tristeza e saúde através do olhar, boquinha e postura.</li>
-            <li>Trava de status: Se algum indicador ficar abaixo de 30%, o gatinho fica fraco e não entrega o peixinho diário.</li>
-            <li>Adicionada a janela oficial de Changelog para acompanhar as mudanças.</li>
-          </ul>
-        </div>
-        <div class="changelog-entry">
-          <div class="changelog-version">v2.4 - Tamagotchi & Economia Dupla</div>
-          <div class="changelog-date">06 de Outubro de 2026</div>
-          <ul class="changelog-list">
-            <li>Criada a moeda secundária "Patinhas 🐾" ganha em minijogos.</li>
-            <li>Adicionada loja de cuidados com ração, sachê, caminha e remédios.</li>
-            <li>Adicionado o minijogo interativo "Pegue a Patinha".</li>
-          </ul>
-        </div>
-        <div class="changelog-entry">
-          <div class="changelog-version">v2.3 - Raças Reais & Mini Preview</div>
-          <div class="changelog-date">05 de Outubro de 2026</div>
-          <ul class="changelog-list">
-            <li>Pelagens fiéis aos gatos da vida real: Siamês, Frajola e Laranja Listrado.</li>
-            <li>Cosméticos de pupila felina e cores customizáveis com mini visualizador na loja.</li>
-            <li>Correção de sobreposição de balões e fluxo de cliques.</li>
+            <li>O gatinho expressa cansaço, fome, tristeza e saúde através do olhar, boquinha e postura.</li>
+            <li>Trava de status: Se algum indicador ficar abaixo de 30%, o gatinho não entrega o peixinho diário.</li>
           </ul>
         </div>
       </div>
@@ -738,18 +812,92 @@
 
   <script>
     /* =========================================================
-       1. SISTEMA DE STATUS E REAÇÕES DO GATO
+       CATÁLOGO LOCAL COM AUTO-RECUPERAÇÃO COMPLETA
     ========================================================= */
+    const DEFAULT_CATALOG = {
+      tintas: [
+        { id: 'c_preto', nome: 'Grafite Escuro', hex: '#2b2725' },
+        { id: 'c_cinza', nome: 'Cinza Suave', hex: '#7a736e' },
+        { id: 'c_marrom', nome: 'Chocolate', hex: '#4a3528' },
+        { id: 'c_ambar', nome: 'Âmbar Dourado', hex: '#c48b36' },
+        { id: 'c_laranja', nome: 'Laranja Queimado', hex: '#d96b27' },
+        { id: 'c_vermelho', nome: 'Vinho Aveludado', hex: '#872b2b' },
+        { id: 'c_rosa', nome: 'Pêssego Suave', hex: '#d98b82' },
+        { id: 'c_roxo', nome: 'Ametista Profundo', hex: '#5b3a6e' },
+        { id: 'c_azul_escuro', nome: 'Azul Meia-Noite', hex: '#223854' },
+        { id: 'c_azul_claro', nome: 'Azul Céu', hex: '#4f83a8' },
+        { id: 'c_verde_escuro', nome: 'Verde Musgo', hex: '#375239' },
+        { id: 'c_verde_claro', nome: 'Verde Sálvia', hex: '#5f8263' },
+        { id: 'c_creme', nome: 'Baunilha Claro', hex: '#f0e3ce' },
+        { id: 'c_dourado', nome: 'Ouro Nobre', hex: '#dfb15b' }
+      ],
+      acessorios: [
+        { 
+          id: 'bowtie', nome: 'Gravatinha Borboleta', preco: 1,
+          svg: `<svg viewBox="0 0 60 40" width="46" height="32"><polygon points="12,10 12,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><polygon points="48,10 48,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="20" r="4.5" fill="#c48b36"/></svg>`
+        },
+        { 
+          id: 'glasses', nome: 'Óculos com Hastes', preco: 2,
+          svg: `<svg viewBox="0 0 76 35" width="54" height="26"><line x1="4" y1="14" x2="18" y2="18" stroke="COLOR" stroke-width="2.5"/><line x1="72" y1="14" x2="58" y2="18" stroke="COLOR" stroke-width="2.5"/><circle cx="28" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><circle cx="48" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><path d="M 40,18 Q 38,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/></svg>`
+        },
+        { 
+          id: 'flower', nome: 'Florzinha Delicada', preco: 3,
+          svg: `<svg viewBox="0 0 50 50" width="38" height="38"><circle cx="20" cy="18" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="13" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="36" cy="22" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="28" cy="30" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="18" cy="26" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="26" cy="22" r="4.5" fill="COLOR"/></svg>`
+        },
+        { 
+          id: 'crown', nome: 'Coroa Imperial', preco: 4,
+          svg: `<svg viewBox="0 0 60 40" width="46" height="30"><path d="M 10,12 L 18,28 L 30,6 L 42,28 L 50,12 L 48,34 L 12,34 Z" fill="COLOR" stroke="#2b2725" stroke-width="2.5"/><circle cx="30" cy="6" r="2.5" fill="#c48b36"/></svg>`
+        }
+      ],
+      pupilas: [
+        { id: 'pupil_round', nome: 'Olhar Curioso (Normal)', preco: 0, icone: '●' },
+        { id: 'pupil_slit', nome: 'Fenda Felina (Caçador)', preco: 2, icone: '❙' },
+        { id: 'pupil_sparkle', nome: 'Olhar Brilhante (Anime)', preco: 3, icone: '✦' }
+      ],
+      olhos: [
+        { id: 'eye_charcoal', nome: 'Grafite Preto', hex: '#2b2725', preco: 0, icone: '👁️' },
+        { id: 'eye_blue', nome: 'Azul Safira (Siamês)', hex: '#3466b0', preco: 2, icone: '💎' },
+        { id: 'eye_amber', nome: 'Âmbar Dourado', hex: '#c47d25', preco: 2, icone: '🍯' },
+        { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3e', preco: 3, icone: '🌿' },
+        { id: 'eye_violet', nome: 'Violeta Profundo', hex: '#633974', preco: 3, icone: '🔮' }
+      ],
+      racas: [
+        { id: 'breed_default', nome: 'Branco Clássico', preco: 0, icone: '⚪' },
+        { id: 'breed_siamese', nome: 'Siamês Real', preco: 3, icone: '🤎' },
+        { id: 'breed_tuxedo', nome: 'Frajola Real', preco: 3, icone: '🖤' },
+        { id: 'breed_orange', nome: 'Laranja Listrado', preco: 4, icone: '🧡' }
+      ],
+      temas: [
+        { id: 'theme_default', nome: 'Pergaminho', preco: 0, icone: '📜', class: '' },
+        { id: 'theme_cafe', nome: 'Carvão & Café', preco: 3, icone: '☕', class: 'theme-cafe' },
+        { id: 'theme_night', nome: 'Noite Estrelada', preco: 5, icone: '🌌', class: 'theme-night' }
+      ],
+      efeitos: [
+        { id: 'fx_hearts', nome: 'Corações', preco: 0, icone: '🤍', type: 'heart' },
+        { id: 'fx_leaves', nome: 'Folhas de Outono', preco: 2, icone: '🍂', type: 'leaf' },
+        { id: 'fx_stars', nome: 'Estrelinhas', preco: 3, icone: '✨', type: 'star' }
+      ]
+    };
+
+    function getCatalog() {
+      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : DEFAULT_CATALOG;
+    }
+
     let catStats = JSON.parse(localStorage.getItem('cat_stats') || JSON.stringify({
-      hunger: 80,
-      energy: 80,
-      happiness: 85,
-      health: 95,
-      lastUpdate: Date.now()
+      hunger: 80, energy: 80, happiness: 85, health: 95, lastUpdate: Date.now()
     }));
 
     let userCoins = parseInt(localStorage.getItem('cat_coins') || '0', 10);
     let userPawCoins = parseInt(localStorage.getItem('cat_paw_coins') || '15', 10);
+    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "pupil_round", "bowtie_color_c_preto", "glasses_color_c_preto", "flower_color_c_ambar", "crown_color_c_ambar"]');
+    let equippedItems = JSON.parse(localStorage.getItem('cat_equipped') || '["fx_hearts"]');
+    let itemColors = JSON.parse(localStorage.getItem('cat_item_colors') || '{"bowtie":"#2b2725","glasses":"#2b2725","flower":"#c48b36","crown":"#ecd29b"}');
+    let activeEyeColor = localStorage.getItem('cat_active_eye_color') || '#2b2725';
+    let activePupil = localStorage.getItem('cat_active_pupil') || 'pupil_round';
+    let activeBreed = localStorage.getItem('cat_active_breed') || 'breed_default';
+    let activeTheme = localStorage.getItem('cat_active_theme') || 'theme_default';
+    let activeEffect = localStorage.getItem('cat_active_effect') || 'heart';
+    let currentShopTab = 'acessorios';
 
     const CARE_ITEMS = [
       { id: 'food_snack', name: 'Ração Crocante', icon: '🍖', price: 2, effect: { hunger: +25, happiness: +5 } },
@@ -768,10 +916,9 @@
       const lastClaim = localStorage.getItem('cat_last_reward_date');
 
       if (lastClaim !== today) {
-        // Se estiver com status crítico, ele não consegue pescar
         if (isStatusCritical()) {
           const bubble = document.getElementById('speech-bubble');
-          bubble.innerText = "O gatinho está muito cansado ou faminto para pescar hoje... Cuide dele primeiro! 😿";
+          bubble.innerText = "O gatinho está muito debilitado ou com fome para pescar hoje... Cuide dele primeiro! 😿";
           return;
         }
 
@@ -821,7 +968,6 @@
       const happyBlush = document.getElementById('happy-blush');
       const sickMark = document.getElementById('sick-mark');
 
-      // Reseta classes e elementos
       wrapper.classList.remove('sick', 'sleepy');
       sleepyEyelids.style.display = 'none';
       mouthNormal.style.display = 'block';
@@ -830,7 +976,6 @@
       happyBlush.style.display = 'none';
       sickMark.style.display = 'none';
 
-      // 1. Saúde Crítica (< 35%)
       if (catStats.health < 35) {
         wrapper.classList.add('sick');
         sickMark.style.display = 'block';
@@ -839,28 +984,24 @@
         return;
       }
 
-      // 2. Energia Baixa (< 35%)
       if (catStats.energy < 35) {
         wrapper.classList.add('sleepy');
         sleepyEyelids.style.display = 'block';
         return;
       }
 
-      // 3. Fome Alta (< 30%)
       if (catStats.hunger < 30) {
         mouthHungry.style.display = 'block';
         mouthNormal.style.display = 'none';
         return;
       }
 
-      // 4. Tristeza (< 35%)
       if (catStats.happiness < 35) {
         mouthSad.style.display = 'block';
         mouthNormal.style.display = 'none';
         return;
       }
 
-      // 5. Todos saudáveis (> 70%)
       if (catStats.hunger >= 70 && catStats.energy >= 70 && catStats.happiness >= 70 && catStats.health >= 70) {
         happyBlush.style.display = 'block';
       }
@@ -885,8 +1026,22 @@
       localStorage.setItem('cat_stats', JSON.stringify(catStats));
       localStorage.setItem('cat_paw_coins', userPawCoins);
       localStorage.setItem('cat_coins', userCoins);
+      localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
+      localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
+      localStorage.setItem('cat_item_colors', JSON.stringify(itemColors));
+      localStorage.setItem('cat_active_eye_color', activeEyeColor);
+      localStorage.setItem('cat_active_pupil', activePupil);
+      localStorage.setItem('cat_active_breed', activeBreed);
+      localStorage.setItem('cat_active_theme', activeTheme);
+      localStorage.setItem('cat_active_effect', activeEffect);
+      
       renderStatusBars();
       updateCatVisualExpression();
+      applyEquippedCosmetics();
+      applyBreeds();
+      applyEyeColorAndPupils();
+      updateMiniPreview();
+      if (!autoTimeEnabled) applyManualTheme();
     }
 
     function applyCareItem(item) {
@@ -901,8 +1056,6 @@
         saveStats();
         renderCareShop();
         createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 8);
-
-        // Se cuidou e agora não é mais crítico, tenta verificar a recompensa
         checkDailyReward();
       } else {
         alert('Patinhas insuficientes! Jogue no botão "Brincar" para ganhar mais 🐾');
@@ -935,9 +1088,7 @@
       });
     }
 
-    /* =========================================================
-       2. MINIJOGO DE PATINHAS
-    ========================================================= */
+    /* MINIJOGO */
     let gameInterval = null;
     function openMinigame(e) {
       if (e) e.stopPropagation();
@@ -978,9 +1129,6 @@
       }, 700);
     }
 
-    /* =========================================================
-       3. CHANGELOG MODAL
-    ========================================================= */
     function openChangelog(e) {
       if (e) e.stopPropagation();
       document.getElementById('changelog-modal').classList.add('open');
@@ -990,9 +1138,6 @@
       document.getElementById('changelog-modal').classList.remove('open');
     }
 
-    /* =========================================================
-       4. INTEGRAÇÃO DE CARINHO E CARTAS
-    ========================================================= */
     function handleCatClick(e) {
       if (document.getElementById('cat-letter-group').style.display !== 'none') {
         openLetter(e);
@@ -1026,9 +1171,6 @@
       }, 1000);
     }
 
-    /* =========================================================
-       5. SISTEMA BASE (HORÁRIOS, ÁUDIO, CANVAS E LOJA VIP)
-    ========================================================= */
     function getPeriodName() {
       const hour = new Date().getHours();
       if (hour >= 5 && hour < 12) return "manha";
@@ -1088,14 +1230,7 @@
       }
     }
 
-    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "pupil_round"]');
-    let equippedItems = JSON.parse(localStorage.getItem('cat_equipped') || '["fx_hearts"]');
-    let itemColors = JSON.parse(localStorage.getItem('cat_item_colors') || '{"bowtie":"#2b2725","glasses":"#2b2725","flower":"#c48b36","crown":"#ecd29b"}');
-    let activeEyeColor = localStorage.getItem('cat_active_eye_color') || '#2b2725';
-    let activePupil = localStorage.getItem('cat_active_pupil') || 'pupil_round';
-    let activeBreed = localStorage.getItem('cat_active_breed') || 'breed_default';
-    let currentShopTab = 'acessorios';
-
+    /* RENDERIZAÇÃO COMPLETA DE TODAS AS ABAS DA LOJA */
     function openShop(e) {
       if (e) e.stopPropagation();
       document.getElementById('shop-modal').classList.add('open');
@@ -1118,7 +1253,7 @@
     function renderCurrentShopTab() {
       const area = document.getElementById('shop-content-area');
       area.innerHTML = '';
-      const cat = window.CATALOGO_COSMETICOS || {};
+      const cat = getCatalog();
 
       if (currentShopTab === 'acessorios') {
         const grid = document.createElement('div');
@@ -1126,21 +1261,140 @@
         (cat.acessorios || []).forEach(item => {
           const isUnlocked = unlockedItems.includes(item.id);
           const isEquipped = equippedItems.includes(item.id);
+          const currentColor = itemColors[item.id] || '#2b2725';
           const card = document.createElement('div');
           card.className = 'shop-card';
+
+          const svgRendered = (item.svg || '').replace(/COLOR/g, currentColor);
           card.innerHTML = `
-            <div style="font-weight: bold; margin-bottom: 2px;">${item.nome}</div>
-            <div style="color: var(--amber); font-size: 0.85rem; margin-bottom: 4px;">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
-            <button class="action-btn" style="padding: 4px 10px; font-size: 0.85rem;" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
+            <div class="shop-card-svg-preview">${svgRendered}</div>
+            <div class="shop-card-name">${item.nome}</div>
+            <div class="shop-card-price">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
+            ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${item.id}', event)">🎨 Mudar Cor</button>` : ''}
+            <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isEquipped ? 'background: var(--amber); color: #fff;' : ''}" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
               ${isUnlocked ? (isEquipped ? 'Equipado ✓' : 'Usar') : 'Comprar'}
             </button>
           `;
           grid.appendChild(card);
         });
         area.appendChild(grid);
-      } else {
-        area.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--pencil-light);">Selecione os itens no catálogo de cosméticos!</div>`;
+      } else if (currentShopTab === 'pupilas') {
+        renderGenericTabGrid(area, cat.pupilas || [], p => activePupil === p.id, p => {
+          if (unlockedItems.includes(p.id)) {
+            activePupil = p.id;
+          } else if (userCoins >= p.preco) {
+            userCoins -= p.preco;
+            unlockedItems.push(p.id);
+            activePupil = p.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'olhos') {
+        renderGenericTabGrid(area, cat.olhos || [], o => activeEyeColor === o.hex, o => {
+          if (unlockedItems.includes(o.id)) {
+            activeEyeColor = o.hex;
+          } else if (userCoins >= o.preco) {
+            userCoins -= o.preco;
+            unlockedItems.push(o.id);
+            activeEyeColor = o.hex;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'racas') {
+        renderGenericTabGrid(area, cat.racas || [], r => activeBreed === r.id, r => {
+          if (unlockedItems.includes(r.id)) {
+            activeBreed = r.id;
+          } else if (userCoins >= r.preco) {
+            userCoins -= r.preco;
+            unlockedItems.push(r.id);
+            activeBreed = r.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'temas') {
+        renderGenericTabGrid(area, cat.temas || [], t => activeTheme === t.id, t => {
+          if (unlockedItems.includes(t.id)) {
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+          } else if (userCoins >= t.preco) {
+            userCoins -= t.preco;
+            unlockedItems.push(t.id);
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'efeitos') {
+        renderGenericTabGrid(area, cat.efeitos || [], e => activeEffect === e.type, e => {
+          if (unlockedItems.includes(e.id)) {
+            activeEffect = e.type;
+          } else if (userCoins >= e.preco) {
+            userCoins -= e.preco;
+            unlockedItems.push(e.id);
+            activeEffect = e.type;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'backup') {
+        area.innerHTML = `
+          <div style="padding: 10px 4px; text-align: center;">
+            <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados com segurança ou restaure seus peixinhos e roupinhas em outro aparelho:</p>
+            <div style="display: flex; gap: 10px;">
+              <button class="action-btn" style="flex: 1; justify-content: center;" onclick="exportDataBackup()">📥 Salvar Backup</button>
+              <button class="action-btn" style="flex: 1; justify-content: center;" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataBackup(event)">
+            </div>
+          </div>
+        `;
       }
+    }
+
+    function renderGenericTabGrid(container, items, isSelectedFn, onSelect) {
+      const grid = document.createElement('div');
+      grid.className = 'shop-items-grid';
+      items.forEach(item => {
+        const isUnlocked = unlockedItems.includes(item.id);
+        const isSelected = isSelectedFn(item);
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+
+        card.innerHTML = `
+          <div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>
+          <div class="shop-card-name">${item.nome}</div>
+          <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${item.preco} 🐟`}</div>
+          <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
+            ${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+          </button>
+        `;
+        card.querySelector('button').onclick = () => onSelect(item);
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
     }
 
     function handleAccessoryClick(id, preco) {
@@ -1152,21 +1406,163 @@
         equippedItems.push(id);
         playPaperSound();
       } else {
-        alert('Peixinhos insuficientes! Cuide do gatinho diariamente para ganhar mais 🐟');
+        alert('Peixinhos insuficientes! 🐟');
         return;
       }
-      localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
-      localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
       saveStats();
-      applyEquippedCosmetics();
       renderCurrentShopTab();
     }
 
-    function applyEquippedCosmetics() {
-      ['bowtie', 'glasses', 'flower', 'crown'].forEach(id => {
-        const el = document.getElementById(`cosmetic-${id}`);
-        if (el) el.style.display = equippedItems.includes(id) ? 'block' : 'none';
+    let colorTargetItemId = null;
+    function openColorModal(itemId, event) {
+      if (event) event.stopPropagation();
+      colorTargetItemId = itemId;
+      const modal = document.getElementById('color-modal');
+      const grid = document.getElementById('color-picker-grid');
+      grid.innerHTML = '';
+
+      const cat = getCatalog();
+      const tintas = cat.tintas || [];
+      const currentColor = itemColors[itemId] || '#2b2725';
+
+      tintas.forEach(t => {
+        const colorKey = `${itemId}_color_${t.id}`;
+        const isUnlocked = unlockedItems.includes(colorKey) || (t.id === 'c_preto' && itemId !== 'flower' && itemId !== 'crown') || (t.id === 'c_ambar' && (itemId === 'flower' || itemId === 'crown'));
+        const isActive = currentColor === t.hex;
+
+        const card = document.createElement('div');
+        card.className = `color-swatch-card ${isActive ? 'active' : ''}`;
+        card.innerHTML = `
+          <div class="color-swatch-circle" style="background: ${t.hex}"></div>
+          <div class="color-swatch-name">${t.nome}</div>
+          <div style="font-size: 0.7rem; color: var(--amber); margin-top: 2px;">${isUnlocked ? '✓' : '1 🐟'}</div>
+        `;
+
+        card.onclick = (e) => {
+          e.stopPropagation();
+          if (isUnlocked) {
+            itemColors[itemId] = t.hex;
+            saveStats();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else if (userCoins >= 1) {
+            userCoins -= 1;
+            unlockedItems.push(colorKey);
+            itemColors[itemId] = t.hex;
+            playPaperSound();
+            saveStats();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else {
+            alert('Você precisa de 1 peixinho para comprar esta tinta! 🐟');
+          }
+        };
+
+        grid.appendChild(card);
       });
+
+      modal.classList.add('open');
+    }
+
+    function closeColorModal(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('color-modal').classList.remove('open');
+    }
+
+    function applyManualTheme() {
+      document.body.classList.remove('theme-cafe', 'theme-night');
+      const cat = getCatalog();
+      const found = (cat.temas || []).find(t => t.id === activeTheme);
+      if (found && found.class) document.body.classList.add(found.class);
+    }
+
+    function applyEyeColorAndPupils() {
+      const leftEye = document.getElementById('eye-bg-left');
+      const rightEye = document.getElementById('eye-bg-right');
+      if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
+      if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
+
+      ['pupil-normal', 'pupil-slit', 'pupil-sparkle'].forEach(cls => {
+        document.querySelectorAll('.' + cls).forEach(el => el.style.display = 'none');
+      });
+
+      if (activePupil === 'pupil_slit') {
+        document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
+      } else if (activePupil === 'pupil_sparkle') {
+        document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
+      } else {
+        document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
+      }
+    }
+
+    function applyBreeds() {
+      const bodyPath = document.getElementById('cat-body');
+      const headPath = document.getElementById('cat-head');
+      const tailPath = document.getElementById('cat-tail');
+
+      ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+
+      bodyPath.setAttribute('fill', '#fffdf9');
+      headPath.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('fill', 'none');
+      tailPath.setAttribute('stroke', '#2b2725');
+
+      if (activeBreed === 'breed_siamese') {
+        bodyPath.setAttribute('fill', '#ebdcc9');
+        headPath.setAttribute('fill', '#ebdcc9');
+        tailPath.setAttribute('stroke', '#3d281d');
+        document.getElementById('breed-siamese').style.display = 'block';
+      } else if (activeBreed === 'breed_tuxedo') {
+        bodyPath.setAttribute('fill', '#fffdf9');
+        headPath.setAttribute('fill', '#fffdf9');
+        tailPath.setAttribute('stroke', '#2b2725');
+        document.getElementById('breed-tuxedo').style.display = 'block';
+        document.getElementById('body-tuxedo').style.display = 'block';
+      } else if (activeBreed === 'breed_orange') {
+        bodyPath.setAttribute('fill', '#e58e45');
+        headPath.setAttribute('fill', '#e58e45');
+        tailPath.setAttribute('stroke', '#b3581d');
+        document.getElementById('breed-orange').style.display = 'block';
+        document.getElementById('body-orange').style.display = 'block';
+      }
+    }
+
+    function applyEquippedCosmetics() {
+      const bowtie = document.getElementById('cosmetic-bowtie');
+      if (bowtie) {
+        bowtie.style.display = equippedItems.includes('bowtie') ? 'block' : 'none';
+        const c = itemColors['bowtie'] || '#2b2725';
+        document.getElementById('bowtie-left').setAttribute('fill', c);
+        document.getElementById('bowtie-right').setAttribute('fill', c);
+      }
+
+      const glasses = document.getElementById('cosmetic-glasses');
+      if (glasses) {
+        glasses.style.display = equippedItems.includes('glasses') ? 'block' : 'none';
+        const c = itemColors['glasses'] || '#2b2725';
+        document.getElementById('glasses-left').setAttribute('stroke', c);
+        document.getElementById('glasses-right').setAttribute('stroke', c);
+        document.getElementById('glasses-bridge').setAttribute('stroke', c);
+        document.getElementById('glasses-leg-left').setAttribute('stroke', c);
+        document.getElementById('glasses-leg-right').setAttribute('stroke', c);
+      }
+
+      const flower = document.getElementById('cosmetic-flower');
+      if (flower) {
+        flower.style.display = equippedItems.includes('flower') ? 'block' : 'none';
+        const c = itemColors['flower'] || '#c48b36';
+        document.getElementById('flower-center').setAttribute('fill', c);
+      }
+
+      const crown = document.getElementById('cosmetic-crown');
+      if (crown) {
+        crown.style.display = equippedItems.includes('crown') ? 'block' : 'none';
+        const c = itemColors['crown'] || '#ecd29b';
+        document.getElementById('crown-body').setAttribute('fill', c);
+      }
     }
 
     function updateMiniPreview() {
@@ -1175,14 +1571,74 @@
       if (container && mainSvg) container.innerHTML = mainSvg.outerHTML;
     }
 
+    function exportDataBackup() {
+      const backupData = {
+        cat_coins: userCoins,
+        cat_paw_coins: userPawCoins,
+        cat_stats: catStats,
+        cat_unlocked: unlockedItems,
+        cat_equipped: equippedItems,
+        cat_item_colors: itemColors,
+        cat_active_eye_color: activeEyeColor,
+        cat_active_pupil: activePupil,
+        cat_active_breed: activeBreed,
+        cat_active_theme: activeTheme,
+        cat_active_effect: activeEffect,
+        cat_last_reward_date: localStorage.getItem('cat_last_reward_date'),
+        cat_last_opened_period: localStorage.getItem('cat_last_opened_period'),
+        backup_date: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_gatinho.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.cat_coins !== undefined) userCoins = data.cat_coins;
+          if (data.cat_paw_coins !== undefined) userPawCoins = data.cat_paw_coins;
+          if (data.cat_stats) catStats = data.cat_stats;
+          if (Array.isArray(data.cat_unlocked)) unlockedItems = data.cat_unlocked;
+          if (Array.isArray(data.cat_equipped)) equippedItems = data.cat_equipped;
+          if (data.cat_item_colors) itemColors = data.cat_item_colors;
+          if (data.cat_active_eye_color) activeEyeColor = data.cat_active_eye_color;
+          if (data.cat_active_pupil) activePupil = data.cat_active_pupil;
+          if (data.cat_active_breed) activeBreed = data.cat_active_breed;
+          if (data.cat_active_theme) activeTheme = data.cat_active_theme;
+          if (data.cat_active_effect) activeEffect = data.cat_active_effect;
+          if (data.cat_last_reward_date) localStorage.setItem('cat_last_reward_date', data.cat_last_reward_date);
+          if (data.cat_last_opened_period) localStorage.setItem('cat_last_opened_period', data.cat_last_opened_period);
+
+          saveStats();
+          updateLetterHoldingState();
+          renderCurrentShopTab();
+          alert('Backup restaurado com sucesso! Seus dados e moedas voltaram.');
+        } catch (err) {
+          alert('Erro ao carregar o arquivo de backup.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
     function openLetter(event) {
       if (event) event.stopPropagation();
       const period = getPeriodName();
       const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
       const cartaCfg = cfg.carta || {};
 
-      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro você!";
-      document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com amor ♡";
+      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro o seu jeitinho!";
+      document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo amor ♡";
 
       playPaperSound();
       document.getElementById('letter-modal').classList.add('open');
@@ -1246,11 +1702,10 @@
     animate();
 
     window.addEventListener('DOMContentLoaded', () => {
-      renderStatusBars();
+      saveStats();
       updateCatStatsOverTime();
       checkDailyReward();
       updateLetterHoldingState();
-      applyEquippedCosmetics();
 
       if (autoTimeEnabled) {
         document.getElementById('auto-time-btn').classList.add('active');
