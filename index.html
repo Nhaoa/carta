@@ -7,6 +7,696 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <script src="mensagens.js"></script>
+  <style>
+    :root {
+      --bg-paper: #f4ede1;
+      --paper-grid: #ded4c1;
+      --charcoal: #2b2725;
+      --pencil: #443e3a;
+      --pencil-light: #6e645e;
+      --amber: #c48b36;
+      --amber-soft: #ecd29b;
+      --card-bg: #fffdf9;
+    }
+
+    body.time-morning {
+      --bg-paper: #fbf6ec;
+      --paper-grid: #e6dcce;
+      --charcoal: #2b2725;
+      --card-bg: #ffffff;
+      --amber: #c88832;
+    }
+    body.time-afternoon {
+      --bg-paper: #f2e7d3;
+      --paper-grid: #d9caae;
+      --charcoal: #282422;
+      --card-bg: #fffaf0;
+      --amber: #b87a26;
+    }
+    body.time-evening {
+      --bg-paper: #322d2a;
+      --paper-grid: #423c38;
+      --charcoal: #f3ece1;
+      --pencil-light: #b0a49c;
+      --card-bg: #262220;
+      --amber: #d89f4b;
+    }
+    body.time-dawn {
+      --bg-paper: #1e1b19;
+      --paper-grid: #2c2724;
+      --charcoal: #e6ded4;
+      --pencil-light: #948b84;
+      --card-bg: #151312;
+      --amber: #cfa156;
+    }
+
+    body.theme-cafe {
+      --bg-paper: #eae0d0;
+      --paper-grid: #cfc2ad;
+      --charcoal: #302621;
+      --card-bg: #fdfaf5;
+      --amber: #a86c2e;
+    }
+    body.theme-night {
+      --bg-paper: #22252a;
+      --paper-grid: #32373e;
+      --charcoal: #e8ecf2;
+      --pencil-light: #9aa2ae;
+      --card-bg: #191c20;
+      --amber: #d2a149;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-paper);
+      background-image: 
+        radial-gradient(circle, var(--paper-grid) 1.2px, transparent 1.2px),
+        linear-gradient(to right, rgba(120, 110, 100, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120, 110, 100, 0.1) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px, 24px 24px;
+      font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      user-select: none;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .top-controls {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+    }
+
+    .auto-time-toggle, .coin-badge {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 1.05rem;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .auto-time-toggle:active, .coin-badge:active {
+      transform: scale(0.96);
+    }
+    .auto-time-toggle.active {
+      border-color: var(--amber);
+      background: #faf4e6;
+      color: #2b2725;
+    }
+
+    .border-peeker {
+      position: fixed;
+      pointer-events: none;
+      z-index: 2;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+      opacity: 0;
+    }
+    .border-peeker.left {
+      left: -55px;
+      top: 35%;
+      transform: rotate(90deg);
+    }
+    .border-peeker.left.active {
+      transform: translateX(55px) rotate(90deg);
+      opacity: 1;
+    }
+    .border-peeker.right {
+      right: -55px;
+      bottom: 30%;
+      transform: rotate(-90deg);
+    }
+    .border-peeker.right.active {
+      transform: translateX(-55px) rotate(-90deg);
+      opacity: 1;
+    }
+    .border-peeker.bottom {
+      bottom: -55px;
+      left: 70%;
+      transform: rotate(0deg);
+    }
+    .border-peeker.bottom.active {
+      transform: translateY(-55px) rotate(0deg);
+      opacity: 1;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .speech-bubble {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 26px;
+      padding: 10px 22px;
+      font-size: 1.25rem;
+      color: var(--charcoal);
+      box-shadow: 3px 4px 0px rgba(0, 0, 0, 0.15);
+      margin-bottom: 14px;
+      position: relative;
+      animation: floatBubble 3s ease-in-out infinite;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .speech-bubble:active {
+      transform: scale(0.96);
+    }
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 11px 11px 0;
+      border-style: solid;
+      border-color: var(--charcoal) transparent transparent;
+      display: block;
+      width: 0;
+    }
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 9px 9px 0;
+      border-style: solid;
+      border-color: var(--card-bg) transparent transparent;
+      display: block;
+      width: 0;
+      z-index: 1;
+    }
+
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .cat-wrapper {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s ease;
+    }
+    .cat-wrapper:active {
+      transform: scale(0.97);
+    }
+
+    .cat-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
+    }
+
+    .cat-wrapper.petting {
+      animation: catWiggle 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes catWiggle {
+      0% { transform: rotate(-3deg) scale(1.02); }
+      100% { transform: rotate(3deg) scale(1.02); }
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .pet-btn, .shop-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      font-family: inherit;
+      color: var(--charcoal);
+      cursor: pointer;
+      box-shadow: 2px 4px 0px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pet-btn:hover, .shop-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 2px 6px 0px rgba(0, 0, 0, 0.2);
+    }
+    .pet-btn:active, .shop-btn:active {
+      transform: translateY(2px);
+      box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .letter-modal, .shop-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .letter-modal.open, .shop-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .letter-paper, .shop-paper {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 18px;
+      max-width: 440px;
+      width: 100%;
+      padding: 38px 24px 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+      transform: translateY(25px) scale(0.92);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+    .letter-paper {
+      background-image: repeating-linear-gradient(
+        var(--card-bg),
+        var(--card-bg) 27px,
+        rgba(150, 140, 130, 0.25) 28px
+      );
+      line-height: 28px;
+    }
+    .letter-modal.open .letter-paper, .shop-modal.open .shop-paper {
+      transform: translateY(0) scale(1);
+    }
+
+    .letter-stamp {
+      position: absolute;
+      top: 14px;
+      right: 56px;
+      width: 44px;
+      height: 48px;
+      border: 1.5px dashed var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transform: rotate(6deg);
+      background: rgba(236, 210, 155, 0.15);
+    }
+
+    .letter-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    .letter-footer {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.15rem;
+      color: var(--pencil-light);
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      border-top: 1px dashed var(--amber);
+      padding-top: 12px;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.2);
+      z-index: 30;
+    }
+    .close-modal-btn:hover {
+      background: #f1e4d0;
+      transform: scale(1.05);
+    }
+
+    .shop-title {
+      font-family: 'Caveat', cursive;
+      font-size: 2.1rem;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .shop-subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--pencil-light);
+      margin-bottom: 14px;
+    }
+    .shop-section-title {
+      font-size: 1.1rem;
+      margin: 14px 0 8px;
+      color: var(--amber);
+      border-bottom: 1px dashed rgba(150, 140, 130, 0.4);
+      padding-bottom: 4px;
+    }
+    .shop-items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .shop-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .shop-card-svg-preview {
+      width: 58px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+    .shop-card-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .shop-card-price {
+      font-size: 0.88rem;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+
+    .color-picker-row {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 8px;
+      justify-content: center;
+    }
+    .color-dot {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 1.5px solid var(--charcoal);
+      cursor: pointer;
+      position: relative;
+    }
+    .color-dot.active {
+      transform: scale(1.25);
+      box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 3.5px var(--charcoal);
+    }
+    .color-dot.locked::after {
+      content: '🔒';
+      font-size: 8px;
+      position: absolute;
+      top: -2px;
+      right: -3px;
+    }
+
+    .item-action-btn {
+      width: 100%;
+      padding: 6px;
+      border-radius: 14px;
+      border: 1.5px solid var(--charcoal);
+      background: var(--card-bg);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--charcoal);
+    }
+    .item-action-btn.equipped {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .backup-panel {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .backup-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      background: var(--card-bg);
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.1);
+    }
+    .backup-btn:hover {
+      background: #faf4e6;
+    }
+
+    .daily-toast {
+      position: fixed;
+      bottom: 24px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 20px;
+      padding: 10px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-size: 1.15rem;
+      z-index: 150;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .daily-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="fx-canvas"></canvas>
+
+  <div class="top-controls">
+    <button class="auto-time-toggle" id="auto-time-btn" onclick="toggleAutoTime()">
+      <span id="auto-time-icon">⏰</span>
+      <span id="auto-time-text">Tema Auto: ON</span>
+    </button>
+    <div class="coin-badge" onclick="openShop()">
+      <span>🐟</span>
+      <span id="coin-counter">0</span>
+    </div>
+  </div>
+
+  <div class="daily-toast" id="daily-toast">
+    🎁 Você ganhou sua moeda diária! (+1 🐟)
+  </div>
+
+  <!-- Gatinhos espiando nas bordas -->
+  <div class="border-peeker left" id="peeker-left">
+    <svg width="70" height="60" viewBox="0 0 100 80">
+      <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="37" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="67" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="41" cy="49" r="4.2" fill="#ffffff"/>
+      <circle cx="71" cy="49" r="4.2" fill="#ffffff"/>
+      <path d="M 49,69 Q 52,72 55,69" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="border-peeker right" id="peeker-right">
+    <svg width="70" height="60" viewBox="0 0 100 80">
+      <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="37" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="67" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="41" cy="49" r="4.2" fill="#ffffff"/>
+      <circle cx="71" cy="49" r="4.2" fill="#ffffff"/>
+      <path d="M 49,69 Q 52,72 55,69" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="border-peeker bottom" id="peeker-bottom">
+    <svg width="70" height="60" viewBox="0 0 100 80">
+      <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
+            fill="#fffdf9" stroke="#2b2725" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="37" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="67" cy="55" r="14" fill="#2b2725"/>
+      <circle cx="41" cy="49" r="4.2" fill="#ffffff"/>
+      <circle cx="71" cy="49" r="4.2" fill="#ffffff"/>
+      <path d="M 49,69 Q 52,72 55,69" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <main class="stage">
+    <div class="speech-bubble" id="speech-bubble" onclick="openLetter()">
+      Psst... toque no gatinho para abrir a cartinha!🐾
+    </div>
+
+    <div class="cat-wrapper" id="cat-wrapper" onclick="openLetter()">
+      <svg class="cat-svg" viewBox="0 0 200 200">
+        <defs>
+          <clipPath id="left-eye-clip">
+            <ellipse cx="68" cy="98" rx="26" ry="24"/>
+          </clipPath>
+          <clipPath id="right-eye-clip">
+            <ellipse cx="122" cy="98" rx="26" ry="24"/>
+          </clipPath>
+        </defs>
+
+        <!-- Cauda -->
+        <path id="cat-tail" d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" 
+              fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- Corpo e patinhas traseiras -->
+        <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" 
+              fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <!-- Cabeça -->
+        <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" 
+              fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <!-- RAÇAS DE GATOS REAIS -->
+        <g id="breed-markings">
+          <g id="breed-siamese" style="display: none;">
+            <path d="M 80,105 Q 98,90 116,105 Q 98,130 80,105 Z" fill="#6d5448" opacity="0.85"/>
+            <path d="M 44,42 L 52,42 L 48,58 Z" fill="#6d5448"/>
+            <path d="M 148,42 L 140,42 L 144,58 Z" fill="#6d5448"/>
+          </g>
+          <g id="breed-tuxedo" style="display: none;">
+            <path d="M 44,82 C 40,54 44,38 52,42 L 75,70 Q 55,85 50,110 Z" fill="#2b2725"/>
+            <path d="M 152,82 C 156,54 152,38 144,42 L 121,70 Q 141,85 146,110 Z" fill="#2b2725"/>
+          </g>
+          <g id="breed-orange" style="display: none;">
+            <path d="M 94,52 L 102,52 L 98,64 Z" fill="#d97a36"/>
+            <path d="M 82,56 L 88,56 L 87,66 Z" fill="#d97a36"/>
+            <path d="M 114,56 L 108,56 L 109,66 Z" fill="#d97a36"/>
+            <path d="M 48,94 L 58,90 L 52,100 Z" fill="#d97a36"/>
+            <path d="M 148,94 L 138,90 L 144,100 Z" fill="#d97a36"/>
+          </g>
+          <g id="breed-calico" style="display: none;">
+            <path d="M 46,40 Q 64,52 60,70 L 44,60 Z" fill="#d97a36"/>
+            <path d="M 144,40 Q 126,52 130,70 L 150,60 Z" fill="#2b2725"/>
+            <ellipse cx="120" cy="148" rx="10" ry="8" fill="#d97a36"/>
+          </g>
+        </g>
+
+        <!-- Olhos Regulares -->
+        <g id="regular-eyes">
+          <ellipse cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <g clip-path="url(#left-eye-clip)">
+            <path d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
+            <circle cx="76" cy="103" r="2.8" fill="#ffffff"/>
+          </g>
+
+          <ellipse cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <g clip-path="url(#right-eye-clip)">
+            <path d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
+            <circle cx="130" cy="103" r="2.8" fill="#ffffff"/>
+          </g>
+
+          <path d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- Olhos de Carinho -->
+        <g id="happy-eyes" style="display: none;">
+          <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M 90,114 Q 95,123 99,117 Q 103,123 108,114" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round"/>
+        </g>
+
+        <!-- Patinhas de descanso -->
+        <g id="idle-paws" style="display: none;">
+          <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+        </g>
+
+        <!-- Envelope Fechado -->
+        <g id="cat-letter-group">
+          <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+          <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M 70,166 L 90,146" fill="none" stroke="#2b2725" stroke-width="2"/>
+          <path d="M 126,166 L 106,146" fill="none" stroke="#2b2725" stroke-width="2"/>
+          <path d="M 98,145 C 98,143 96,141 94,142 C 92,143 92,145 94,147 L 98,151 L 102,147 C 104,145 104,143 102,142 C 100,141 98,143 98,145 Z" 
+                fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+        </g>
+
+        <!-- COSMÉTICOS -->
+        <g id="cosmetic-<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uma Cartinha Para Você 🐾</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-paper: #f4ede1;
