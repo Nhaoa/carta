@@ -73,4 +73,29 @@ window.CATALOGO_COSMETICOS = {
     { id: 'eye_charcoal', nome: 'Grafite Preto', hex: '#2b2725', preco: 0, icone: '👁️' },
     { id: 'eye_blue', nome: 'Azul Safira (Siamês)', hex: '#3466b0', preco: 2, icone: '💎' },
     { id: 'eye_amber', nome: 'Âmbar Dourado', hex: '#c47d25', preco: 2, icone: '🍯' },
-    { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3
+    { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3e', preco: 3, icone: '🌿' },
+    { id: 'eye_violet', nome: 'Violeta Profundo', hex: '#633974', preco: 3, icone: '🔮' }
+  ],
+
+  // Raças com padrões realistas
+  racas: [
+    { id: 'breed_default', nome: 'Branco Clássico', preco: 0, icone: '⚪' },
+    { id: 'breed_siamese', nome: 'Siamês Real', preco: 3, icone: '🤎' },
+    { id: 'breed_tuxedo', nome: 'Frajola Real', preco: 3, icone: '🖤' },
+    { id: 'breed_orange', nome: 'Laranja Listrado', preco: 4, icone: '🧡' }
+  ],
+
+  // Temas de iluminação e papel
+  temas: [
+    { id: 'theme_default', nome: 'Pergaminho', preco: 0, icone: '📜', class: '' },
+    { id: 'theme_cafe', nome: 'Carvão & Café', preco: 3, icone: '☕', class: 'theme-cafe' },
+    { id: 'theme_night', nome: 'Noite Estrelada', preco: 5, icone: '🌌', class: 'theme-night' }
+  ],
+
+  // Efeitos ao acariciar
+  efeitos: [
+    { id: 'fx_hearts', nome: 'Corações', preco: 0, icone: '🤍', type: 'heart' },
+    { id: 'fx_leaves', nome: 'Folhas de Outono', preco: 2, icone: '🍂', type: 'leaf' },
+    { id: 'fx_stars', nome: 'Estrelinhas', preco: 3, icone: '✨', type: 'star' }
+  ]
+};
