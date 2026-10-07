@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
-    /* Paleta padrão / Dia */
     :root {
       --bg-paper: #f4ede1;
       --paper-grid: #ded4c1;
@@ -52,7 +51,6 @@
       --amber: #cfa156;
     }
 
-    /* Paletas compradas na loja */
     body.theme-cafe {
       --bg-paper: #eae0d0;
       --paper-grid: #cfc2ad;
@@ -103,7 +101,7 @@
       z-index: 1;
     }
 
-    /* Barra Superior de Controles */
+    /* Controles Superiores */
     .top-controls {
       position: fixed;
       top: 16px;
@@ -320,12 +318,12 @@
       border-radius: 18px;
       max-width: 440px;
       width: 100%;
-      padding: 30px 22px 22px;
+      padding: 38px 24px 24px;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
       position: relative;
       transform: translateY(25px) scale(0.92);
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      max-height: 85vh;
+      max-height: 88vh;
       overflow-y: auto;
     }
     .letter-paper {
@@ -343,7 +341,7 @@
     .letter-stamp {
       position: absolute;
       top: 14px;
-      right: 18px;
+      right: 56px;
       width: 44px;
       height: 48px;
       border: 1.5px dashed var(--amber);
@@ -378,24 +376,32 @@
       padding-top: 12px;
     }
 
+    /* Botão X de Fechar Totalmente Acessível */
     .close-modal-btn {
       position: absolute;
       top: 12px;
       right: 12px;
       background: var(--card-bg);
       border: 2px solid var(--charcoal);
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
       color: var(--charcoal);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.2);
+      z-index: 20;
+    }
+    .close-modal-btn:hover {
+      background: #f1e4d0;
+      transform: scale(1.05);
     }
 
-    /* Lojinha com abas */
+    /* Lojinha & Backup */
     .shop-title {
       font-family: 'Caveat', cursive;
       font-size: 2.1rem;
@@ -445,7 +451,7 @@
     }
     .item-action-btn {
       width: 100%;
-      padding: 5px;
+      padding: 6px;
       border-radius: 14px;
       border: 1.5px solid var(--charcoal);
       background: var(--card-bg);
@@ -457,6 +463,32 @@
     .item-action-btn.equipped {
       background: var(--amber);
       color: #fff;
+    }
+
+    /* Painel de Backup */
+    .backup-panel {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .backup-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      background: var(--card-bg);
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.1);
+    }
+    .backup-btn:hover {
+      background: #faf4e6;
     }
 
     .daily-toast {
@@ -499,7 +531,7 @@
     🎁 Você ganhou sua moeda diária! (+1 🐟)
   </div>
 
-  <!-- Gatinhos espiando nas bordas (design do rascunho com orelhas simétricas pontiagudas) -->
+  <!-- Gatinhos espiando nas bordas -->
   <div class="border-peeker left" id="peeker-left">
     <svg width="70" height="60" viewBox="0 0 100 80">
       <path d="M 16,80 L 16,42 L 6,18 L 40,32 Q 50,35 60,32 L 94,18 L 84,42 L 84,80 Z"
@@ -556,7 +588,7 @@
         <path d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" 
               fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
 
-        <!-- Corpo e patinhas traseiras em arco 'U' contínuas e arredondadas -->
+        <!-- Corpo e patinhas traseiras -->
         <path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" 
               fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
@@ -581,20 +613,48 @@
           <path d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
         </g>
 
-        <!-- Olhos Felizes (Carinho) -->
+        <!-- Olhos de Carinho (^ ‿ ^) -->
         <g id="happy-eyes" style="display: none;">
           <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M 90,114 Q 95,123 99,117 Q 103,123 108,114" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round"/>
         </g>
 
-        <!-- Cosméticos do Gato -->
+        <!-- Patinhas apoiadas na barriga (quando não está segurando a carta) -->
+        <g id="idle-paws" style="display: none;">
+          <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+        </g>
+
+        <!-- Envelope Fechado (segurado pelo gato 1 vez por período) -->
+        <g id="cat-letter-group">
+          <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+          <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M 70,166 L 90,146" fill="none" stroke="#2b2725" stroke-width="2"/>
+          <path d="M 126,166 L 106,146" fill="none" stroke="#2b2725" stroke-width="2"/>
+          <path d="M 98,145 C 98,143 96,141 94,142 C 92,143 92,145 94,147 L 98,151 L 102,147 C 104,145 104,143 102,142 C 100,141 98,143 98,145 Z" 
+                fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          <!-- Patinhas segurando o envelope -->
+          <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+        </g>
+
+        <!-- ================= COSMÉTICOS DO GATO ================= -->
+        <!-- Gravatinha Borboleta (Posicionada acima, visível com ou sem a carta) -->
+        <g id="cosmetic-bowtie" style="display: none;">
+          <polygon points="85,124 85,138 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <polygon points="111,124 111,138 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+          <circle cx="98" cy="131" r="3.5" fill="#c48b36"/>
+        </g>
+
+        <!-- Óculos -->
         <g id="cosmetic-glasses" style="display: none;">
           <circle cx="68" cy="98" r="24" fill="none" stroke="#2b2725" stroke-width="3"/>
           <circle cx="122" cy="98" r="24" fill="none" stroke="#2b2725" stroke-width="3"/>
           <path d="M 92,98 Q 95,94 98,98" fill="none" stroke="#2b2725" stroke-width="3"/>
         </g>
 
+        <!-- Florzinha -->
         <g id="cosmetic-flower" style="display: none;">
           <circle cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
           <circle cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
@@ -604,30 +664,12 @@
           <circle cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
         </g>
 
+        <!-- Coroa -->
         <g id="cosmetic-crown" style="display: none;">
           <path d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" 
                 fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
           <circle cx="98" cy="42" r="2.5" fill="#c48b36"/>
         </g>
-
-        <g id="cosmetic-bowtie" style="display: none;">
-          <polygon points="86,134 86,146 95,140" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
-          <polygon points="108,134 108,146 99,140" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
-          <circle cx="97" cy="140" r="3" fill="#c48b36"/>
-        </g>
-
-        <!-- Envelope Fechado -->
-        <g id="closed-letter">
-          <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
-          <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
-          <path d="M 70,166 L 90,146" fill="none" stroke="#2b2725" stroke-width="2"/>
-          <path d="M 126,166 L 106,146" fill="none" stroke="#2b2725" stroke-width="2"/>
-          <path d="M 98,145 C 98,143 96,141 94,142 C 92,143 92,145 94,147 L 98,151 L 102,147 C 104,145 104,143 102,142 C 100,141 98,143 98,145 Z" 
-                fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
-        </g>
-
-        <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-        <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
       </svg>
     </div>
 
@@ -642,9 +684,10 @@
     </div>
   </main>
 
-  <!-- Modal da Carta -->
+  <!-- Modal da Carta Aberta -->
   <div class="letter-modal" id="letter-modal">
     <div class="letter-paper">
+      <!-- Botão de Fechar ✕ Totalmente funcional e acessível -->
       <button class="close-modal-btn" onclick="closeLetter()" aria-label="Fechar">✕</button>
       <div class="letter-stamp">💌</div>
       <div class="letter-text" id="letter-content"></div>
@@ -661,25 +704,64 @@
       <h2 class="shop-title">Lojinha & Cosméticos 🐟</h2>
       <p class="shop-subtitle">Use suas moedas diárias para personalizar tudo!</p>
 
-      <!-- Seção Acessórios do Gatinho -->
       <div class="shop-section-title">Acessórios do Gatinho</div>
       <div class="shop-items-grid" id="shop-accessories-grid"></div>
 
-      <!-- Seção Paletas de Cor -->
       <div class="shop-section-title">Paletas de Cores do Site</div>
       <div class="shop-items-grid" id="shop-themes-grid"></div>
 
-      <!-- Seção Efeitos Flutuantes -->
       <div class="shop-section-title">Efeitos de Carinho</div>
       <div class="shop-items-grid" id="shop-effects-grid"></div>
+
+      <!-- Backup e Restauração de Dados -->
+      <div class="shop-section-title">Dados & Backup 💾</div>
+      <div class="backup-panel">
+        <button class="backup-btn" onclick="exportDataBackup()">📥 Salvar Backup</button>
+        <button class="backup-btn" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
+        <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataBackup(event)">
+      </div>
     </div>
   </div>
 
   <script>
     /* =========================================================
-       1. SISTEMA DE TEMAS E MUDANÇA CONFORME HORÁRIO
+       1. CONTROLE DE PERÍODO E ENTREGA DA CARTA
     ========================================================= */
-    let autoTimeEnabled = localStorage.getItem('cat_auto_time') !== 'false'; // Padrão ligado
+    function getCurrentPeriodKey() {
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+      const hour = now.getHours();
+      let period = "dawn";
+      if (hour >= 5 && hour < 12) period = "morning";
+      else if (hour >= 12 && hour < 18) period = "afternoon";
+      else if (hour >= 18 && hour < 24) period = "evening";
+      return `${dateStr}_${period}`;
+    }
+
+    function updateLetterHoldingState() {
+      const currentPeriod = getCurrentPeriodKey();
+      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
+      const letterGroup = document.getElementById('cat-letter-group');
+      const idlePaws = document.getElementById('idle-paws');
+      const bubble = document.getElementById('speech-bubble');
+
+      // Se ainda não abriu a carta deste período, o gato segura o envelope
+      if (lastOpenedPeriod !== currentPeriod) {
+        letterGroup.style.display = 'block';
+        idlePaws.style.display = 'none';
+        bubble.innerText = "Psst... o gatinho trouxe uma cartinha para você! 🐾";
+      } else {
+        // Já abriu neste período: gato solta a carta
+        letterGroup.style.display = 'none';
+        idlePaws.style.display = 'block';
+        bubble.innerText = "Toque no gatinho para reler a cartinha! 💌";
+      }
+    }
+
+    /* =========================================================
+       2. TEMA AUTOMÁTICO CONFORME O HORÁRIO
+    ========================================================= */
+    let autoTimeEnabled = localStorage.getItem('cat_auto_time') !== 'false';
 
     function updateTimeTheme() {
       if (!autoTimeEnabled) return;
@@ -722,7 +804,7 @@
     }
 
     /* =========================================================
-       2. CONFIGURAÇÃO DOS ITENS DA LOJINHA
+       3. LOJINHA, ITENS E BACKUP
     ========================================================= */
     const SHOP_CONFIG = {
       accessories: [
@@ -821,7 +903,6 @@
     }
 
     function renderShop() {
-      // Acessórios
       renderShopSection('shop-accessories-grid', SHOP_CONFIG.accessories, 
         item => equippedItems.includes(item.id),
         item => {
@@ -841,13 +922,12 @@
         }
       );
 
-      // Temas
       renderShopSection('shop-themes-grid', SHOP_CONFIG.themes,
         item => activeTheme === item.id,
         item => {
           if (unlockedItems.includes(item.id)) {
             activeTheme = item.id;
-            if (autoTimeEnabled) toggleAutoTime(); // Desliga o automático se escolher tema manual
+            if (autoTimeEnabled) toggleAutoTime();
           } else if (userCoins >= item.price) {
             userCoins -= item.price;
             unlockedItems.push(item.id);
@@ -863,7 +943,6 @@
         }
       );
 
-      // Efeitos
       renderShopSection('shop-effects-grid', SHOP_CONFIG.effects,
         item => activeEffect === item.type,
         item => {
@@ -898,7 +977,58 @@
     });
 
     /* =========================================================
-       3. SAUDAÇÃO DINÂMICA
+       4. BACKUP EM ARQUIVO JSON
+    ========================================================= */
+    function exportDataBackup() {
+      const backupData = {
+        cat_coins: userCoins,
+        cat_unlocked: unlockedItems,
+        cat_equipped: equippedItems,
+        cat_active_theme: activeTheme,
+        cat_active_effect: activeEffect,
+        cat_last_reward_date: localStorage.getItem('cat_last_reward_date'),
+        cat_last_opened_period: localStorage.getItem('cat_last_opened_period'),
+        backup_date: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_gatinho.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.cat_coins !== undefined) userCoins = data.cat_coins;
+          if (Array.isArray(data.cat_unlocked)) unlockedItems = data.cat_unlocked;
+          if (Array.isArray(data.cat_equipped)) equippedItems = data.cat_equipped;
+          if (data.cat_active_theme) activeTheme = data.cat_active_theme;
+          if (data.cat_active_effect) activeEffect = data.cat_active_effect;
+          if (data.cat_last_reward_date) localStorage.setItem('cat_last_reward_date', data.cat_last_reward_date);
+          if (data.cat_last_opened_period) localStorage.setItem('cat_last_opened_period', data.cat_last_opened_period);
+
+          saveState();
+          updateLetterHoldingState();
+          renderShop();
+          alert('Backup restaurado com sucesso! Seus dados e moedas voltaram.');
+        } catch (err) {
+          alert('Erro ao carregar o arquivo de backup. Verifique se é um arquivo .json válido.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* =========================================================
+       5. SAUDAÇÃO DINÂMICA
     ========================================================= */
     function getDynamicGreeting() {
       const hour = new Date().getHours();
@@ -914,7 +1044,7 @@
     }
 
     /* =========================================================
-       4. REPRODUÇÃO DE ÁUDIO (gato_1.mp3 + FALLBACK)
+       6. REPRODUÇÃO DE ÁUDIO
     ========================================================= */
     let catAudio = null;
     try {
@@ -998,7 +1128,7 @@
     }
 
     /* =========================================================
-       5. INTERAÇÕES
+       7. INTERAÇÕES: ABRIR CARTA E CARINHO
     ========================================================= */
     const letterModal = document.getElementById('letter-modal');
     const letterContent = document.getElementById('letter-content');
@@ -1011,6 +1141,11 @@
       playPaperSound();
       letterModal.classList.add('open');
       createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
+
+      // Marca o período atual como aberto e faz o gato soltar a carta
+      const currentPeriod = getCurrentPeriodKey();
+      localStorage.setItem('cat_last_opened_period', currentPeriod);
+      updateLetterHoldingState();
     }
 
     function closeLetter() {
@@ -1018,7 +1153,7 @@
     }
 
     letterModal.addEventListener('click', (e) => {
-      if (e.target === letterModal) closeLetter();
+      if (e.target.id === 'letter-modal') closeLetter();
     });
 
     let petTimeout = null;
@@ -1042,7 +1177,7 @@
     }
 
     /* =========================================================
-       6. RASTROS DE PATINHAS E EFEITOS DINÂMICOS
+       8. RASTROS DE PATINHAS E PARTÍCULAS
     ========================================================= */
     const canvas = document.getElementById('fx-canvas');
     const ctx = canvas.getContext('2d');
@@ -1189,7 +1324,7 @@
     animate();
 
     /* =========================================================
-       7. GATINHOS ESPIANDO NAS BORDAS
+       9. GATINHOS ESPIANDO NAS BORDAS
     ========================================================= */
     const peekers = [
       document.getElementById('peeker-left'),
@@ -1200,17 +1335,24 @@
     function triggerRandomPeeker() {
       const p = peekers[Math.floor(Math.random() * peekers.length)];
       p.classList.add('active');
-      setTimeout(() => p.classList.remove('active'), 2600);
+      setTimeout(() => {
+        p.classList.remove('active');
+      }, 2600);
       setTimeout(triggerRandomPeeker, Math.random() * 4500 + 3500);
     }
     setTimeout(triggerRandomPeeker, 2000);
 
     /* Inicializações */
     checkDailyReward();
+    updateLetterHoldingState();
+
     if (autoTimeEnabled) {
       document.getElementById('auto-time-btn').classList.add('active');
       updateTimeTheme();
-      setInterval(updateTimeTheme, 60000); // Checa horário a cada minuto
+      setInterval(() => {
+        updateTimeTheme();
+        updateLetterHoldingState();
+      }, 60000);
     } else {
       document.getElementById('auto-time-btn').classList.remove('active');
       document.getElementById('auto-time-text').innerText = "Auto: OFF";
