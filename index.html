@@ -123,7 +123,6 @@
       background: #faf4e6;
     }
 
-    /* GAVETA DE STATUS NO TOPO */
     .status-container {
       position: fixed;
       top: 0;
@@ -225,7 +224,6 @@
       transition: transform 0.2s ease, opacity 0.3s ease;
     }
 
-    /* GATINHO E ANIMAÇÕES ORGÂNICAS */
     .cat-wrapper {
       position: relative;
       width: 230px;
@@ -247,7 +245,7 @@
       filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
     }
 
-    /* Animação de Respiração */
+    /* Animações Corporais */
     .anim-body-group {
       transform-origin: 100px 145px;
       animation: catBreathe 3.5s ease-in-out infinite alternate;
@@ -257,9 +255,8 @@
       100% { transform: scale(1.025, 0.985); }
     }
 
-    /* Animação do Rabo */
     .anim-tail {
-      transform-origin: 136px 156px;
+      transform-origin: 134px 152px;
       animation: tailWag 3.2s ease-in-out infinite alternate;
     }
     @keyframes tailWag {
@@ -268,9 +265,8 @@
       100% { transform: rotate(-8deg); }
     }
 
-    /* Animação de Piscar Espontâneo */
     .anim-eye-blink {
-      transform-origin: center;
+      transform-origin: 95px 98px;
       animation: catBlink 4.5s infinite;
     }
     @keyframes catBlink {
@@ -278,7 +274,6 @@
       96% { transform: scaleY(0.08); }
     }
 
-    /* Tremelique de orelhas */
     .anim-ears {
       transform-origin: 100px 65px;
       animation: earFlick 6s infinite ease-in-out;
@@ -288,7 +283,6 @@
       95% { transform: rotate(-2deg); }
     }
 
-    /* BARRA INFERIOR */
     .bottom-nav-bar {
       position: fixed;
       bottom: 0;
@@ -321,7 +315,137 @@
     .bottom-nav-btn:active { transform: scale(0.92); }
     .bottom-nav-btn span.icon { font-size: 1.45rem; }
 
-    /* TENDA DE COMIDA */
+    /* Modal da Loja VIP */
+    .shop-preview-box {
+      width: 100%;
+      height: 90px;
+      background: #faf4e8;
+      border: 1.5px dashed var(--pencil-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .shop-preview-box svg {
+      width: 72px !important;
+      height: 72px !important;
+    }
+    .shop-preview-label {
+      position: absolute;
+      bottom: 3px;
+      right: 8px;
+      font-size: 0.8rem;
+      color: var(--pencil-light);
+    }
+
+    .shop-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1.5px solid var(--pencil-light);
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .shop-tabs::-webkit-scrollbar { display: none; }
+    .shop-tab-btn {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 16px;
+      background: var(--card-bg);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .shop-tab-btn.active {
+      background: var(--amber);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .shop-content-area {
+      overflow-y: auto;
+      flex: 1;
+      min-height: 220px;
+      max-height: 52vh;
+      padding-right: 4px;
+    }
+    .shop-items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .shop-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .shop-card-svg-preview {
+      width: 58px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .shop-card-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1px;
+      text-align: center;
+    }
+    .shop-card-price {
+      font-size: 0.85rem;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .palette-btn {
+      width: 100%;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1.5px dashed var(--charcoal);
+      background: #faf4e8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .action-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 24px;
+      padding: 6px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--charcoal);
+      cursor: pointer;
+      box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .action-btn:hover { transform: translateY(-2px); }
+    .action-btn:active { transform: translateY(1px); }
+
+    /* Tenda de Comidas */
     .stall-modal-paper {
       background: #fdf7ec;
       border: 2.5px solid var(--charcoal);
@@ -456,7 +580,6 @@
       cursor: pointer;
     }
 
-    /* INVENTÁRIO */
     .inventory-tray {
       background: var(--card-bg);
       border: 2px solid var(--charcoal);
@@ -507,136 +630,6 @@
       padding: 0 4px;
       border-radius: 8px;
     }
-
-    /* PREVIEW DA LOJA VIP */
-    .shop-preview-box {
-      width: 100%;
-      height: 90px;
-      background: #faf4e8;
-      border: 1.5px dashed var(--pencil-light);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-      position: relative;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .shop-preview-box svg {
-      width: 72px !important;
-      height: 72px !important;
-    }
-    .shop-preview-label {
-      position: absolute;
-      bottom: 3px;
-      right: 8px;
-      font-size: 0.8rem;
-      color: var(--pencil-light);
-    }
-
-    .shop-tabs {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 10px;
-      border-bottom: 1.5px solid var(--pencil-light);
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-x;
-      flex-shrink: 0;
-      scrollbar-width: none;
-    }
-    .shop-tabs::-webkit-scrollbar { display: none; }
-    .shop-tab-btn {
-      flex: 0 0 auto;
-      padding: 6px 12px;
-      border: 1.5px solid var(--charcoal);
-      border-radius: 16px;
-      background: var(--card-bg);
-      color: var(--charcoal);
-      font-family: inherit;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .shop-tab-btn.active {
-      background: var(--amber);
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .shop-content-area {
-      overflow-y: auto;
-      flex: 1;
-      min-height: 220px;
-      max-height: 52vh;
-      padding-right: 4px;
-    }
-    .shop-items-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .shop-card {
-      border: 1.5px solid var(--charcoal);
-      border-radius: 12px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.03);
-    }
-    .shop-card-svg-preview {
-      width: 58px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 2px;
-    }
-    .shop-card-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 1px;
-      text-align: center;
-    }
-    .shop-card-price {
-      font-size: 0.85rem;
-      color: var(--amber);
-      margin-bottom: 6px;
-    }
-    .palette-btn {
-      width: 100%;
-      padding: 4px;
-      border-radius: 14px;
-      border: 1.5px dashed var(--charcoal);
-      background: #faf4e8;
-      font-family: inherit;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      margin-bottom: 4px;
-    }
-
-    .action-btn {
-      background: var(--card-bg);
-      border: 2px solid var(--charcoal);
-      border-radius: 24px;
-      padding: 6px 14px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      color: var(--charcoal);
-      cursor: pointer;
-      box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .action-btn:hover { transform: translateY(-2px); }
-    .action-btn:active { transform: translateY(1px); }
 
     .modal-backdrop {
       position: fixed;
@@ -754,7 +747,7 @@
     </div>
   </div>
 
-  <!-- STATUS MINIMALISTA NO TOPO -->
+  <!-- STATUS MINIMALISTA -->
   <div class="status-container" id="status-container">
     <div class="status-squares-row">
       <div class="status-square" title="Fome">
@@ -798,7 +791,7 @@
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Gatinho Animado com Rabo Preenchido -->
+    <!-- Gatinho com Rabo Preenchido e Expressões -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
       <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
         <defs>
@@ -808,20 +801,17 @@
           <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
         </defs>
 
-        <!-- Rabo Totalmente Preenchido e com Animação -->
+        <!-- Rabo com Animação -->
         <g class="anim-tail">
           <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
                 fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
-          <!-- Ponta extra de rabo (para gato laranja listrado) -->
           <path id="tail-stripes" d="M 166,114 Q 172,120 162,128" fill="none" stroke="#b3581d" stroke-width="3" style="display: none;"/>
         </g>
 
-        <!-- Grupo com Respiração Suave -->
+        <!-- Corpo e Cabeça -->
         <g class="anim-body-group">
-          <!-- Corpo -->
           <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-          <!-- Pelagens do Corpo -->
           <g clip-path="url(#cat-body-clip)" id="body-markings">
             <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
             <g id="body-orange" style="display: none;">
@@ -831,11 +821,10 @@
             </g>
           </g>
 
-          <!-- Cabeça e Orelhas com Tremelique -->
+          <!-- Cabeça -->
           <g class="anim-ears">
             <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-            <!-- Pelagens da Cabeça -->
             <g clip-path="url(#cat-head-clip)" id="breed-markings">
               <g id="breed-siamese" style="display: none;">
                 <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
@@ -857,14 +846,14 @@
               </g>
             </g>
 
-            <!-- Modo Avião (Expressão Orelhas) -->
+            <!-- Modo Avião -->
             <g id="expr-airplane-ears" style="display: none;">
               <polygon points="42,54 22,70 54,66" fill="#e58e45" stroke="#2b2725" stroke-width="3"/>
               <polygon points="154,54 174,70 142,66" fill="#e58e45" stroke="#2b2725" stroke-width="3"/>
             </g>
           </g>
 
-          <!-- Olhos com Piscar Espontâneo -->
+          <!-- Olhos e Piscar -->
           <g id="regular-eyes" class="anim-eye-blink">
             <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
             <g clip-path="url(#left-eye-clip)">
@@ -886,7 +875,6 @@
             </g>
           </g>
 
-          <!-- Expressões Faciais Cosméticas (Sobrancelhas e Olhos) -->
           <g id="expr-determined-brows" style="display: none;">
             <line x1="50" y1="78" x2="74" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
             <line x1="146" y1="78" x2="122" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
@@ -902,19 +890,19 @@
             <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
           </g>
 
-          <!-- Variantes de Boca Cosméticas -->
+          <!-- Bocas Cosméticas -->
           <g id="mouth-variants">
-            <path id="mouth-cat" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
-            <g id="mouth-tongue" style="display: none;">
+            <path id="mouth-cat-path" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <g id="mouth-tongue-path" style="display: none;">
               <path d="M 94,115 Q 98,119 102,115" fill="none" stroke="#2b2725" stroke-width="2.5"/>
               <path d="M 96,117 C 96,122 100,122 100,117 Z" fill="#e74c3c" stroke="#2b2725" stroke-width="1.5"/>
             </g>
-            <g id="mouth-vampire" style="display: none;">
+            <g id="mouth-vampire-path" style="display: none;">
               <path d="M 93,116 Q 98,120 103,116" fill="none" stroke="#2b2725" stroke-width="2.5"/>
               <polygon points="95,116 96,120 97,116" fill="#fff" stroke="#2b2725" stroke-width="1"/>
               <polygon points="99,116 100,120 101,116" fill="#fff" stroke="#2b2725" stroke-width="1"/>
             </g>
-            <path id="mouth-smile" d="M 92,114 Q 98,123 104,114" fill="none" stroke="#2b2725" stroke-width="2.8" stroke-linecap="round" style="display: none;"/>
+            <path id="mouth-smile-path" d="M 92,114 Q 98,123 104,114" fill="none" stroke="#2b2725" stroke-width="2.8" stroke-linecap="round" style="display: none;"/>
           </g>
 
           <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
@@ -941,7 +929,7 @@
             <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
           </g>
 
-          <!-- Acessórios Sobrepostos -->
+          <!-- Acessórios -->
           <g id="cosmetic-bowtie" style="display: none;">
             <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
             <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
@@ -996,7 +984,7 @@
     </button>
   </nav>
 
-  <!-- MODAL: TENDA DE COMIDA COM VENDEDOR -->
+  <!-- MODAL: TENDA DE COMIDA -->
   <div class="modal-backdrop" id="stall-modal" onclick="closeFoodStall(event)">
     <div class="stall-modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeFoodStall(event)">✕</button>
@@ -1016,7 +1004,7 @@
           <ellipse cx="98" cy="56" rx="8" ry="9" fill="#9b59b6" stroke="#331908" stroke-width="1.5"/>
           <path d="M 120,65 C 118,50 128,45 136,50 C 144,45 154,50 152,65 Z" fill="#d7b899" stroke="#331908" stroke-width="1.5"/>
           <rect x="310" y="44" width="12" height="21" rx="3" fill="#5dade2" stroke="#331908" stroke-width="1.5"/>
-          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd2b0" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd29b" stroke="#331908" stroke-width="1.5"/>
         </svg>
 
         <div class="vendor-cat-container">
@@ -1068,7 +1056,7 @@
     </div>
   </div>
 
-  <!-- MODAL: LOJINHA VIP COMPLETA COM NOVAS ABAS DE BOCAS E EXPRESSÕES -->
+  <!-- MODAL: LOJINHA VIP COMPLETA COM BOCAS E EXPRESSÕES -->
   <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
@@ -1111,12 +1099,12 @@
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Atualizações 📜</h3>
       <div class="changelog-content">
         <div class="changelog-entry">
-          <div class="changelog-version">v3.1 - Rabo Preenchido, Animações e Expressões</div>
+          <div class="changelog-version">v3.2 - Bocas, Expressões e Catálogo Seguro</div>
           <div class="changelog-date">07 de Outubro de 2026</div>
           <ul class="changelog-list">
-            <li>Rabo agora tem preenchimento sólido colorido condizente com a raça e listras especiais.</li>
-            <li>Animações integradas: respiração, balançar de rabo e piscar espontâneo de olhos.</li>
-            <li>Adicionadas as abas de Bocas e Expressões Faciais na Loja VIP.</li>
+            <li>Adicionadas as opções cosméticas de Bocas (:3, linguinha, vampiro) e Expressões.</li>
+            <li>Correção de renderização com catálogo fallback completo.</li>
+            <li>Rabo fechado com cor de pelagem e animações sincronizadas.</li>
           </ul>
         </div>
       </div>
@@ -1125,10 +1113,90 @@
 
   <script>
     /* =========================================================
-       1. ESTADOS, SALVAMENTO E TEMPORIZADORES
+       CATÁLOGO PADRÃO COMPLETO (FALLBACK SEGURO)
     ========================================================= */
+    const DEFAULT_CATALOG_EMBEDDED = {
+      tintas: [
+        { id: 'c_preto', nome: 'Grafite Escuro', hex: '#2b2725' },
+        { id: 'c_cinza', nome: 'Cinza Suave', hex: '#7a736e' },
+        { id: 'c_marrom', nome: 'Chocolate', hex: '#4a3528' },
+        { id: 'c_ambar', nome: 'Âmbar Dourado', hex: '#c48b36' },
+        { id: 'c_laranja', nome: 'Laranja Queimado', hex: '#d96b27' },
+        { id: 'c_vermelho', nome: 'Vinho Aveludado', hex: '#872b2b' },
+        { id: 'c_rosa', nome: 'Pêssego Suave', hex: '#d98b82' },
+        { id: 'c_roxo', nome: 'Ametista Profundo', hex: '#5b3a6e' },
+        { id: 'c_azul_escuro', nome: 'Azul Meia-Noite', hex: '#223854' },
+        { id: 'c_azul_claro', nome: 'Azul Céu', hex: '#4f83a8' },
+        { id: 'c_verde_escuro', nome: 'Verde Musgo', hex: '#375239' },
+        { id: 'c_verde_claro', nome: 'Verde Sálvia', hex: '#5f8263' },
+        { id: 'c_creme', nome: 'Baunilha Claro', hex: '#f0e3ce' },
+        { id: 'c_dourado', nome: 'Ouro Nobre', hex: '#dfb15b' }
+      ],
+      acessorios: [
+        { 
+          id: 'bowtie', nome: 'Gravatinha Borboleta', preco: 1,
+          svg: `<svg viewBox="0 0 60 40" width="46" height="32"><polygon points="12,10 12,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><polygon points="48,10 48,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="20" r="4.5" fill="#c48b36"/></svg>`
+        },
+        { 
+          id: 'glasses', nome: 'Óculos com Hastes', preco: 2,
+          svg: `<svg viewBox="0 0 76 35" width="54" height="26"><line x1="4" y1="14" x2="18" y2="18" stroke="COLOR" stroke-width="2.5"/><line x1="72" y1="14" x2="58" y2="18" stroke="COLOR" stroke-width="2.5"/><circle cx="28" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><circle cx="48" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><path d="M 40,18 Q 38,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/></svg>`
+        },
+        { 
+          id: 'flower', nome: 'Florzinha Delicada', preco: 3,
+          svg: `<svg viewBox="0 0 50 50" width="38" height="38"><circle cx="20" cy="18" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="13" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="36" cy="22" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="28" cy="30" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="18" cy="26" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="26" cy="22" r="4.5" fill="COLOR"/></svg>`
+        },
+        { 
+          id: 'crown', nome: 'Coroa Imperial', preco: 4,
+          svg: `<svg viewBox="0 0 60 40" width="46" height="30"><path d="M 10,12 L 18,28 L 30,6 L 42,28 L 50,12 L 48,34 L 12,34 Z" fill="COLOR" stroke="#2b2725" stroke-width="2.5"/><circle cx="30" cy="6" r="2.5" fill="#c48b36"/></svg>`
+        }
+      ],
+      bocas: [
+        { id: 'mouth_cat', nome: 'Gatinho Fofo (:3)', preco: 0, icone: 'ω' },
+        { id: 'mouth_tongue', nome: 'Linguinha de Fora (:P)', preco: 2, icone: '👅' },
+        { id: 'mouth_vampire', nome: 'Dentinho de Vampiro', preco: 3, icone: '🧛' },
+        { id: 'mouth_smile', nome: 'Sorriso Amplo', preco: 2, icone: '‿' }
+      ],
+      expressoes: [
+        { id: 'expr_neutral', nome: 'Expressão Padrão', preco: 0, icone: '🐱' },
+        { id: 'expr_anime', nome: 'Olhar Curioso Anime', preco: 2, icone: '✨' },
+        { id: 'expr_airplane', nome: 'Orelhas em Modo Avião', preco: 3, icone: '✈️' },
+        { id: 'expr_determined', nome: 'Determinado / Focado', preco: 2, icone: '😼' }
+      ],
+      pupilas: [
+        { id: 'pupil_round', nome: 'Olhar Curioso (Normal)', preco: 0, icone: '●' },
+        { id: 'pupil_slit', nome: 'Fenda Felina (Caçador)', preco: 2, icone: '❙' },
+        { id: 'pupil_sparkle', nome: 'Olhar Brilhante (Anime)', preco: 3, icone: '✦' }
+      ],
+      olhos: [
+        { id: 'eye_charcoal', nome: 'Grafite Preto', hex: '#2b2725', preco: 0, icone: '👁️' },
+        { id: 'eye_blue', nome: 'Azul Safira (Siamês)', hex: '#3466b0', preco: 2, icone: '💎' },
+        { id: 'eye_amber', nome: 'Âmbar Dourado', hex: '#c47d25', preco: 2, icone: '🍯' },
+        { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3e', preco: 3, icone: '🌿' },
+        { id: 'eye_violet', nome: 'Violeta Profundo', hex: '#633974', preco: 3, icone: '🔮' }
+      ],
+      racas: [
+        { id: 'breed_default', nome: 'Branco Clássico', preco: 0, icone: '⚪' },
+        { id: 'breed_siamese', nome: 'Siamês Real', preco: 3, icone: '🤎' },
+        { id: 'breed_tuxedo', nome: 'Frajola Real', preco: 3, icone: '🖤' },
+        { id: 'breed_orange', nome: 'Laranja Listrado', preco: 4, icone: '🧡' }
+      ],
+      temas: [
+        { id: 'theme_default', nome: 'Pergaminho', preco: 0, icone: '📜', class: '' },
+        { id: 'theme_cafe', nome: 'Carvão & Café', preco: 3, icone: '☕', class: 'theme-cafe' },
+        { id: 'theme_night', nome: 'Noite Estrelada', preco: 5, icone: '🌌', class: 'theme-night' }
+      ],
+      efeitos: [
+        { id: 'fx_hearts', nome: 'Corações', preco: 0, icone: '🤍', type: 'heart' },
+        { id: 'fx_leaves', nome: 'Folhas de Outono', preco: 2, icone: '🍂', type: 'leaf' },
+        { id: 'fx_stars', nome: 'Estrelinhas', preco: 3, icone: '✨', type: 'star' }
+      ]
+    };
+
     function getCatalog() {
-      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : {};
+      if (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.bocas) {
+        return window.CATALOGO_COSMETICOS;
+      }
+      return DEFAULT_CATALOG_EMBEDDED;
     }
 
     const FOOD_ITEMS = [
@@ -1240,7 +1308,6 @@
     function updateCatVisualExpression() {
       const wrapper = document.getElementById('cat-wrapper');
       const sleepyEyelids = document.getElementById('sleepy-eyelids');
-      const mouthNormal = document.getElementById('mouth-normal');
       const mouthSad = document.getElementById('mouth-sad');
       const mouthHungry = document.getElementById('mouth-hungry');
       const happyBlush = document.getElementById('happy-blush');
@@ -1319,9 +1386,7 @@
       }
     }
 
-    /* =========================================================
-       2. TENDA DE COMIDA
-    ========================================================= */
+    /* TENDA DE COMIDA */
     const VENDOR_GREETINGS = [
       "Miau! Seja muito bem-vindo à feira! 🧺",
       "Tudo fresquinho, colhido hoje mesmo! 🍲",
@@ -1412,7 +1477,6 @@
       }
     }
 
-    /* INVENTÁRIO */
     function renderInventorySlots() {
       const container = document.getElementById('inventory-slots-container');
       container.innerHTML = '';
@@ -1551,9 +1615,7 @@
       checkDailyReward();
     }
 
-    /* =========================================================
-       3. LOJA VIP COM ABAS DE BOCAS E EXPRESSÕES
-    ========================================================= */
+    /* LOJA VIP */
     function openShop(e) {
       if (e) e.stopPropagation();
       document.getElementById('shop-modal').classList.add('open');
@@ -1832,7 +1894,6 @@
       document.getElementById('color-modal').classList.remove('open');
     }
 
-    /* APLICAÇÕES DE RAÇA COM RABO PREENCHIDO */
     function applyBreeds() {
       const bodyPath = document.getElementById('cat-body');
       const headPath = document.getElementById('cat-head');
@@ -1875,15 +1936,22 @@
     }
 
     function applyMouthAndExpressions() {
-      // Bocas
-      ['mouth-cat', 'mouth-tongue', 'mouth-vampire', 'mouth-smile'].forEach(id => {
+      ['mouth-cat-path', 'mouth-tongue-path', 'mouth-vampire-path', 'mouth-smile-path'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
       });
-      const activeMouthEl = document.getElementById(activeMouth);
+
+      const mouthMap = {
+        'mouth_cat': 'mouth-cat-path',
+        'mouth_tongue': 'mouth-tongue-path',
+        'mouth_vampire': 'mouth-vampire-path',
+        'mouth_smile': 'mouth-smile-path'
+      };
+
+      const selectedMouthId = mouthMap[activeMouth] || 'mouth-cat-path';
+      const activeMouthEl = document.getElementById(selectedMouthId);
       if (activeMouthEl) activeMouthEl.style.display = 'block';
 
-      // Expressões
       const airplaneEl = document.getElementById('expr-airplane-ears');
       const detEl = document.getElementById('expr-determined-brows');
       if (airplaneEl) airplaneEl.style.display = (activeExpr === 'expr_airplane') ? 'block' : 'none';
@@ -2140,7 +2208,7 @@
           updateLetterHoldingState();
           renderInventorySlots();
           renderCurrentShopTab();
-          alert('Backup restaurado com sucesso! Seus dados voltaram.');
+          alert('Backup restaurado com sucesso!');
         } catch (err) {
           alert('Erro ao carregar o arquivo de backup.');
         }
