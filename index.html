@@ -225,6 +225,7 @@
       transition: transform 0.2s ease, opacity 0.3s ease;
     }
 
+    /* GATINHO E ANIMAÇÕES ORGÂNICAS */
     .cat-wrapper {
       position: relative;
       width: 230px;
@@ -244,6 +245,47 @@
       width: 100%;
       height: 100%;
       filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
+    }
+
+    /* Animação de Respiração */
+    .anim-body-group {
+      transform-origin: 100px 145px;
+      animation: catBreathe 3.5s ease-in-out infinite alternate;
+    }
+    @keyframes catBreathe {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.025, 0.985); }
+    }
+
+    /* Animação do Rabo */
+    .anim-tail {
+      transform-origin: 136px 156px;
+      animation: tailWag 3.2s ease-in-out infinite alternate;
+    }
+    @keyframes tailWag {
+      0% { transform: rotate(-5deg); }
+      50% { transform: rotate(4deg); }
+      100% { transform: rotate(-8deg); }
+    }
+
+    /* Animação de Piscar Espontâneo */
+    .anim-eye-blink {
+      transform-origin: center;
+      animation: catBlink 4.5s infinite;
+    }
+    @keyframes catBlink {
+      0%, 94%, 98%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.08); }
+    }
+
+    /* Tremelique de orelhas */
+    .anim-ears {
+      transform-origin: 100px 65px;
+      animation: earFlick 6s infinite ease-in-out;
+    }
+    @keyframes earFlick {
+      0%, 93%, 97%, 100% { transform: rotate(0deg); }
+      95% { transform: rotate(-2deg); }
     }
 
     /* BARRA INFERIOR */
@@ -276,16 +318,10 @@
       cursor: pointer;
       transition: transform 0.15s;
     }
-    .bottom-nav-btn:active {
-      transform: scale(0.92);
-    }
-    .bottom-nav-btn span.icon {
-      font-size: 1.45rem;
-    }
+    .bottom-nav-btn:active { transform: scale(0.92); }
+    .bottom-nav-btn span.icon { font-size: 1.45rem; }
 
-    /* =========================================================
-       TENDA DE COMIDA & CENÁRIO DO VENDEDOR CENTRALIZADO
-    ========================================================= */
+    /* TENDA DE COMIDA */
     .stall-modal-paper {
       background: #fdf7ec;
       border: 2.5px solid var(--charcoal);
@@ -315,21 +351,17 @@
       z-index: 2;
     }
 
-    /* Cenário centralizado com prateleiras e lanternas */
     .stall-scene {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
       padding: 12px 14px 0;
-      background: 
-        radial-gradient(circle at 50% 30%, #e9f0df 0%, #dbdfcb 100%);
+      background: radial-gradient(circle at 50% 30%, #e9f0df 0%, #dbdfcb 100%);
       border-bottom: 4px solid var(--wood-dark);
       position: relative;
       min-height: 175px;
     }
-
-    /* Balcão de madeira rústica */
     .stall-scene::after {
       content: '';
       position: absolute;
@@ -372,59 +404,15 @@
       box-shadow: 1px 3px 0 rgba(0,0,0,0.12);
       text-align: center;
       max-width: 280px;
-      position: relative;
-      animation: floatSpeech 3s ease-in-out infinite alternate;
-    }
-    .vendor-speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 6px 6px 0;
-      border-style: solid;
-      border-color: #ffffff transparent transparent;
-      display: block;
-      width: 0;
-    }
-    .vendor-speech-bubble::before {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 7px 7px 0;
-      border-style: solid;
-      border-color: var(--charcoal) transparent transparent;
-      display: block;
-      width: 0;
     }
 
-    @keyframes floatSpeech {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-3px); }
-    }
-
-    /* Animação do vendedor */
     .vendor-cat-svg {
       width: 100px;
       height: 94px;
       transform-origin: bottom center;
       animation: vendorBob 2.8s ease-in-out infinite alternate;
     }
-
-    .vendor-cat-svg.happy {
-      animation: vendorHappy 0.6s ease-in-out 2;
-    }
-
-    .vendor-ear-left, .vendor-ear-right {
-      transform-origin: center bottom;
-      animation: earTwitch 4s infinite ease-in-out;
-    }
-    .vendor-ear-right {
-      animation-delay: 2s;
-    }
-
+    .vendor-cat-svg.happy { animation: vendorHappy 0.6s ease-in-out 2; }
     @keyframes vendorBob {
       0% { transform: translateY(0) scale(1); }
       100% { transform: translateY(2.5px) scale(1.01, 0.99); }
@@ -432,11 +420,6 @@
     @keyframes vendorHappy {
       0%, 100% { transform: translateY(0) scale(1); }
       50% { transform: translateY(-8px) scale(1.05, 0.95); }
-    }
-    @keyframes earTwitch {
-      0%, 90%, 100% { transform: rotate(0deg); }
-      92% { transform: rotate(-5deg); }
-      96% { transform: rotate(5deg); }
     }
 
     .stall-shelf-grid {
@@ -457,9 +440,7 @@
       align-items: center;
       cursor: pointer;
       box-shadow: 2px 3px 0 rgba(99, 56, 27, 0.25);
-      transition: transform 0.15s;
     }
-    .shelf-item-card:active { transform: scale(0.95); }
     .shelf-item-icon { font-size: 2.1rem; }
     .shelf-item-name { font-weight: bold; font-size: 0.92rem; text-align: center; }
     .shelf-item-price { color: var(--amber); font-size: 0.88rem; font-weight: bold; margin: 2px 0; }
@@ -475,7 +456,7 @@
       cursor: pointer;
     }
 
-    /* INVENTÁRIO COM DRAG AND DROP */
+    /* INVENTÁRIO */
     .inventory-tray {
       background: var(--card-bg);
       border: 2px solid var(--charcoal);
@@ -515,7 +496,6 @@
       cursor: grab;
       touch-action: none;
     }
-    .inventory-slot:active { cursor: grabbing; }
     .slot-icon { font-size: 1.8rem; pointer-events: none; }
     .slot-qty {
       position: absolute;
@@ -528,7 +508,7 @@
       border-radius: 8px;
     }
 
-    /* PREVIEW LOJA VIP */
+    /* PREVIEW DA LOJA VIP */
     .shop-preview-box {
       width: 100%;
       height: 90px;
@@ -546,8 +526,6 @@
     .shop-preview-box svg {
       width: 72px !important;
       height: 72px !important;
-      max-width: 72px !important;
-      max-height: 72px !important;
     }
     .shop-preview-label {
       position: absolute;
@@ -820,7 +798,7 @@
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Gatinho do Jogador -->
+    <!-- Gatinho Animado com Rabo Preenchido -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
       <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
         <defs>
@@ -830,129 +808,169 @@
           <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
         </defs>
 
-        <path id="cat-tail" d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
-        <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-
-        <!-- Pelagens -->
-        <g clip-path="url(#cat-body-clip)" id="body-markings">
-          <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
-          <g id="body-orange" style="display: none;">
-            <path d="M 60,140 Q 75,145 70,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <path d="M 138,140 Q 123,145 128,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <ellipse cx="98" cy="144" rx="14" ry="10" fill="#fffdf9"/>
-          </g>
+        <!-- Rabo Totalmente Preenchido e com Animação -->
+        <g class="anim-tail">
+          <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
+                fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Ponta extra de rabo (para gato laranja listrado) -->
+          <path id="tail-stripes" d="M 166,114 Q 172,120 162,128" fill="none" stroke="#b3581d" stroke-width="3" style="display: none;"/>
         </g>
 
-        <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+        <!-- Grupo com Respiração Suave -->
+        <g class="anim-body-group">
+          <!-- Corpo -->
+          <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <g clip-path="url(#cat-head-clip)" id="breed-markings">
-          <g id="breed-siamese" style="display: none;">
-            <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
-            <polygon points="156,30 131,70 166,70" fill="#3d281d"/>
-            <path d="M 64,112 Q 98,78 132,112 Q 98,140 64,112 Z" fill="#3d281d"/>
-          </g>
-          <g id="breed-tuxedo" style="display: none;">
-            <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
-            <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
-            <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
-            <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
-          </g>
-          <g id="breed-orange" style="display: none;">
-            <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
-            <circle cx="98" cy="116" r="4" fill="#d98270"/>
-            <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
-            <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
-          </g>
-        </g>
-
-        <!-- Olhos e pupilas -->
-        <g id="regular-eyes">
-          <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
-          <g clip-path="url(#left-eye-clip)">
-            <g id="pupil-left-group">
-              <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
-              <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
-              <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
-              <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+          <!-- Pelagens do Corpo -->
+          <g clip-path="url(#cat-body-clip)" id="body-markings">
+            <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
+            <g id="body-orange" style="display: none;">
+              <path d="M 60,140 Q 75,145 70,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <path d="M 138,140 Q 123,145 128,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="98" cy="144" rx="14" ry="10" fill="#fffdf9"/>
             </g>
           </g>
-          <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
-          <g clip-path="url(#right-eye-clip)">
-            <g id="pupil-right-group">
-              <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
-              <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
-              <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
-              <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+
+          <!-- Cabeça e Orelhas com Tremelique -->
+          <g class="anim-ears">
+            <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+            <!-- Pelagens da Cabeça -->
+            <g clip-path="url(#cat-head-clip)" id="breed-markings">
+              <g id="breed-siamese" style="display: none;">
+                <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
+                <polygon points="156,30 131,70 166,70" fill="#3d281d"/>
+                <path d="M 64,112 Q 98,78 132,112 Q 98,140 64,112 Z" fill="#3d281d"/>
+              </g>
+              <g id="breed-tuxedo" style="display: none;">
+                <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
+                <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
+                <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
+                <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
+              </g>
+              <g id="breed-orange" style="display: none;">
+                <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
+                <circle cx="98" cy="116" r="4" fill="#d98270"/>
+                <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+
+            <!-- Modo Avião (Expressão Orelhas) -->
+            <g id="expr-airplane-ears" style="display: none;">
+              <polygon points="42,54 22,70 54,66" fill="#e58e45" stroke="#2b2725" stroke-width="3"/>
+              <polygon points="154,54 174,70 142,66" fill="#e58e45" stroke="#2b2725" stroke-width="3"/>
             </g>
           </g>
-        </g>
 
-        <!-- Expressões -->
-        <g id="sleepy-eyelids" style="display: none;">
-          <path d="M 42,94 Q 68,110 94,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-          <path d="M 96,94 Q 122,110 148,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-        </g>
+          <!-- Olhos com Piscar Espontâneo -->
+          <g id="regular-eyes" class="anim-eye-blink">
+            <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#left-eye-clip)">
+              <g id="pupil-left-group">
+                <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+            </g>
+            <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#right-eye-clip)">
+              <g id="pupil-right-group">
+                <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+            </g>
+          </g>
 
-        <g id="happy-eyes" style="display: none;">
-          <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
-        </g>
+          <!-- Expressões Faciais Cosméticas (Sobrancelhas e Olhos) -->
+          <g id="expr-determined-brows" style="display: none;">
+            <line x1="50" y1="78" x2="74" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="146" y1="78" x2="122" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
 
-        <path id="mouth-normal" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
-        <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
-        <ellipse id="mouth-hungry" cx="98" cy="118" rx="4" ry="6" fill="#2b2725" style="display: none;"/>
+          <g id="sleepy-eyelids" style="display: none;">
+            <path d="M 42,94 Q 68,110 94,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path d="M 96,94 Q 122,110 148,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
 
-        <g id="happy-blush" style="display: none;">
-          <ellipse cx="50" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
-          <ellipse cx="146" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
-        </g>
+          <g id="happy-eyes" style="display: none;">
+            <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
 
-        <g id="sick-mark" style="display: none;">
-          <rect x="130" y="60" width="16" height="7" rx="3" fill="#e5c898" stroke="#2b2725" stroke-width="1.5" transform="rotate(25 130 60)"/>
-        </g>
+          <!-- Variantes de Boca Cosméticas -->
+          <g id="mouth-variants">
+            <path id="mouth-cat" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <g id="mouth-tongue" style="display: none;">
+              <path d="M 94,115 Q 98,119 102,115" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <path d="M 96,117 C 96,122 100,122 100,117 Z" fill="#e74c3c" stroke="#2b2725" stroke-width="1.5"/>
+            </g>
+            <g id="mouth-vampire" style="display: none;">
+              <path d="M 93,116 Q 98,120 103,116" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <polygon points="95,116 96,120 97,116" fill="#fff" stroke="#2b2725" stroke-width="1"/>
+              <polygon points="99,116 100,120 101,116" fill="#fff" stroke="#2b2725" stroke-width="1"/>
+            </g>
+            <path id="mouth-smile" d="M 92,114 Q 98,123 104,114" fill="none" stroke="#2b2725" stroke-width="2.8" stroke-linecap="round" style="display: none;"/>
+          </g>
 
-        <g id="idle-paws" style="display: none;">
-          <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-          <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-        </g>
+          <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
+          <ellipse id="mouth-hungry" cx="98" cy="118" rx="4" ry="6" fill="#2b2725" style="display: none;"/>
 
-        <g id="cat-letter-group">
-          <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
-          <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
-          <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-          <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-        </g>
+          <g id="happy-blush" style="display: none;">
+            <ellipse cx="50" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+            <ellipse cx="146" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+          </g>
 
-        <!-- Cosméticos -->
-        <g id="cosmetic-bowtie" style="display: none;">
-          <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
-          <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
-          <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
-        </g>
-        <g id="cosmetic-glasses" style="display: none;">
-          <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
-          <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
-          <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
-          <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
-          <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
-        </g>
-        <g id="cosmetic-flower" style="display: none;">
-          <circle class="flower-petal" cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
-          <circle class="flower-petal" cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
-          <circle class="flower-petal" cx="64" cy="52" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
-          <circle class="flower-petal" cx="56" cy="60" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
-          <circle class="flower-petal" cx="46" cy="56" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
-          <circle id="flower-center" cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
-        </g>
-        <g id="cosmetic-crown" style="display: none;">
-          <path id="crown-body" d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle id="crown-gem" cx="98" cy="42" r="2.5" fill="#c48b36"/>
+          <g id="sick-mark" style="display: none;">
+            <rect x="130" y="60" width="16" height="7" rx="3" fill="#e5c898" stroke="#2b2725" stroke-width="1.5" transform="rotate(25 130 60)"/>
+          </g>
+
+          <g id="idle-paws" style="display: none;">
+            <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="cat-letter-group">
+            <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+            <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <!-- Acessórios Sobrepostos -->
+          <g id="cosmetic-bowtie" style="display: none;">
+            <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          </g>
+          <g id="cosmetic-glasses" style="display: none;">
+            <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
+          </g>
+          <g id="cosmetic-flower" style="display: none;">
+            <circle class="flower-petal" cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="64" cy="52" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="56" cy="60" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="46" cy="56" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="flower-center" cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
+          </g>
+          <g id="cosmetic-crown" style="display: none;">
+            <path id="crown-body" d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle id="crown-gem" cx="98" cy="42" r="2.5" fill="#c48b36"/>
+          </g>
         </g>
       </svg>
     </div>
 
-    <!-- MOCHILA DE COMIDINHAS COM DRAG AND DROP -->
+    <!-- MOCHILA DE COMIDINHAS -->
     <div class="inventory-tray">
       <div class="inventory-title">
         <span>🎒 Mochila de Comidinhas</span>
@@ -962,7 +980,7 @@
     </div>
   </main>
 
-  <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+  <!-- BARRA INFERIOR -->
   <nav class="bottom-nav-bar">
     <button class="bottom-nav-btn" onclick="openFoodStall(event)">
       <span class="icon">🏪</span>
@@ -978,89 +996,55 @@
     </button>
   </nav>
 
-  <!-- MODAL: TENDA DE COMIDA RÚSTICA (VENDEDOR CENTRALIZADO & CENÁRIO ILUSTRADO) -->
+  <!-- MODAL: TENDA DE COMIDA COM VENDEDOR -->
   <div class="modal-backdrop" id="stall-modal" onclick="closeFoodStall(event)">
     <div class="stall-modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeFoodStall(event)">✕</button>
       <div class="stall-canopy"></div>
       
-      <!-- Cenário da tenda de feira -->
       <div class="stall-scene">
-        <!-- Detalhes do fundo: prateleiras de madeira, potinhos e lanternas de feira -->
         <svg class="stall-backdrop-svg" viewBox="0 0 460 175" preserveAspectRatio="none">
-          <!-- Colunas de madeira laterais -->
           <rect x="8" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
           <rect x="430" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
-          
-          <!-- Prateleira de fundo -->
           <rect x="30" y="65" width="400" height="12" fill="#844c23" stroke="#4a2811" stroke-width="2"/>
-          
-          <!-- Lanterna Esquerda -->
           <rect x="52" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
           <circle cx="62" cy="37" r="4" fill="#f39c12"/>
           <path d="M 52,24 L 62,14 L 72,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
-
-          <!-- Lanterna Direita -->
           <rect x="388" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
           <circle cx="398" cy="37" r="4" fill="#f39c12"/>
           <path d="M 388,24 L 398,14 L 408,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
-
-          <!-- Potinhos e sacos nas prateleiras -->
-          <!-- Pote de poção roxa -->
           <ellipse cx="98" cy="56" rx="8" ry="9" fill="#9b59b6" stroke="#331908" stroke-width="1.5"/>
-          <rect x="95" y="44" width="6" height="5" fill="#e67e22" stroke="#331908" stroke-width="1.2"/>
-          
-          <!-- Sacaria de grãos -->
           <path d="M 120,65 C 118,50 128,45 136,50 C 144,45 154,50 152,65 Z" fill="#d7b899" stroke="#331908" stroke-width="1.5"/>
-          
-          <!-- Garrafa azul de leite/poção -->
           <rect x="310" y="44" width="12" height="21" rx="3" fill="#5dade2" stroke="#331908" stroke-width="1.5"/>
-          
-          <!-- Saco de farinha -->
           <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd2b0" stroke="#331908" stroke-width="1.5"/>
         </svg>
 
-        <!-- Vendedor Centralizado com balão de fala dinâmico -->
         <div class="vendor-cat-container">
           <div class="vendor-speech-bubble" id="vendor-speech-bubble">Miau! Tudo fresquinho! 🍲</div>
           <svg class="vendor-cat-svg" id="vendor-cat-svg" viewBox="0 0 100 95">
-            <!-- Cabeça do gatinho -->
             <path d="M 20,48 C 18,28 20,16 28,20 C 38,24 52,40 62,40 C 72,40 86,24 94,20 C 102,16 104,28 100,48 C 105,68 95,84 62,84 C 28,84 15,68 20,48 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
-            
-            <!-- Manchas Calico (Laranja e Marrom) -->
             <path class="vendor-ear-left" d="M 22,23 Q 36,28 32,46 L 20,38 Z" fill="#d97a36"/>
             <path class="vendor-ear-right" d="M 96,23 Q 82,28 86,46 L 98,38 Z" fill="#4a3528"/>
             <ellipse cx="78" cy="60" rx="9" ry="6" fill="#d97a36"/>
-
-            <!-- Olhos normais -->
             <g id="vendor-eyes-normal">
               <ellipse cx="44" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
               <ellipse cx="78" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
               <circle cx="46.5" cy="54" r="2" fill="#fff"/>
               <circle cx="80.5" cy="54" r="2" fill="#fff"/>
             </g>
-
-            <!-- Olhos felizes ao vender -->
             <g id="vendor-eyes-happy" style="display: none;">
               <path d="M 38,58 Q 44,50 50,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
               <path d="M 72,58 Q 78,50 84,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
             </g>
-
-            <!-- Focinho e boca -->
             <path d="M 58,66 Q 62,70 66,66" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
             <circle cx="62" cy="63" r="2.2" fill="#d98270"/>
-
-            <!-- Lenço Vermelho -->
             <polygon points="38,80 62,94 86,80" fill="#c0392b" stroke="#2b2725" stroke-width="2.5"/>
-
-            <!-- Patinhas apoiadas no balcão -->
             <ellipse cx="42" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
             <ellipse cx="80" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
           </svg>
         </div>
       </div>
 
-      <!-- As 6 Prateleiras de Comida -->
       <div class="stall-shelf-grid" id="stall-shelf-grid"></div>
     </div>
   </div>
@@ -1084,7 +1068,7 @@
     </div>
   </div>
 
-  <!-- MODAL: LOJINHA VIP -->
+  <!-- MODAL: LOJINHA VIP COMPLETA COM NOVAS ABAS DE BOCAS E EXPRESSÕES -->
   <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
@@ -1096,6 +1080,8 @@
 
       <div class="shop-tabs">
         <button class="shop-tab-btn active" onclick="switchShopTab('acessorios')">Acessórios</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('bocas')">Bocas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('expressoes')">Expressões</button>
         <button class="shop-tab-btn" onclick="switchShopTab('pupilas')">Pupilas</button>
         <button class="shop-tab-btn" onclick="switchShopTab('olhos')">Olhos</button>
         <button class="shop-tab-btn" onclick="switchShopTab('racas')">Raças</button>
@@ -1125,13 +1111,12 @@
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Atualizações 📜</h3>
       <div class="changelog-content">
         <div class="changelog-entry">
-          <div class="changelog-version">v3.0 - Tenda de Feira com Vendedor Centralizado</div>
+          <div class="changelog-version">v3.1 - Rabo Preenchido, Animações e Expressões</div>
           <div class="changelog-date">07 de Outubro de 2026</div>
           <ul class="changelog-list">
-            <li>Gato do jogador removido da tela de compras para dar foco total ao balcão.</li>
-            <li>Gatinho vendedor centralizado com animações de balanço e orelhinhas.</li>
-            <li>Falas dinâmicas do vendedor com saudações, agradecimentos e reações animadas.</li>
-            <li>Cenário de feira florestal com prateleiras e lanternas rústicas.</li>
+            <li>Rabo agora tem preenchimento sólido colorido condizente com a raça e listras especiais.</li>
+            <li>Animações integradas: respiração, balançar de rabo e piscar espontâneo de olhos.</li>
+            <li>Adicionadas as abas de Bocas e Expressões Faciais na Loja VIP.</li>
           </ul>
         </div>
       </div>
@@ -1140,75 +1125,10 @@
 
   <script>
     /* =========================================================
-       1. CATÁLOGOS E CONFIGURAÇÃO
+       1. ESTADOS, SALVAMENTO E TEMPORIZADORES
     ========================================================= */
-    const DEFAULT_CATALOG = {
-      tintas: [
-        { id: 'c_preto', nome: 'Grafite Escuro', hex: '#2b2725' },
-        { id: 'c_cinza', nome: 'Cinza Suave', hex: '#7a736e' },
-        { id: 'c_marrom', nome: 'Chocolate', hex: '#4a3528' },
-        { id: 'c_ambar', nome: 'Âmbar Dourado', hex: '#c48b36' },
-        { id: 'c_laranja', nome: 'Laranja Queimado', hex: '#d96b27' },
-        { id: 'c_vermelho', nome: 'Vinho Aveludado', hex: '#872b2b' },
-        { id: 'c_rosa', nome: 'Pêssego Suave', hex: '#d98b82' },
-        { id: 'c_roxo', nome: 'Ametista Profundo', hex: '#5b3a6e' },
-        { id: 'c_azul_escuro', nome: 'Azul Meia-Noite', hex: '#223854' },
-        { id: 'c_azul_claro', nome: 'Azul Céu', hex: '#4f83a8' },
-        { id: 'c_verde_escuro', nome: 'Verde Musgo', hex: '#375239' },
-        { id: 'c_verde_claro', nome: 'Verde Sálvia', hex: '#5f8263' },
-        { id: 'c_creme', nome: 'Baunilha Claro', hex: '#f0e3ce' },
-        { id: 'c_dourado', nome: 'Ouro Nobre', hex: '#dfb15b' }
-      ],
-      acessorios: [
-        { 
-          id: 'bowtie', nome: 'Gravatinha Borboleta', preco: 1,
-          svg: `<svg viewBox="0 0 60 40" width="46" height="32"><polygon points="12,10 12,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><polygon points="48,10 48,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="20" r="4.5" fill="#c48b36"/></svg>`
-        },
-        { 
-          id: 'glasses', nome: 'Óculos com Hastes', preco: 2,
-          svg: `<svg viewBox="0 0 76 35" width="54" height="26"><line x1="4" y1="14" x2="18" y2="18" stroke="COLOR" stroke-width="2.5"/><line x1="72" y1="14" x2="58" y2="18" stroke="COLOR" stroke-width="2.5"/><circle cx="28" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><circle cx="48" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><path d="M 40,18 Q 38,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/></svg>`
-        },
-        { 
-          id: 'flower', nome: 'Florzinha Delicada', preco: 3,
-          svg: `<svg viewBox="0 0 50 50" width="38" height="38"><circle cx="20" cy="18" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="13" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="36" cy="22" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="28" cy="30" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="18" cy="26" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="26" cy="22" r="4.5" fill="COLOR"/></svg>`
-        },
-        { 
-          id: 'crown', nome: 'Coroa Imperial', preco: 4,
-          svg: `<svg viewBox="0 0 60 40" width="46" height="30"><path d="M 10,12 L 18,28 L 30,6 L 42,28 L 50,12 L 48,34 L 12,34 Z" fill="COLOR" stroke="#2b2725" stroke-width="2.5"/><circle cx="30" cy="6" r="2.5" fill="#c48b36"/></svg>`
-        }
-      ],
-      pupilas: [
-        { id: 'pupil_round', nome: 'Olhar Curioso (Normal)', preco: 0, icone: '●' },
-        { id: 'pupil_slit', nome: 'Fenda Felina (Caçador)', preco: 2, icone: '❙' },
-        { id: 'pupil_sparkle', nome: 'Olhar Brilhante (Anime)', preco: 3, icone: '✦' }
-      ],
-      olhos: [
-        { id: 'eye_charcoal', nome: 'Grafite Preto', hex: '#2b2725', preco: 0, icone: '👁️' },
-        { id: 'eye_blue', nome: 'Azul Safira (Siamês)', hex: '#3466b0', preco: 2, icone: '💎' },
-        { id: 'eye_amber', nome: 'Âmbar Dourado', hex: '#c47d25', preco: 2, icone: '🍯' },
-        { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3e', preco: 3, icone: '🌿' },
-        { id: 'eye_violet', nome: 'Violeta Profundo', hex: '#633974', preco: 3, icone: '🔮' }
-      ],
-      racas: [
-        { id: 'breed_default', nome: 'Branco Clássico', preco: 0, icone: '⚪' },
-        { id: 'breed_siamese', nome: 'Siamês Real', preco: 3, icone: '🤎' },
-        { id: 'breed_tuxedo', nome: 'Frajola Real', preco: 3, icone: '🖤' },
-        { id: 'breed_orange', nome: 'Laranja Listrado', preco: 4, icone: '🧡' }
-      ],
-      temas: [
-        { id: 'theme_default', nome: 'Pergaminho', preco: 0, icone: '📜', class: '' },
-        { id: 'theme_cafe', nome: 'Carvão & Café', preco: 3, icone: '☕', class: 'theme-cafe' },
-        { id: 'theme_night', nome: 'Noite Estrelada', preco: 5, icone: '🌌', class: 'theme-night' }
-      ],
-      efeitos: [
-        { id: 'fx_hearts', nome: 'Corações', preco: 0, icone: '🤍', type: 'heart' },
-        { id: 'fx_leaves', nome: 'Folhas de Outono', preco: 2, icone: '🍂', type: 'leaf' },
-        { id: 'fx_stars', nome: 'Estrelinhas', preco: 3, icone: '✨', type: 'star' }
-      ]
-    };
-
     function getCatalog() {
-      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : DEFAULT_CATALOG;
+      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : {};
     }
 
     const FOOD_ITEMS = [
@@ -1227,18 +1147,180 @@
 
     let userCoins = parseInt(localStorage.getItem('cat_coins') || '0', 10);
     let userPawCoins = parseInt(localStorage.getItem('cat_paw_coins') || '20', 10);
-    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "pupil_round", "bowtie_color_c_preto", "glasses_color_c_preto", "flower_color_c_ambar", "crown_color_c_ambar"]');
+    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "pupil_round", "mouth_cat", "expr_neutral", "bowtie_color_c_preto", "glasses_color_c_preto", "flower_color_c_ambar", "crown_color_c_ambar"]');
     let equippedItems = JSON.parse(localStorage.getItem('cat_equipped') || '["fx_hearts"]');
     let itemColors = JSON.parse(localStorage.getItem('cat_item_colors') || '{"bowtie":"#2b2725","glasses":"#2b2725","flower":"#c48b36","crown":"#ecd29b"}');
     let activeEyeColor = localStorage.getItem('cat_active_eye_color') || '#2b2725';
     let activePupil = localStorage.getItem('cat_active_pupil') || 'pupil_round';
     let activeBreed = localStorage.getItem('cat_active_breed') || 'breed_default';
+    let activeMouth = localStorage.getItem('cat_active_mouth') || 'mouth_cat';
+    let activeExpr = localStorage.getItem('cat_active_expr') || 'expr_neutral';
     let activeTheme = localStorage.getItem('cat_active_theme') || 'theme_default';
     let activeEffect = localStorage.getItem('cat_active_effect') || 'heart';
     let currentShopTab = 'acessorios';
 
+    function saveStats() {
+      localStorage.setItem('cat_stats', JSON.stringify(catStats));
+      localStorage.setItem('cat_inventory', JSON.stringify(userInventory));
+      localStorage.setItem('cat_paw_coins', userPawCoins);
+      localStorage.setItem('cat_coins', userCoins);
+      localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
+      localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
+      localStorage.setItem('cat_item_colors', JSON.stringify(itemColors));
+      localStorage.setItem('cat_active_eye_color', activeEyeColor);
+      localStorage.setItem('cat_active_pupil', activePupil);
+      localStorage.setItem('cat_active_breed', activeBreed);
+      localStorage.setItem('cat_active_mouth', activeMouth);
+      localStorage.setItem('cat_active_expr', activeExpr);
+      localStorage.setItem('cat_active_theme', activeTheme);
+      localStorage.setItem('cat_active_effect', activeEffect);
+
+      renderStatusBars();
+      updateCatVisualExpression();
+      applyEquippedCosmetics();
+      applyBreeds();
+      applyEyeColorAndPupils();
+      applyMouthAndExpressions();
+      updateMiniPreview();
+      if (!autoTimeEnabled) applyManualTheme();
+    }
+
+    function isStatusCritical() {
+      return catStats.hunger < 30 || catStats.energy < 30 || catStats.happiness < 30 || catStats.health < 30;
+    }
+
+    function checkDailyReward() {
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('cat_last_reward_date');
+
+      if (lastClaim !== today) {
+        if (isStatusCritical()) {
+          const bubble = document.getElementById('speech-bubble');
+          bubble.innerText = "O gatinho está muito debilitado ou com fome para pescar hoje... Cuide dele primeiro! 😿";
+          return;
+        }
+
+        userCoins += 1;
+        localStorage.setItem('cat_last_reward_date', today);
+        saveStats();
+
+        setTimeout(() => {
+          const toast = document.getElementById('daily-toast');
+          if (toast) {
+            toast.innerText = "🎁 O gatinho saudável pescou sua moeda diária! (+1 🐟)";
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+          }
+        }, 800);
+      }
+    }
+
+    function updateCatStatsOverTime() {
+      const now = Date.now();
+      const elapsedMinutes = (now - catStats.lastUpdate) / (1000 * 60);
+
+      if (elapsedMinutes >= 1) {
+        const decayUnits = Math.floor(elapsedMinutes / 10);
+        if (decayUnits > 0) {
+          catStats.hunger = Math.max(0, catStats.hunger - decayUnits * 2);
+          catStats.energy = Math.max(0, catStats.energy - decayUnits * 1.5);
+          catStats.happiness = Math.max(0, catStats.happiness - decayUnits * 2);
+          
+          if (catStats.hunger < 25 || catStats.energy < 25) {
+            catStats.health = Math.max(0, catStats.health - decayUnits * 3);
+          }
+          catStats.lastUpdate = now;
+          saveStats();
+        }
+      }
+      renderStatusBars();
+      updateCatVisualExpression();
+    }
+
+    function updateCatVisualExpression() {
+      const wrapper = document.getElementById('cat-wrapper');
+      const sleepyEyelids = document.getElementById('sleepy-eyelids');
+      const mouthNormal = document.getElementById('mouth-normal');
+      const mouthSad = document.getElementById('mouth-sad');
+      const mouthHungry = document.getElementById('mouth-hungry');
+      const happyBlush = document.getElementById('happy-blush');
+      const sickMark = document.getElementById('sick-mark');
+
+      wrapper.classList.remove('sick', 'sleepy');
+      sleepyEyelids.style.display = 'none';
+      mouthSad.style.display = 'none';
+      mouthHungry.style.display = 'none';
+      happyBlush.style.display = 'none';
+      sickMark.style.display = 'none';
+
+      if (catStats.health < 35) {
+        wrapper.classList.add('sick');
+        sickMark.style.display = 'block';
+        mouthSad.style.display = 'block';
+        return;
+      }
+      if (catStats.energy < 35) {
+        wrapper.classList.add('sleepy');
+        sleepyEyelids.style.display = 'block';
+        return;
+      }
+      if (catStats.hunger < 30) {
+        mouthHungry.style.display = 'block';
+        return;
+      }
+      if (catStats.happiness < 35) {
+        mouthSad.style.display = 'block';
+        return;
+      }
+      if (catStats.hunger >= 70 && catStats.energy >= 70 && catStats.happiness >= 70 && catStats.health >= 70) {
+        happyBlush.style.display = 'block';
+      }
+    }
+
+    function renderStatusBars() {
+      const updateSquareFill = (id, val) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.height = `${val}%`;
+        if (val <= 30) {
+          el.style.backgroundColor = '#c0392b';
+        } else if (val >= 70) {
+          el.style.backgroundColor = '#27ae60';
+        } else {
+          el.style.backgroundColor = 'var(--amber)';
+        }
+      };
+
+      updateSquareFill('fill-hunger', catStats.hunger);
+      updateSquareFill('fill-energy', catStats.energy);
+      updateSquareFill('fill-happiness', catStats.happiness);
+      updateSquareFill('fill-health', catStats.health);
+
+      document.getElementById('paw-counter').innerText = userPawCoins;
+      document.getElementById('coin-counter').innerText = userCoins;
+    }
+
+    let statusVisible = localStorage.getItem('cat_status_visible') !== 'false';
+    function toggleStatusVisibility() {
+      statusVisible = !statusVisible;
+      localStorage.setItem('cat_status_visible', statusVisible);
+      applyStatusVisibility();
+    }
+
+    function applyStatusVisibility() {
+      const container = document.getElementById('status-container');
+      const arrow = document.getElementById('status-arrow-icon');
+      if (statusVisible) {
+        container.classList.remove('hidden');
+        arrow.innerText = '▲';
+      } else {
+        container.classList.add('hidden');
+        arrow.innerText = '▼';
+      }
+    }
+
     /* =========================================================
-       2. TENDA DE COMIDA & FALAS DINÂMICAS DO VENDEDOR
+       2. TENDA DE COMIDA
     ========================================================= */
     const VENDOR_GREETINGS = [
       "Miau! Seja muito bem-vindo à feira! 🧺",
@@ -1280,11 +1362,8 @@
     function openFoodStall(e) {
       if (e) e.stopPropagation();
       renderFoodStallShelves();
-
-      // Fala aleatória de boas-vindas
       const greeting = VENDOR_GREETINGS[Math.floor(Math.random() * VENDOR_GREETINGS.length)];
       setVendorSpeech(greeting);
-
       document.getElementById('stall-modal').classList.add('open');
     }
 
@@ -1325,7 +1404,6 @@
         renderInventorySlots();
         createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 6);
 
-        // Animação e fala do vendedor
         triggerVendorHappyAnimation();
         const thanks = VENDOR_THANKS[Math.floor(Math.random() * VENDOR_THANKS.length)];
         setVendorSpeech(thanks);
@@ -1334,9 +1412,7 @@
       }
     }
 
-    /* =========================================================
-       3. INVENTÁRIO COM DRAG AND DROP
-    ========================================================= */
+    /* INVENTÁRIO */
     function renderInventorySlots() {
       const container = document.getElementById('inventory-slots-container');
       container.innerHTML = '';
@@ -1462,16 +1538,13 @@
       renderInventorySlots();
 
       const hungryMouth = document.getElementById('mouth-hungry');
-      const normalMouth = document.getElementById('mouth-normal');
       hungryMouth.style.display = 'block';
-      normalMouth.style.display = 'none';
 
       const rect = catWrapper.getBoundingClientRect();
       createFloatingParticles(rect.left + rect.width / 2, rect.top + 60, 8);
 
       setTimeout(() => {
         hungryMouth.style.display = 'none';
-        normalMouth.style.display = 'block';
         updateCatVisualExpression();
       }, 700);
 
@@ -1479,398 +1552,8 @@
     }
 
     /* =========================================================
-       4. ESTADO, TEMPO E SALVAMENTO
+       3. LOJA VIP COM ABAS DE BOCAS E EXPRESSÕES
     ========================================================= */
-    function saveStats() {
-      localStorage.setItem('cat_stats', JSON.stringify(catStats));
-      localStorage.setItem('cat_inventory', JSON.stringify(userInventory));
-      localStorage.setItem('cat_paw_coins', userPawCoins);
-      localStorage.setItem('cat_coins', userCoins);
-      localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
-      localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
-      localStorage.setItem('cat_item_colors', JSON.stringify(itemColors));
-      localStorage.setItem('cat_active_eye_color', activeEyeColor);
-      localStorage.setItem('cat_active_pupil', activePupil);
-      localStorage.setItem('cat_active_breed', activeBreed);
-      localStorage.setItem('cat_active_theme', activeTheme);
-      localStorage.setItem('cat_active_effect', activeEffect);
-
-      renderStatusBars();
-      updateCatVisualExpression();
-      applyEquippedCosmetics();
-      applyBreeds();
-      applyEyeColorAndPupils();
-      updateMiniPreview();
-      if (!autoTimeEnabled) applyManualTheme();
-    }
-
-    function isStatusCritical() {
-      return catStats.hunger < 30 || catStats.energy < 30 || catStats.happiness < 30 || catStats.health < 30;
-    }
-
-    function checkDailyReward() {
-      const today = new Date().toDateString();
-      const lastClaim = localStorage.getItem('cat_last_reward_date');
-
-      if (lastClaim !== today) {
-        if (isStatusCritical()) {
-          const bubble = document.getElementById('speech-bubble');
-          bubble.innerText = "O gatinho está muito faminto ou fraco para pescar hoje... Alimente-o! 😿";
-          return;
-        }
-
-        userCoins += 1;
-        localStorage.setItem('cat_last_reward_date', today);
-        saveStats();
-
-        setTimeout(() => {
-          const toast = document.getElementById('daily-toast');
-          if (toast) {
-            toast.innerText = "🎁 O gatinho alimentado pescou sua moeda diária! (+1 🐟)";
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3500);
-          }
-        }, 800);
-      }
-    }
-
-    function updateCatStatsOverTime() {
-      const now = Date.now();
-      const elapsedMinutes = (now - catStats.lastUpdate) / (1000 * 60);
-
-      if (elapsedMinutes >= 1) {
-        const decayUnits = Math.floor(elapsedMinutes / 10);
-        if (decayUnits > 0) {
-          catStats.hunger = Math.max(0, catStats.hunger - decayUnits * 2);
-          catStats.energy = Math.max(0, catStats.energy - decayUnits * 1.5);
-          catStats.happiness = Math.max(0, catStats.happiness - decayUnits * 2);
-          
-          if (catStats.hunger < 25 || catStats.energy < 25) {
-            catStats.health = Math.max(0, catStats.health - decayUnits * 3);
-          }
-          catStats.lastUpdate = now;
-          saveStats();
-        }
-      }
-      renderStatusBars();
-      updateCatVisualExpression();
-    }
-
-    function updateCatVisualExpression() {
-      const wrapper = document.getElementById('cat-wrapper');
-      const sleepyEyelids = document.getElementById('sleepy-eyelids');
-      const mouthNormal = document.getElementById('mouth-normal');
-      const mouthSad = document.getElementById('mouth-sad');
-      const mouthHungry = document.getElementById('mouth-hungry');
-      const happyBlush = document.getElementById('happy-blush');
-      const sickMark = document.getElementById('sick-mark');
-
-      wrapper.classList.remove('sick', 'sleepy');
-      sleepyEyelids.style.display = 'none';
-      mouthNormal.style.display = 'block';
-      mouthSad.style.display = 'none';
-      mouthHungry.style.display = 'none';
-      happyBlush.style.display = 'none';
-      sickMark.style.display = 'none';
-
-      if (catStats.health < 35) {
-        wrapper.classList.add('sick');
-        sickMark.style.display = 'block';
-        mouthSad.style.display = 'block';
-        mouthNormal.style.display = 'none';
-        return;
-      }
-      if (catStats.energy < 35) {
-        wrapper.classList.add('sleepy');
-        sleepyEyelids.style.display = 'block';
-        return;
-      }
-      if (catStats.hunger < 30) {
-        mouthHungry.style.display = 'block';
-        mouthNormal.style.display = 'none';
-        return;
-      }
-      if (catStats.happiness < 35) {
-        mouthSad.style.display = 'block';
-        mouthNormal.style.display = 'none';
-        return;
-      }
-      if (catStats.hunger >= 70 && catStats.energy >= 70 && catStats.happiness >= 70 && catStats.health >= 70) {
-        happyBlush.style.display = 'block';
-      }
-    }
-
-    function renderStatusBars() {
-      const updateSquareFill = (id, val) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.style.height = `${val}%`;
-        if (val <= 30) {
-          el.style.backgroundColor = '#c0392b';
-        } else if (val >= 70) {
-          el.style.backgroundColor = '#27ae60';
-        } else {
-          el.style.backgroundColor = 'var(--amber)';
-        }
-      };
-
-      updateSquareFill('fill-hunger', catStats.hunger);
-      updateSquareFill('fill-energy', catStats.energy);
-      updateSquareFill('fill-happiness', catStats.happiness);
-      updateSquareFill('fill-health', catStats.health);
-
-      document.getElementById('paw-counter').innerText = userPawCoins;
-      document.getElementById('coin-counter').innerText = userCoins;
-    }
-
-    let statusVisible = localStorage.getItem('cat_status_visible') !== 'false';
-    function toggleStatusVisibility() {
-      statusVisible = !statusVisible;
-      localStorage.setItem('cat_status_visible', statusVisible);
-      applyStatusVisibility();
-    }
-
-    function applyStatusVisibility() {
-      const container = document.getElementById('status-container');
-      const arrow = document.getElementById('status-arrow-icon');
-      if (statusVisible) {
-        container.classList.remove('hidden');
-        arrow.innerText = '▲';
-      } else {
-        container.classList.add('hidden');
-        arrow.innerText = '▼';
-      }
-    }
-
-    /* MINIJOGO */
-    let gameInterval = null;
-    function openMinigame(e) {
-      if (e) e.stopPropagation();
-      document.getElementById('game-modal').classList.add('open');
-      startMinigame();
-    }
-    function closeMinigame(e) {
-      if (e) e.stopPropagation();
-      document.getElementById('game-modal').classList.remove('open');
-      clearInterval(gameInterval);
-      document.getElementById('game-arena').innerHTML = '';
-    }
-
-    function startMinigame() {
-      const arena = document.getElementById('game-arena');
-      arena.innerHTML = '';
-      clearInterval(gameInterval);
-
-      gameInterval = setInterval(() => {
-        if (!document.getElementById('game-modal').classList.contains('open')) return;
-
-        const paw = document.createElement('div');
-        paw.className = 'clickable-paw';
-        paw.innerText = ['🐾', '🧶', '🐟', '✨'][Math.floor(Math.random() * 4)];
-        paw.style.left = `${Math.random() * 80 + 5}%`;
-        paw.style.top = `${Math.random() * 70 + 10}%`;
-
-        paw.onclick = () => {
-          userPawCoins += 1;
-          catStats.happiness = Math.min(100, catStats.happiness + 2);
-          saveStats();
-          playPaperSound();
-          paw.remove();
-        };
-
-        arena.appendChild(paw);
-        setTimeout(() => paw.remove(), 900);
-      }, 700);
-    }
-
-    /* INTERAÇÕES */
-    function handleCatClick(e) {
-      const letterGroup = document.getElementById('cat-letter-group');
-      if (letterGroup && letterGroup.style.display !== 'none') {
-        openLetter(e);
-      } else {
-        petTheCat(e);
-      }
-    }
-
-    let petTimeout = null;
-    function petTheCat(event) {
-      if (event) event.stopPropagation();
-      playMeowSound();
-
-      catStats.happiness = Math.min(100, catStats.happiness + 4);
-      catStats.health = Math.min(100, catStats.health + 1);
-      saveStats();
-
-      document.getElementById('regular-eyes').style.display = 'none';
-      document.getElementById('happy-eyes').style.display = 'block';
-      document.getElementById('cat-wrapper').classList.add('petting');
-
-      const rect = document.getElementById('cat-wrapper').getBoundingClientRect();
-      createFloatingParticles(rect.left + rect.width / 2, rect.top + 50, 6);
-
-      clearTimeout(petTimeout);
-      petTimeout = setTimeout(() => {
-        document.getElementById('regular-eyes').style.display = 'block';
-        document.getElementById('happy-eyes').style.display = 'none';
-        document.getElementById('cat-wrapper').classList.remove('petting');
-        updateCatVisualExpression();
-      }, 1000);
-    }
-
-    function openLetter(event) {
-      if (event) event.stopPropagation();
-      const period = getPeriodName();
-      const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
-      const cartaCfg = cfg.carta || {};
-
-      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro você!";
-      document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo amor ♡";
-
-      playPaperSound();
-      document.getElementById('letter-modal').classList.add('open');
-      createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
-
-      localStorage.setItem('cat_last_opened_period', getCurrentPeriodKey());
-      updateLetterHoldingState();
-    }
-
-    function closeLetter(event) {
-      if (event) event.stopPropagation();
-      document.getElementById('letter-modal').classList.remove('open');
-    }
-
-    function getPeriodName() {
-      const hour = new Date().getHours();
-      if (hour >= 5 && hour < 12) return "manha";
-      if (hour >= 12 && hour < 18) return "tarde";
-      if (hour >= 18 && hour < 24) return "noite";
-      return "madrugada";
-    }
-
-    function getCurrentPeriodKey() {
-      return `${new Date().toISOString().split('T')[0]}_${getPeriodName()}`;
-    }
-
-    function updateLetterHoldingState() {
-      const currentPeriod = getCurrentPeriodKey();
-      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
-      const letterGroup = document.getElementById('cat-letter-group');
-      const idlePaws = document.getElementById('idle-paws');
-      const bubble = document.getElementById('speech-bubble');
-
-      const period = getPeriodName();
-      const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
-
-      if (lastOpenedPeriod === currentPeriod) {
-        letterGroup.style.display = 'none';
-        idlePaws.style.display = 'block';
-        if (!isStatusCritical()) {
-          bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Toque no balão para reler a cartinha! 💌";
-        }
-      } else {
-        letterGroup.style.display = 'block';
-        idlePaws.style.display = 'none';
-        bubble.innerText = config.balao || "Psst... toque no gatinho para abrir a cartinha! 🐾";
-      }
-    }
-
-    function applyEquippedCosmetics() {
-      ['bowtie', 'glasses', 'flower', 'crown'].forEach(id => {
-        const el = document.getElementById(`cosmetic-${id}`);
-        if (el) el.style.display = equippedItems.includes(id) ? 'block' : 'none';
-      });
-
-      const bowtieLeft = document.getElementById('bowtie-left');
-      const bowtieRight = document.getElementById('bowtie-right');
-      if (bowtieLeft && bowtieRight) {
-        const c = itemColors['bowtie'] || '#2b2725';
-        bowtieLeft.setAttribute('fill', c);
-        bowtieRight.setAttribute('fill', c);
-      }
-
-      const glassesLeft = document.getElementById('glasses-left');
-      const glassesRight = document.getElementById('glasses-right');
-      const glassesBridge = document.getElementById('glasses-bridge');
-      const glassesLegLeft = document.getElementById('glasses-leg-left');
-      const glassesLegRight = document.getElementById('glasses-leg-right');
-      if (glassesLeft && glassesRight) {
-        const c = itemColors['glasses'] || '#2b2725';
-        glassesLeft.setAttribute('stroke', c);
-        glassesRight.setAttribute('stroke', c);
-        if (glassesBridge) glassesBridge.setAttribute('stroke', c);
-        if (glassesLegLeft) glassesLegLeft.setAttribute('stroke', c);
-        if (glassesLegRight) glassesLegRight.setAttribute('stroke', c);
-      }
-
-      const flowerCenter = document.getElementById('flower-center');
-      if (flowerCenter) flowerCenter.setAttribute('fill', itemColors['flower'] || '#c48b36');
-
-      const crownBody = document.getElementById('crown-body');
-      if (crownBody) crownBody.setAttribute('fill', itemColors['crown'] || '#ecd29b');
-    }
-
-    function applyBreeds() {
-      const bodyPath = document.getElementById('cat-body');
-      const headPath = document.getElementById('cat-head');
-      const tailPath = document.getElementById('cat-tail');
-
-      ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-
-      bodyPath.setAttribute('fill', '#fffdf9');
-      headPath.setAttribute('fill', '#fffdf9');
-      tailPath.setAttribute('stroke', '#2b2725');
-
-      if (activeBreed === 'breed_siamese') {
-        bodyPath.setAttribute('fill', '#ebdcc9');
-        headPath.setAttribute('fill', '#ebdcc9');
-        tailPath.setAttribute('stroke', '#3d281d');
-        document.getElementById('breed-siamese').style.display = 'block';
-      } else if (activeBreed === 'breed_tuxedo') {
-        bodyPath.setAttribute('fill', '#fffdf9');
-        headPath.setAttribute('fill', '#fffdf9');
-        tailPath.setAttribute('stroke', '#2b2725');
-        document.getElementById('breed-tuxedo').style.display = 'block';
-        document.getElementById('body-tuxedo').style.display = 'block';
-      } else if (activeBreed === 'breed_orange') {
-        bodyPath.setAttribute('fill', '#e58e45');
-        headPath.setAttribute('fill', '#e58e45');
-        tailPath.setAttribute('stroke', '#b3581d');
-        document.getElementById('breed-orange').style.display = 'block';
-        document.getElementById('body-orange').style.display = 'block';
-      }
-    }
-
-    function applyEyeColorAndPupils() {
-      const leftEye = document.getElementById('eye-bg-left');
-      const rightEye = document.getElementById('eye-bg-right');
-      if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
-      if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
-
-      ['pupil-normal', 'pupil-slit', 'pupil-sparkle'].forEach(cls => {
-        document.querySelectorAll('.' + cls).forEach(el => el.style.display = 'none');
-      });
-
-      if (activePupil === 'pupil_slit') {
-        document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
-      } else if (activePupil === 'pupil_sparkle') {
-        document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
-      } else {
-        document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
-      }
-    }
-
-    function applyManualTheme() {
-      document.body.classList.remove('theme-cafe', 'theme-night');
-      const cat = getCatalog();
-      const found = (cat.temas || []).find(t => t.id === activeTheme);
-      if (found && found.class) document.body.classList.add(found.class);
-    }
-
-    /* LOJA VIP */
     function openShop(e) {
       if (e) e.stopPropagation();
       document.getElementById('shop-modal').classList.add('open');
@@ -1926,6 +1609,38 @@
           grid.appendChild(card);
         });
         area.appendChild(grid);
+      } else if (currentShopTab === 'bocas') {
+        renderGenericTabGrid(area, cat.bocas || [], m => activeMouth === m.id, m => {
+          if (unlockedItems.includes(m.id)) {
+            activeMouth = m.id;
+          } else if (userCoins >= m.preco) {
+            userCoins -= m.preco;
+            unlockedItems.push(m.id);
+            activeMouth = m.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'expressoes') {
+        renderGenericTabGrid(area, cat.expressoes || [], ex => activeExpr === ex.id, ex => {
+          if (unlockedItems.includes(ex.id)) {
+            activeExpr = ex.id;
+          } else if (userCoins >= ex.preco) {
+            userCoins -= ex.preco;
+            unlockedItems.push(ex.id);
+            activeExpr = ex.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
       } else if (currentShopTab === 'pupilas') {
         renderGenericTabGrid(area, cat.pupilas || [], p => activePupil === p.id, p => {
           if (unlockedItems.includes(p.id)) {
@@ -2011,7 +1726,7 @@
       } else if (currentShopTab === 'backup') {
         area.innerHTML = `
           <div style="padding: 10px 4px; text-align: center;">
-            <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados ou restaure em outro aparelho:</p>
+            <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados com segurança:</p>
             <div style="display: flex; gap: 10px;">
               <button class="action-btn" style="flex: 1; justify-content: center;" onclick="exportDataBackup()">📥 Salvar Backup</button>
               <button class="action-btn" style="flex: 1; justify-content: center;" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
@@ -2117,6 +1832,257 @@
       document.getElementById('color-modal').classList.remove('open');
     }
 
+    /* APLICAÇÕES DE RAÇA COM RABO PREENCHIDO */
+    function applyBreeds() {
+      const bodyPath = document.getElementById('cat-body');
+      const headPath = document.getElementById('cat-head');
+      const tailPath = document.getElementById('cat-tail');
+      const tailStripes = document.getElementById('tail-stripes');
+
+      ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      if (tailStripes) tailStripes.style.display = 'none';
+
+      bodyPath.setAttribute('fill', '#fffdf9');
+      headPath.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('stroke', '#2b2725');
+
+      if (activeBreed === 'breed_siamese') {
+        bodyPath.setAttribute('fill', '#ebdcc9');
+        headPath.setAttribute('fill', '#ebdcc9');
+        tailPath.setAttribute('fill', '#3d281d');
+        tailPath.setAttribute('stroke', '#2b2725');
+        document.getElementById('breed-siamese').style.display = 'block';
+      } else if (activeBreed === 'breed_tuxedo') {
+        bodyPath.setAttribute('fill', '#fffdf9');
+        headPath.setAttribute('fill', '#fffdf9');
+        tailPath.setAttribute('fill', '#2b2725');
+        tailPath.setAttribute('stroke', '#2b2725');
+        document.getElementById('breed-tuxedo').style.display = 'block';
+        document.getElementById('body-tuxedo').style.display = 'block';
+      } else if (activeBreed === 'breed_orange') {
+        bodyPath.setAttribute('fill', '#e58e45');
+        headPath.setAttribute('fill', '#e58e45');
+        tailPath.setAttribute('fill', '#e58e45');
+        tailPath.setAttribute('stroke', '#b3581d');
+        if (tailStripes) tailStripes.style.display = 'block';
+        document.getElementById('breed-orange').style.display = 'block';
+        document.getElementById('body-orange').style.display = 'block';
+      }
+    }
+
+    function applyMouthAndExpressions() {
+      // Bocas
+      ['mouth-cat', 'mouth-tongue', 'mouth-vampire', 'mouth-smile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      const activeMouthEl = document.getElementById(activeMouth);
+      if (activeMouthEl) activeMouthEl.style.display = 'block';
+
+      // Expressões
+      const airplaneEl = document.getElementById('expr-airplane-ears');
+      const detEl = document.getElementById('expr-determined-brows');
+      if (airplaneEl) airplaneEl.style.display = (activeExpr === 'expr_airplane') ? 'block' : 'none';
+      if (detEl) detEl.style.display = (activeExpr === 'expr_determined') ? 'block' : 'none';
+    }
+
+    function applyEyeColorAndPupils() {
+      const leftEye = document.getElementById('eye-bg-left');
+      const rightEye = document.getElementById('eye-bg-right');
+      if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
+      if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
+
+      ['pupil-normal', 'pupil-slit', 'pupil-sparkle'].forEach(cls => {
+        document.querySelectorAll('.' + cls).forEach(el => el.style.display = 'none');
+      });
+
+      if (activePupil === 'pupil_slit') {
+        document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
+      } else if (activePupil === 'pupil_sparkle' || activeExpr === 'expr_anime') {
+        document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
+      } else {
+        document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
+      }
+    }
+
+    function applyEquippedCosmetics() {
+      ['bowtie', 'glasses', 'flower', 'crown'].forEach(id => {
+        const el = document.getElementById(`cosmetic-${id}`);
+        if (el) el.style.display = equippedItems.includes(id) ? 'block' : 'none';
+      });
+
+      const bowtieLeft = document.getElementById('bowtie-left');
+      const bowtieRight = document.getElementById('bowtie-right');
+      if (bowtieLeft && bowtieRight) {
+        const c = itemColors['bowtie'] || '#2b2725';
+        bowtieLeft.setAttribute('fill', c);
+        bowtieRight.setAttribute('fill', c);
+      }
+
+      const glassesLeft = document.getElementById('glasses-left');
+      const glassesRight = document.getElementById('glasses-right');
+      const glassesBridge = document.getElementById('glasses-bridge');
+      const glassesLegLeft = document.getElementById('glasses-leg-left');
+      const glassesLegRight = document.getElementById('glasses-leg-right');
+      if (glassesLeft && glassesRight) {
+        const c = itemColors['glasses'] || '#2b2725';
+        glassesLeft.setAttribute('stroke', c);
+        glassesRight.setAttribute('stroke', c);
+        if (glassesBridge) glassesBridge.setAttribute('stroke', c);
+        if (glassesLegLeft) glassesLegLeft.setAttribute('stroke', c);
+        if (glassesLegRight) glassesLegRight.setAttribute('stroke', c);
+      }
+
+      const flowerCenter = document.getElementById('flower-center');
+      if (flowerCenter) flowerCenter.setAttribute('fill', itemColors['flower'] || '#c48b36');
+
+      const crownBody = document.getElementById('crown-body');
+      if (crownBody) crownBody.setAttribute('fill', itemColors['crown'] || '#ecd29b');
+    }
+
+    function applyManualTheme() {
+      document.body.classList.remove('theme-cafe', 'theme-night');
+      const cat = getCatalog();
+      const found = (cat.temas || []).find(t => t.id === activeTheme);
+      if (found && found.class) document.body.classList.add(found.class);
+    }
+
+    /* MINIJOGO */
+    let gameInterval = null;
+    function openMinigame(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('game-modal').classList.add('open');
+      startMinigame();
+    }
+    function closeMinigame(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('game-modal').classList.remove('open');
+      clearInterval(gameInterval);
+      document.getElementById('game-arena').innerHTML = '';
+    }
+
+    function startMinigame() {
+      const arena = document.getElementById('game-arena');
+      arena.innerHTML = '';
+      clearInterval(gameInterval);
+
+      gameInterval = setInterval(() => {
+        if (!document.getElementById('game-modal').classList.contains('open')) return;
+
+        const paw = document.createElement('div');
+        paw.className = 'clickable-paw';
+        paw.innerText = ['🐾', '🧶', '🐟', '✨'][Math.floor(Math.random() * 4)];
+        paw.style.left = `${Math.random() * 80 + 5}%`;
+        paw.style.top = `${Math.random() * 70 + 10}%`;
+
+        paw.onclick = () => {
+          userPawCoins += 1;
+          catStats.happiness = Math.min(100, catStats.happiness + 2);
+          saveStats();
+          playPaperSound();
+          paw.remove();
+        };
+
+        arena.appendChild(paw);
+        setTimeout(() => paw.remove(), 900);
+      }, 700);
+    }
+
+    function handleCatClick(e) {
+      const letterGroup = document.getElementById('cat-letter-group');
+      if (letterGroup && letterGroup.style.display !== 'none') {
+        openLetter(e);
+      } else {
+        petTheCat(e);
+      }
+    }
+
+    let petTimeout = null;
+    function petTheCat(event) {
+      if (event) event.stopPropagation();
+      playMeowSound();
+
+      catStats.happiness = Math.min(100, catStats.happiness + 4);
+      catStats.health = Math.min(100, catStats.health + 1);
+      saveStats();
+
+      document.getElementById('regular-eyes').style.display = 'none';
+      document.getElementById('happy-eyes').style.display = 'block';
+      document.getElementById('cat-wrapper').classList.add('petting');
+
+      const rect = document.getElementById('cat-wrapper').getBoundingClientRect();
+      createFloatingParticles(rect.left + rect.width / 2, rect.top + 50, 6);
+
+      clearTimeout(petTimeout);
+      petTimeout = setTimeout(() => {
+        document.getElementById('regular-eyes').style.display = 'block';
+        document.getElementById('happy-eyes').style.display = 'none';
+        document.getElementById('cat-wrapper').classList.remove('petting');
+        updateCatVisualExpression();
+      }, 1000);
+    }
+
+    function openLetter(event) {
+      if (event) event.stopPropagation();
+      const period = getPeriodName();
+      const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+      const cartaCfg = cfg.carta || {};
+
+      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro você!";
+      document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo amor ♡";
+
+      playPaperSound();
+      document.getElementById('letter-modal').classList.add('open');
+      createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
+
+      localStorage.setItem('cat_last_opened_period', getCurrentPeriodKey());
+      updateLetterHoldingState();
+    }
+
+    function closeLetter(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('letter-modal').classList.remove('open');
+    }
+
+    function getPeriodName() {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 12) return "manha";
+      if (hour >= 12 && hour < 18) return "tarde";
+      if (hour >= 18 && hour < 24) return "noite";
+      return "madrugada";
+    }
+
+    function getCurrentPeriodKey() {
+      return `${new Date().toISOString().split('T')[0]}_${getPeriodName()}`;
+    }
+
+    function updateLetterHoldingState() {
+      const currentPeriod = getCurrentPeriodKey();
+      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
+      const letterGroup = document.getElementById('cat-letter-group');
+      const idlePaws = document.getElementById('idle-paws');
+      const bubble = document.getElementById('speech-bubble');
+
+      const period = getPeriodName();
+      const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+
+      if (lastOpenedPeriod === currentPeriod) {
+        letterGroup.style.display = 'none';
+        idlePaws.style.display = 'block';
+        if (!isStatusCritical()) {
+          bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Toque no balão para reler a cartinha! 💌";
+        }
+      } else {
+        letterGroup.style.display = 'block';
+        idlePaws.style.display = 'none';
+        bubble.innerText = config.balao || "Psst... toque no gatinho para abrir a cartinha! 🐾";
+      }
+    }
+
     function exportDataBackup() {
       const backupData = {
         cat_coins: userCoins,
@@ -2129,6 +2095,8 @@
         cat_active_eye_color: activeEyeColor,
         cat_active_pupil: activePupil,
         cat_active_breed: activeBreed,
+        cat_active_mouth: activeMouth,
+        cat_active_expr: activeExpr,
         cat_active_theme: activeTheme,
         cat_active_effect: activeEffect,
         cat_last_reward_date: localStorage.getItem('cat_last_reward_date'),
@@ -2163,10 +2131,10 @@
           if (data.cat_active_eye_color) activeEyeColor = data.cat_active_eye_color;
           if (data.cat_active_pupil) activePupil = data.cat_active_pupil;
           if (data.cat_active_breed) activeBreed = data.cat_active_breed;
+          if (data.cat_active_mouth) activeMouth = data.cat_active_mouth;
+          if (data.cat_active_expr) activeExpr = data.cat_active_expr;
           if (data.cat_active_theme) activeTheme = data.cat_active_theme;
           if (data.cat_active_effect) activeEffect = data.cat_active_effect;
-          if (data.cat_last_reward_date) localStorage.setItem('cat_last_reward_date', data.cat_last_reward_date);
-          if (data.cat_last_opened_period) localStorage.setItem('cat_last_opened_period', data.cat_last_opened_period);
 
           saveStats();
           updateLetterHoldingState();
