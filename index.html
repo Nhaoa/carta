@@ -54,6 +54,22 @@
       --amber: #cfa156;
     }
 
+    body.theme-cafe {
+      --bg-paper: #eae0d0;
+      --paper-grid: #cfc2ad;
+      --charcoal: #302621;
+      --card-bg: #fdfaf5;
+      --amber: #a86c2e;
+    }
+    body.theme-night {
+      --bg-paper: #22252a;
+      --paper-grid: #32373e;
+      --charcoal: #e8ecf2;
+      --pencil-light: #9aa2ae;
+      --card-bg: #191c20;
+      --amber: #d2a149;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -79,7 +95,7 @@
       position: relative;
       user-select: none;
       transition: background-color 0.5s ease, color 0.5s ease;
-      padding-bottom: 90px;
+      padding-bottom: 95px;
     }
 
     #fx-canvas {
@@ -246,7 +262,7 @@
       filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
     }
 
-    /* BARRA INFERIOR FIXA COM TODOS OS BOTÕES DE LOJAS */
+    /* BARRA INFERIOR FIXA */
     .bottom-nav-bar {
       position: fixed;
       bottom: 0;
@@ -274,7 +290,6 @@
       font-weight: bold;
       color: var(--charcoal);
       cursor: pointer;
-      position: relative;
       transition: transform 0.15s;
     }
     .bottom-nav-btn:active {
@@ -283,24 +298,149 @@
     .bottom-nav-btn span.icon {
       font-size: 1.45rem;
     }
-    .nav-badge-count {
+
+    /* PREVIEW DA LOJA VIP CORRIGIDO */
+    .shop-preview-box {
+      width: 100%;
+      height: 90px;
+      background: #faf4e8;
+      border: 1.5px dashed var(--pencil-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .shop-preview-box svg {
+      width: 72px !important;
+      height: 72px !important;
+      max-width: 72px !important;
+      max-height: 72px !important;
+    }
+    .shop-preview-label {
       position: absolute;
-      top: -2px;
-      right: 4px;
-      background: #c0392b;
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 1px 5px;
-      border-radius: 10px;
-      border: 1px solid var(--charcoal);
+      bottom: 3px;
+      right: 8px;
+      font-size: 0.8rem;
+      color: var(--pencil-light);
     }
 
-    /* CENÁRIO DA TENDA DA LOJA DE COMIDAS */
+    /* ABAS DA LOJA VIP */
+    .shop-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1.5px solid var(--pencil-light);
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .shop-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .shop-tab-btn {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 16px;
+      background: var(--card-bg);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .shop-tab-btn.active {
+      background: var(--amber);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .shop-content-area {
+      overflow-y: auto;
+      flex: 1;
+      min-height: 220px;
+      max-height: 52vh;
+      padding-right: 4px;
+    }
+
+    .shop-items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .shop-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .shop-card-svg-preview {
+      width: 58px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .shop-card-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1px;
+      text-align: center;
+    }
+    .shop-card-price {
+      font-size: 0.85rem;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .palette-btn {
+      width: 100%;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1.5px dashed var(--charcoal);
+      background: #faf4e8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .action-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 24px;
+      padding: 6px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--charcoal);
+      cursor: pointer;
+      box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .action-btn:hover { transform: translateY(-2px); }
+    .action-btn:active { transform: translateY(1px); }
+
+    /* CENÁRIO DA TENDA DE COMIDA */
     .stall-modal-paper {
       background: #fdf7ec;
       border: 2.5px solid var(--charcoal);
       border-radius: 20px;
-      max-width: 480px;
+      max-width: 460px;
       width: 100%;
       padding: 0 0 16px 0;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
@@ -310,7 +450,6 @@
       flex-direction: column;
     }
 
-    /* Toldo Listrado */
     .stall-canopy {
       width: 100%;
       height: 52px;
@@ -322,18 +461,6 @@
         #f4ede1 40px
       );
       border-bottom: 3px solid var(--charcoal);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-      position: relative;
-    }
-    .stall-canopy::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 0;
-      right: 0;
-      height: 10px;
-      background: radial-gradient(circle at 10px 0, transparent 10px, #b84040 10.5px);
-      background-size: 20px 20px;
     }
 
     .stall-scene {
@@ -345,7 +472,6 @@
       border-bottom: 3px solid var(--wood-dark);
       position: relative;
     }
-
     .vendor-cat-box {
       display: flex;
       flex-direction: column;
@@ -360,26 +486,11 @@
       font-size: 0.85rem;
       margin-bottom: 4px;
       white-space: nowrap;
-      box-shadow: 1px 2px 0 rgba(0,0,0,0.1);
     }
-    .vendor-svg {
-      width: 90px;
-      height: 90px;
-    }
+    .vendor-svg { width: 90px; height: 90px; }
+    .customer-cat-box { width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center; }
+    .customer-cat-box svg { width: 80px !important; height: 80px !important; }
 
-    .customer-cat-box {
-      width: 90px;
-      height: 90px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .customer-cat-box svg {
-      width: 80px;
-      height: 80px;
-    }
-
-    /* As 6 prateleiras da tenda */
     .stall-shelf-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -388,7 +499,6 @@
       background: #ebd2b0;
       border-bottom: 4px solid var(--wood-dark);
     }
-
     .shelf-item-card {
       background: #fff9ef;
       border: 2px solid var(--wood-dark);
@@ -397,30 +507,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 2px 3px 0 rgba(99, 56, 27, 0.3);
       cursor: pointer;
-      transition: transform 0.15s;
     }
-    .shelf-item-card:active {
-      transform: scale(0.95);
-    }
-    .shelf-item-icon {
-      font-size: 2.2rem;
-      margin-bottom: 2px;
-      filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.15));
-    }
-    .shelf-item-name {
-      font-weight: bold;
-      font-size: 0.95rem;
-      text-align: center;
-      line-height: 1.1;
-    }
-    .shelf-item-price {
-      color: var(--amber);
-      font-size: 0.88rem;
-      font-weight: bold;
-      margin: 2px 0;
-    }
+    .shelf-item-icon { font-size: 2.2rem; }
+    .shelf-item-name { font-weight: bold; font-size: 0.95rem; text-align: center; }
+    .shelf-item-price { color: var(--amber); font-size: 0.88rem; font-weight: bold; margin: 2px 0; }
     .shelf-buy-btn {
       width: 100%;
       background: #e8c187;
@@ -433,7 +524,7 @@
       cursor: pointer;
     }
 
-    /* GAVETA DE INVENTÁRIO COM DRAG AND DROP */
+    /* INVENTÁRIO COM DRAG AND DROP */
     .inventory-tray {
       background: var(--card-bg);
       border: 2px solid var(--charcoal);
@@ -473,13 +564,8 @@
       cursor: grab;
       touch-action: none;
     }
-    .inventory-slot:active {
-      cursor: grabbing;
-    }
-    .slot-icon {
-      font-size: 1.8rem;
-      pointer-events: none;
-    }
+    .inventory-slot:active { cursor: grabbing; }
+    .slot-icon { font-size: 1.8rem; pointer-events: none; }
     .slot-qty {
       position: absolute;
       bottom: 2px;
@@ -489,10 +575,9 @@
       font-size: 0.75rem;
       padding: 0 4px;
       border-radius: 8px;
-      font-family: monospace;
     }
 
-    /* MODAL PADRÃO */
+    /* MODAIS */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -507,10 +592,7 @@
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
 
     .modal-paper {
       background: var(--card-bg);
@@ -545,37 +627,51 @@
       z-index: 10;
     }
 
-    /* MINIJOGO */
-    .game-arena {
-      width: 100%;
-      height: 240px;
-      border: 2px dashed var(--charcoal);
-      border-radius: 14px;
-      position: relative;
-      overflow: hidden;
-      background: #faf2e3;
-      margin-top: 10px;
+    .color-paper { max-width: 360px; z-index: 120; }
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      overflow-y: auto;
+      max-height: 320px;
+      padding: 4px;
     }
-    .clickable-paw {
-      position: absolute;
-      font-size: 2rem;
+    .color-swatch-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       cursor: pointer;
-      animation: popPaw 0.8s ease-out forwards;
-      user-select: none;
+      background: #fffdf9;
     }
-    @keyframes popPaw {
-      0% { transform: scale(0.4); opacity: 0; }
-      20% { transform: scale(1.1); opacity: 1; }
-      80% { opacity: 1; }
-      100% { transform: scale(0.8); opacity: 0; }
+    .color-swatch-card.active { box-shadow: 0 0 0 2.5px var(--amber); }
+    .color-swatch-circle { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,0.2); margin-bottom: 4px; }
+    .color-swatch-name { font-size: 0.75rem; text-align: center; line-height: 1.1; }
+
+    .daily-toast {
+      position: fixed;
+      bottom: 24px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 20px;
+      padding: 10px 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-size: 1.15rem;
+      z-index: 150;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .daily-toast.show { transform: translateY(0); opacity: 1; }
   </style>
 </head>
 <body>
 
   <canvas id="fx-canvas"></canvas>
 
-  <!-- Controlos de Topo -->
   <div class="top-controls">
     <div class="left-controls">
       <button class="auto-time-toggle" id="auto-time-btn" onclick="toggleAutoTime()">
@@ -598,10 +694,9 @@
     </div>
   </div>
 
-  <!-- BARRAS DE STATUS MINIMALISTAS NO TOPO -->
+  <!-- STATUS MINIMALISTA NO TOPO -->
   <div class="status-container" id="status-container">
     <div class="status-squares-row">
-      <!-- Fome -->
       <div class="status-square" title="Fome">
         <div class="status-fill" id="fill-hunger"></div>
         <svg class="status-icon-svg" viewBox="0 0 32 32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -611,16 +706,12 @@
           <circle cx="7" cy="23" r="1.5"/>
         </svg>
       </div>
-
-      <!-- Energia -->
       <div class="status-square" title="Energia">
         <div class="status-fill" id="fill-energy"></div>
         <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
         </svg>
       </div>
-
-      <!-- Alegria -->
       <div class="status-square" title="Alegria">
         <div class="status-fill" id="fill-happiness"></div>
         <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -630,8 +721,6 @@
           <path d="M9.5 14 Q12 16.5 14.5 14"/>
         </svg>
       </div>
-
-      <!-- Saúde -->
       <div class="status-square" title="Saúde">
         <div class="status-fill" id="fill-health"></div>
         <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -639,19 +728,17 @@
         </svg>
       </div>
     </div>
-
     <div class="status-toggle-tab" onclick="toggleStatusVisibility()" title="Ocultar/Exibir Status">
       <span id="status-arrow-icon">▲</span>
     </div>
   </div>
 
   <main class="stage">
-    <!-- Balão de Fala -->
     <div class="speech-bubble" id="speech-bubble" onclick="openLetter(event)">
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Nosso Gatinho Interativo -->
+    <!-- Gatinho Principal -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
       <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
         <defs>
@@ -664,7 +751,6 @@
         <path id="cat-tail" d="M 136,155 C 165,152 178,130 170,118 C 163,108 152,118 150,126 C 148,135 140,147 132,154" fill="none" stroke="#2b2725" stroke-width="4" stroke-linecap="round"/>
         <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Pelagens -->
         <g clip-path="url(#cat-body-clip)" id="body-markings">
           <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
           <g id="body-orange" style="display: none;">
@@ -690,19 +776,19 @@
           </g>
           <g id="breed-orange" style="display: none;">
             <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
+            <circle cx="98" cy="116" r="4" fill="#d98270"/>
             <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
             <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
             <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
           </g>
         </g>
 
-        <!-- Olhos -->
+        <!-- Olhos e pupilas -->
         <g id="regular-eyes">
           <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
           <g clip-path="url(#left-eye-clip)">
             <g id="pupil-left-group">
               <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
-              <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
               <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
               <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
             </g>
@@ -711,7 +797,6 @@
           <g clip-path="url(#right-eye-clip)">
             <g id="pupil-right-group">
               <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
-              <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
               <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
               <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
             </g>
@@ -782,7 +867,7 @@
       </svg>
     </div>
 
-    <!-- MOCHILA / INVENTÁRIO (ARRASTE PARA O GATO) -->
+    <!-- MOCHILA DE COMIDINHAS COM DRAG AND DROP -->
     <div class="inventory-tray">
       <div class="inventory-title">
         <span>🎒 Mochila de Comidinhas</span>
@@ -792,7 +877,7 @@
     </div>
   </main>
 
-  <!-- BARRA DE BOTÕES FIXA INFERIOR -->
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
   <nav class="bottom-nav-bar">
     <button class="bottom-nav-btn" onclick="openFoodStall(event)">
       <span class="icon">🏪</span>
@@ -808,45 +893,31 @@
     </button>
   </nav>
 
-  <!-- MODAL: TENDA DE COMIDA RÚSTICA COM O VENDEDOR CALICO -->
+  <!-- MODAL: TENDA DE COMIDA RÚSTICA -->
   <div class="modal-backdrop" id="stall-modal" onclick="closeFoodStall(event)">
     <div class="stall-modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeFoodStall(event)">✕</button>
-      
-      <!-- Toldo -->
       <div class="stall-canopy"></div>
-
-      <!-- Cenário: Gato Vendedor à Esquerda e Nosso Gato à Direita -->
       <div class="stall-scene">
         <div class="vendor-cat-box">
           <div class="vendor-speech">Miau! Tudo fresquinho! 🍲</div>
-          <!-- Vendedor Calico Simpático com Lenço -->
           <svg class="vendor-svg" viewBox="0 0 100 100">
-            <!-- Cabeça -->
             <path d="M 20,50 C 18,30 20,18 28,22 C 38,26 52,42 62,42 C 72,42 86,26 94,22 C 102,18 104,30 100,50 C 105,70 95,86 62,86 C 28,86 15,70 20,50 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
-            <!-- Manchas Calico (Laranja e Marrom) -->
             <path d="M 22,25 Q 36,30 32,48 L 20,40 Z" fill="#d97a36"/>
             <path d="M 96,25 Q 82,30 86,48 L 98,40 Z" fill="#4a3528"/>
             <ellipse cx="78" cy="62" rx="10" ry="7" fill="#d97a36"/>
-            <!-- Olhinhos -->
             <ellipse cx="44" cy="58" rx="6" ry="7" fill="#2b2725"/>
             <ellipse cx="78" cy="58" rx="6" ry="7" fill="#2b2725"/>
             <circle cx="46" cy="56" r="1.8" fill="#fff"/>
             <circle cx="80" cy="56" r="1.8" fill="#fff"/>
             <path d="M 58,68 Q 62,72 66,68" fill="none" stroke="#2b2725" stroke-width="2" stroke-linecap="round"/>
-            <!-- Lenço Vermelho -->
             <polygon points="40,82 62,96 84,82" fill="#c0392b" stroke="#2b2725" stroke-width="2"/>
-            <!-- Patinhas no balcão -->
             <ellipse cx="42" cy="88" rx="7" ry="5" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/>
             <ellipse cx="80" cy="88" rx="7" ry="5" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/>
           </svg>
         </div>
-
-        <!-- Nosso Gatinho a Observar no Lado Direito -->
         <div class="customer-cat-box" id="stall-customer-preview"></div>
       </div>
-
-      <!-- As 6 Prateleiras de Comida -->
       <div class="stall-shelf-grid" id="stall-shelf-grid"></div>
     </div>
   </div>
@@ -870,14 +941,18 @@
     </div>
   </div>
 
-  <!-- MODAL: LOJINHA VIP -->
+  <!-- MODAL: LOJINHA VIP COMPLETA RESTAURADA -->
   <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
+      
+      <!-- Mini Preview Compacto no Topo -->
       <div class="shop-preview-box">
         <div id="shop-mini-cat-container"></div>
         <span class="shop-preview-label">Visualização ao Vivo 🐾</span>
       </div>
+
+      <!-- Abas da Loja VIP -->
       <div class="shop-tabs">
         <button class="shop-tab-btn active" onclick="switchShopTab('acessorios')">Acessórios</button>
         <button class="shop-tab-btn" onclick="switchShopTab('pupilas')">Pupilas</button>
@@ -887,7 +962,19 @@
         <button class="shop-tab-btn" onclick="switchShopTab('efeitos')">Efeitos</button>
         <button class="shop-tab-btn" onclick="switchShopTab('backup')">Backup</button>
       </div>
-      <div class="shop-content-area" id="shop-content-area" style="overflow-y: auto; flex: 1;"></div>
+
+      <!-- Conteúdo com Rolagem Livre e Produtos -->
+      <div class="shop-content-area" id="shop-content-area"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: PALETA DE CORES -->
+  <div class="modal-backdrop" id="color-modal" onclick="closeColorModal(event)">
+    <div class="modal-paper color-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
+      <div class="color-grid" id="color-picker-grid"></div>
     </div>
   </div>
 
@@ -898,13 +985,11 @@
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Atualizações 📜</h3>
       <div class="changelog-content">
         <div class="changelog-entry">
-          <div class="changelog-version">v2.8 - A Tenda de Comidas & Inventário Interativo</div>
+          <div class="changelog-version">v2.9 - Loja VIP Restaurada & Visualização Equilibrada</div>
           <div class="changelog-date">07 de Outubro de 2026</div>
           <ul class="changelog-list">
-            <li>Tenda de comida com o vendedor Calico e o nosso gatinho no lado direito.</li>
-            <li>Barra de navegação inferior unificada para lojas e brincadeiras.</li>
-            <li>6 produtos gastronómicos compráveis com moedas de patas 🐾.</li>
-            <li>Mochila com arrastar e largar (drag and drop) para alimentar o gatinho diretamente.</li>
+            <li>Ajustada a escala da pré-visualização ao vivo na Loja VIP para não ocultar os produtos.</li>
+            <li>Restauração completa dos produtos e mecânica em todas as 7 abas de cosméticos.</li>
           </ul>
         </div>
       </div>
@@ -913,8 +998,77 @@
 
   <script>
     /* =========================================================
-       1. CATÁLOGO DAS 6 COMIDAS DA TENDA
+       1. CATÁLOGOS E CONFIGURAÇÃO INICIAL
     ========================================================= */
+    const DEFAULT_CATALOG = {
+      tintas: [
+        { id: 'c_preto', nome: 'Grafite Escuro', hex: '#2b2725' },
+        { id: 'c_cinza', nome: 'Cinza Suave', hex: '#7a736e' },
+        { id: 'c_marrom', nome: 'Chocolate', hex: '#4a3528' },
+        { id: 'c_ambar', nome: 'Âmbar Dourado', hex: '#c48b36' },
+        { id: 'c_laranja', nome: 'Laranja Queimado', hex: '#d96b27' },
+        { id: 'c_vermelho', nome: 'Vinho Aveludado', hex: '#872b2b' },
+        { id: 'c_rosa', nome: 'Pêssego Suave', hex: '#d98b82' },
+        { id: 'c_roxo', nome: 'Ametista Profundo', hex: '#5b3a6e' },
+        { id: 'c_azul_escuro', nome: 'Azul Meia-Noite', hex: '#223854' },
+        { id: 'c_azul_claro', nome: 'Azul Céu', hex: '#4f83a8' },
+        { id: 'c_verde_escuro', nome: 'Verde Musgo', hex: '#375239' },
+        { id: 'c_verde_claro', nome: 'Verde Sálvia', hex: '#5f8263' },
+        { id: 'c_creme', nome: 'Baunilha Claro', hex: '#f0e3ce' },
+        { id: 'c_dourado', nome: 'Ouro Nobre', hex: '#dfb15b' }
+      ],
+      acessorios: [
+        { 
+          id: 'bowtie', nome: 'Gravatinha Borboleta', preco: 1,
+          svg: `<svg viewBox="0 0 60 40" width="46" height="32"><polygon points="12,10 12,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><polygon points="48,10 48,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="20" r="4.5" fill="#c48b36"/></svg>`
+        },
+        { 
+          id: 'glasses', nome: 'Óculos com Hastes', preco: 2,
+          svg: `<svg viewBox="0 0 76 35" width="54" height="26"><line x1="4" y1="14" x2="18" y2="18" stroke="COLOR" stroke-width="2.5"/><line x1="72" y1="14" x2="58" y2="18" stroke="COLOR" stroke-width="2.5"/><circle cx="28" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><circle cx="48" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><path d="M 40,18 Q 38,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/></svg>`
+        },
+        { 
+          id: 'flower', nome: 'Florzinha Delicada', preco: 3,
+          svg: `<svg viewBox="0 0 50 50" width="38" height="38"><circle cx="20" cy="18" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="13" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="36" cy="22" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="28" cy="30" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="18" cy="26" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="26" cy="22" r="4.5" fill="COLOR"/></svg>`
+        },
+        { 
+          id: 'crown', nome: 'Coroa Imperial', preco: 4,
+          svg: `<svg viewBox="0 0 60 40" width="46" height="30"><path d="M 10,12 L 18,28 L 30,6 L 42,28 L 50,12 L 48,34 L 12,34 Z" fill="COLOR" stroke="#2b2725" stroke-width="2.5"/><circle cx="30" cy="6" r="2.5" fill="#c48b36"/></svg>`
+        }
+      ],
+      pupilas: [
+        { id: 'pupil_round', nome: 'Olhar Curioso (Normal)', preco: 0, icone: '●' },
+        { id: 'pupil_slit', nome: 'Fenda Felina (Caçador)', preco: 2, icone: '❙' },
+        { id: 'pupil_sparkle', nome: 'Olhar Brilhante (Anime)', preco: 3, icone: '✦' }
+      ],
+      olhos: [
+        { id: 'eye_charcoal', nome: 'Grafite Preto', hex: '#2b2725', preco: 0, icone: '👁️' },
+        { id: 'eye_blue', nome: 'Azul Safira (Siamês)', hex: '#3466b0', preco: 2, icone: '💎' },
+        { id: 'eye_amber', nome: 'Âmbar Dourado', hex: '#c47d25', preco: 2, icone: '🍯' },
+        { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3e', preco: 3, icone: '🌿' },
+        { id: 'eye_violet', nome: 'Violeta Profundo', hex: '#633974', preco: 3, icone: '🔮' }
+      ],
+      racas: [
+        { id: 'breed_default', nome: 'Branco Clássico', preco: 0, icone: '⚪' },
+        { id: 'breed_siamese', nome: 'Siamês Real', preco: 3, icone: '🤎' },
+        { id: 'breed_tuxedo', nome: 'Frajola Real', preco: 3, icone: '🖤' },
+        { id: 'breed_orange', nome: 'Laranja Listrado', preco: 4, icone: '🧡' }
+      ],
+      temas: [
+        { id: 'theme_default', nome: 'Pergaminho', preco: 0, icone: '📜', class: '' },
+        { id: 'theme_cafe', nome: 'Carvão & Café', preco: 3, icone: '☕', class: 'theme-cafe' },
+        { id: 'theme_night', nome: 'Noite Estrelada', preco: 5, icone: '🌌', class: 'theme-night' }
+      ],
+      efeitos: [
+        { id: 'fx_hearts', nome: 'Corações', preco: 0, icone: '🤍', type: 'heart' },
+        { id: 'fx_leaves', nome: 'Folhas de Outono', preco: 2, icone: '🍂', type: 'leaf' },
+        { id: 'fx_stars', nome: 'Estrelinhas', preco: 3, icone: '✨', type: 'star' }
+      ]
+    };
+
+    function getCatalog() {
+      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : DEFAULT_CATALOG;
+    }
+
     const FOOD_ITEMS = [
       { id: 'food_bread', name: 'Pão Quentinho', icon: '🍞', price: 2, hunger: +18, health: 0, energy: +5, joy: +2 },
       { id: 'food_starfruit', name: 'Fruta Estrela', icon: '🍏', price: 3, hunger: +22, health: +5, energy: 0, joy: +10 },
@@ -925,7 +1079,6 @@
     ];
 
     let userInventory = JSON.parse(localStorage.getItem('cat_inventory') || '{"food_bread": 2, "food_milk": 1}');
-
     let catStats = JSON.parse(localStorage.getItem('cat_stats') || JSON.stringify({
       hunger: 80, energy: 80, happiness: 85, health: 95, lastUpdate: Date.now()
     }));
@@ -943,7 +1096,257 @@
     let currentShopTab = 'acessorios';
 
     /* =========================================================
-       2. TENDA DE COMIDA & COMPRAS
+       2. LOJA VIP & RENDERIZAÇÃO COMPLETA DAS ABAS
+    ========================================================= */
+    function openShop(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('shop-modal').classList.add('open');
+      renderCurrentShopTab();
+      updateMiniPreview();
+    }
+
+    function closeShop(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('shop-modal').classList.remove('open');
+    }
+
+    function updateMiniPreview() {
+      const container = document.getElementById('shop-mini-cat-container');
+      const mainSvg = document.getElementById('main-cat-svg');
+      if (container && mainSvg) {
+        container.innerHTML = mainSvg.outerHTML;
+      }
+    }
+
+    function switchShopTab(tabKey) {
+      currentShopTab = tabKey;
+      document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.shop-tab-btn')).find(b => b.getAttribute('onclick').includes(tabKey));
+      if (activeBtn) activeBtn.classList.add('active');
+      renderCurrentShopTab();
+    }
+
+    function renderCurrentShopTab() {
+      const area = document.getElementById('shop-content-area');
+      area.innerHTML = '';
+      const cat = getCatalog();
+
+      if (currentShopTab === 'acessorios') {
+        const grid = document.createElement('div');
+        grid.className = 'shop-items-grid';
+        (cat.acessorios || []).forEach(item => {
+          const isUnlocked = unlockedItems.includes(item.id);
+          const isEquipped = equippedItems.includes(item.id);
+          const currentColor = itemColors[item.id] || '#2b2725';
+          const card = document.createElement('div');
+          card.className = 'shop-card';
+
+          const svgRendered = (item.svg || '').replace(/COLOR/g, currentColor);
+          card.innerHTML = `
+            <div class="shop-card-svg-preview">${svgRendered}</div>
+            <div class="shop-card-name">${item.nome}</div>
+            <div class="shop-card-price">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
+            ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${item.id}', event)">🎨 Mudar Cor</button>` : ''}
+            <button class="action-btn" style="width: 100%; padding: 4px; font-size: 0.85rem; justify-content: center; ${isEquipped ? 'background: var(--amber); color: #fff;' : ''}" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
+              ${isUnlocked ? (isEquipped ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+            </button>
+          `;
+          grid.appendChild(card);
+        });
+        area.appendChild(grid);
+      } else if (currentShopTab === 'pupilas') {
+        renderGenericTabGrid(area, cat.pupilas || [], p => activePupil === p.id, p => {
+          if (unlockedItems.includes(p.id)) {
+            activePupil = p.id;
+          } else if (userCoins >= p.preco) {
+            userCoins -= p.preco;
+            unlockedItems.push(p.id);
+            activePupil = p.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'olhos') {
+        renderGenericTabGrid(area, cat.olhos || [], o => activeEyeColor === o.hex, o => {
+          if (unlockedItems.includes(o.id)) {
+            activeEyeColor = o.hex;
+          } else if (userCoins >= o.preco) {
+            userCoins -= o.preco;
+            unlockedItems.push(o.id);
+            activeEyeColor = o.hex;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'racas') {
+        renderGenericTabGrid(area, cat.racas || [], r => activeBreed === r.id, r => {
+          if (unlockedItems.includes(r.id)) {
+            activeBreed = r.id;
+          } else if (userCoins >= r.preco) {
+            userCoins -= r.preco;
+            unlockedItems.push(r.id);
+            activeBreed = r.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'temas') {
+        renderGenericTabGrid(area, cat.temas || [], t => activeTheme === t.id, t => {
+          if (unlockedItems.includes(t.id)) {
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+          } else if (userCoins >= t.preco) {
+            userCoins -= t.preco;
+            unlockedItems.push(t.id);
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'efeitos') {
+        renderGenericTabGrid(area, cat.efeitos || [], e => activeEffect === e.type, e => {
+          if (unlockedItems.includes(e.id)) {
+            activeEffect = e.type;
+          } else if (userCoins >= e.preco) {
+            userCoins -= e.preco;
+            unlockedItems.push(e.id);
+            activeEffect = e.type;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'backup') {
+        area.innerHTML = `
+          <div style="padding: 10px 4px; text-align: center;">
+            <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados com segurança ou restaure seus peixinhos e roupinhas em outro aparelho:</p>
+            <div style="display: flex; gap: 10px;">
+              <button class="action-btn" style="flex: 1; justify-content: center;" onclick="exportDataBackup()">📥 Salvar Backup</button>
+              <button class="action-btn" style="flex: 1; justify-content: center;" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataBackup(event)">
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderGenericTabGrid(container, items, isSelectedFn, onSelect) {
+      const grid = document.createElement('div');
+      grid.className = 'shop-items-grid';
+      items.forEach(item => {
+        const isUnlocked = unlockedItems.includes(item.id);
+        const isSelected = isSelectedFn(item);
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+
+        card.innerHTML = `
+          <div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>
+          <div class="shop-card-name">${item.nome}</div>
+          <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${item.preco} 🐟`}</div>
+          <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
+            ${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+          </button>
+        `;
+        card.querySelector('button').onclick = () => onSelect(item);
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
+    }
+
+    function handleAccessoryClick(id, preco) {
+      if (unlockedItems.includes(id)) {
+        equippedItems = equippedItems.includes(id) ? equippedItems.filter(x => x !== id) : [...equippedItems, id];
+      } else if (userCoins >= preco) {
+        userCoins -= preco;
+        unlockedItems.push(id);
+        equippedItems.push(id);
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    }
+
+    let colorTargetItemId = null;
+    function openColorModal(itemId, event) {
+      if (event) event.stopPropagation();
+      colorTargetItemId = itemId;
+      const modal = document.getElementById('color-modal');
+      const grid = document.getElementById('color-picker-grid');
+      grid.innerHTML = '';
+
+      const cat = getCatalog();
+      const tintas = cat.tintas || [];
+      const currentColor = itemColors[itemId] || '#2b2725';
+
+      tintas.forEach(t => {
+        const colorKey = `${itemId}_color_${t.id}`;
+        const isUnlocked = unlockedItems.includes(colorKey) || (t.id === 'c_preto' && itemId !== 'flower' && itemId !== 'crown') || (t.id === 'c_ambar' && (itemId === 'flower' || itemId === 'crown'));
+        const isActive = currentColor === t.hex;
+
+        const card = document.createElement('div');
+        card.className = `color-swatch-card ${isActive ? 'active' : ''}`;
+        card.innerHTML = `
+          <div class="color-swatch-circle" style="background: ${t.hex}"></div>
+          <div class="color-swatch-name">${t.nome}</div>
+          <div style="font-size: 0.7rem; color: var(--amber); margin-top: 2px;">${isUnlocked ? '✓' : '1 🐟'}</div>
+        `;
+
+        card.onclick = (e) => {
+          e.stopPropagation();
+          if (isUnlocked) {
+            itemColors[itemId] = t.hex;
+            saveStats();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else if (userCoins >= 1) {
+            userCoins -= 1;
+            unlockedItems.push(colorKey);
+            itemColors[itemId] = t.hex;
+            playPaperSound();
+            saveStats();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else {
+            alert('Você precisa de 1 peixinho para comprar esta tinta! 🐟');
+          }
+        };
+
+        grid.appendChild(card);
+      });
+
+      modal.classList.add('open');
+    }
+
+    function closeColorModal(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('color-modal').classList.remove('open');
+    }
+
+    /* =========================================================
+       3. TENDA DE COMIDA & INVENTÁRIO
     ========================================================= */
     function openFoodStall(e) {
       if (e) e.stopPropagation();
@@ -998,9 +1401,6 @@
       }
     }
 
-    /* =========================================================
-       3. INVENTÁRIO COM DRAG AND DROP PARA O GATO
-    ========================================================= */
     function renderInventorySlots() {
       const container = document.getElementById('inventory-slots-container');
       container.innerHTML = '';
@@ -1024,12 +1424,10 @@
           <span class="slot-qty">${userInventory[key]}</span>
         `;
 
-        // Eventos de arrastar para Desktop
         slot.addEventListener('dragstart', (e) => {
           e.dataTransfer.setData('text/plain', key);
         });
 
-        // Toque Mobile (Touch Drag)
         slot.addEventListener('pointerdown', (e) => {
           handleTouchDragFood(e, key, food.icon);
         });
@@ -1038,7 +1436,6 @@
       });
     }
 
-    // Drag and Drop para o corpinho do gato
     const catWrapper = document.getElementById('cat-wrapper');
 
     catWrapper.addEventListener('dragover', (e) => {
@@ -1057,9 +1454,8 @@
       feedCat(foodId);
     });
 
-    // Manipulador de toque móvel para arrastar a comida até o gato
     function handleTouchDragFood(event, foodId, iconChar) {
-      if (event.pointerType === 'mouse') return; // Desktop usa DragEvent nativo
+      if (event.pointerType === 'mouse') return;
 
       const floatingElem = document.createElement('div');
       floatingElem.innerText = iconChar;
@@ -1129,7 +1525,6 @@
       saveStats();
       renderInventorySlots();
 
-      // Expressão de mastigação rápida
       const hungryMouth = document.getElementById('mouth-hungry');
       const normalMouth = document.getElementById('mouth-normal');
       hungryMouth.style.display = 'block';
@@ -1148,7 +1543,7 @@
     }
 
     /* =========================================================
-       4. ESTADOS, SALVAMENTO E TEMPORIZADORES
+       4. ESTADO, TEMPO E SALVAMENTO
     ========================================================= */
     function saveStats() {
       localStorage.setItem('cat_stats', JSON.stringify(catStats));
@@ -1311,9 +1706,7 @@
       }
     }
 
-    /* =========================================================
-       5. MINIJOGO DAS PATINHAS
-    ========================================================= */
+    /* MINIJOGO */
     let gameInterval = null;
     function openMinigame(e) {
       if (e) e.stopPropagation();
@@ -1354,9 +1747,7 @@
       }, 700);
     }
 
-    /* =========================================================
-       6. INTERAÇÕES COM O GATO & CARTAS
-    ========================================================= */
+    /* INTERAÇÕES */
     function handleCatClick(e) {
       const letterGroup = document.getElementById('cat-letter-group');
       if (letterGroup && letterGroup.style.display !== 'none') {
@@ -1397,7 +1788,7 @@
       const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
       const cartaCfg = cfg.carta || {};
 
-      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro o seu jeitinho!";
+      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro você!";
       document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo amor ♡";
 
       playPaperSound();
@@ -1448,81 +1839,39 @@
       }
     }
 
-    /* =========================================================
-       7. LOJA VIP & SUPORTE A COSMÉTICOS
-    ========================================================= */
-    function openShop(e) {
-      if (e) e.stopPropagation();
-      document.getElementById('shop-modal').classList.add('open');
-      renderCurrentShopTab();
-      updateMiniPreview();
-    }
-    function closeShop(e) {
-      if (e) e.stopPropagation();
-      document.getElementById('shop-modal').classList.remove('open');
-    }
-
-    function switchShopTab(tabKey) {
-      currentShopTab = tabKey;
-      document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = Array.from(document.querySelectorAll('.shop-tab-btn')).find(b => b.getAttribute('onclick').includes(tabKey));
-      if (activeBtn) activeBtn.classList.add('active');
-      renderCurrentShopTab();
-    }
-
-    function renderCurrentShopTab() {
-      const area = document.getElementById('shop-content-area');
-      area.innerHTML = '';
-      const cat = (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : {};
-
-      if (currentShopTab === 'acessorios') {
-        const grid = document.createElement('div');
-        grid.className = 'shop-items-grid';
-        (cat.acessorios || []).forEach(item => {
-          const isUnlocked = unlockedItems.includes(item.id);
-          const isEquipped = equippedItems.includes(item.id);
-          const currentColor = itemColors[item.id] || '#2b2725';
-          const card = document.createElement('div');
-          card.className = 'shop-card';
-
-          const svgRendered = (item.svg || '').replace(/COLOR/g, currentColor);
-          card.innerHTML = `
-            <div class="shop-card-svg-preview">${svgRendered}</div>
-            <div class="shop-card-name">${item.nome}</div>
-            <div class="shop-card-price">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
-            <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isEquipped ? 'background: var(--amber); color: #fff;' : ''}" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
-              ${isUnlocked ? (isEquipped ? 'Equipado ✓' : 'Usar') : 'Comprar'}
-            </button>
-          `;
-          grid.appendChild(card);
-        });
-        area.appendChild(grid);
-      } else {
-        area.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--pencil-light);">Selecione os itens nas categorias!</div>`;
-      }
-    }
-
-    function handleAccessoryClick(id, preco) {
-      if (unlockedItems.includes(id)) {
-        equippedItems = equippedItems.includes(id) ? equippedItems.filter(x => x !== id) : [...equippedItems, id];
-      } else if (userCoins >= preco) {
-        userCoins -= preco;
-        unlockedItems.push(id);
-        equippedItems.push(id);
-        playPaperSound();
-      } else {
-        alert('Peixinhos insuficientes! 🐟');
-        return;
-      }
-      saveStats();
-      renderCurrentShopTab();
-    }
-
     function applyEquippedCosmetics() {
       ['bowtie', 'glasses', 'flower', 'crown'].forEach(id => {
         const el = document.getElementById(`cosmetic-${id}`);
         if (el) el.style.display = equippedItems.includes(id) ? 'block' : 'none';
       });
+
+      const bowtieLeft = document.getElementById('bowtie-left');
+      const bowtieRight = document.getElementById('bowtie-right');
+      if (bowtieLeft && bowtieRight) {
+        const c = itemColors['bowtie'] || '#2b2725';
+        bowtieLeft.setAttribute('fill', c);
+        bowtieRight.setAttribute('fill', c);
+      }
+
+      const glassesLeft = document.getElementById('glasses-left');
+      const glassesRight = document.getElementById('glasses-right');
+      const glassesBridge = document.getElementById('glasses-bridge');
+      const glassesLegLeft = document.getElementById('glasses-leg-left');
+      const glassesLegRight = document.getElementById('glasses-leg-right');
+      if (glassesLeft && glassesRight) {
+        const c = itemColors['glasses'] || '#2b2725';
+        glassesLeft.setAttribute('stroke', c);
+        glassesRight.setAttribute('stroke', c);
+        if (glassesBridge) glassesBridge.setAttribute('stroke', c);
+        if (glassesLegLeft) glassesLegLeft.setAttribute('stroke', c);
+        if (glassesLegRight) glassesLegRight.setAttribute('stroke', c);
+      }
+
+      const flowerCenter = document.getElementById('flower-center');
+      if (flowerCenter) flowerCenter.setAttribute('fill', itemColors['flower'] || '#c48b36');
+
+      const crownBody = document.getElementById('crown-body');
+      if (crownBody) crownBody.setAttribute('fill', itemColors['crown'] || '#ecd29b');
     }
 
     function applyBreeds() {
@@ -1547,6 +1896,7 @@
       } else if (activeBreed === 'breed_tuxedo') {
         bodyPath.setAttribute('fill', '#fffdf9');
         headPath.setAttribute('fill', '#fffdf9');
+        tailPath.setAttribute('stroke', '#2b2725');
         document.getElementById('breed-tuxedo').style.display = 'block';
         document.getElementById('body-tuxedo').style.display = 'block';
       } else if (activeBreed === 'breed_orange') {
@@ -1563,12 +1913,88 @@
       const rightEye = document.getElementById('eye-bg-right');
       if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
       if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
+
+      ['pupil-normal', 'pupil-slit', 'pupil-sparkle'].forEach(cls => {
+        document.querySelectorAll('.' + cls).forEach(el => el.style.display = 'none');
+      });
+
+      if (activePupil === 'pupil_slit') {
+        document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
+      } else if (activePupil === 'pupil_sparkle') {
+        document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
+      } else {
+        document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
+      }
     }
 
-    function updateMiniPreview() {
-      const container = document.getElementById('shop-mini-cat-container');
-      const mainSvg = document.getElementById('main-cat-svg');
-      if (container && mainSvg) container.innerHTML = mainSvg.outerHTML;
+    function applyManualTheme() {
+      document.body.classList.remove('theme-cafe', 'theme-night');
+      const cat = getCatalog();
+      const found = (cat.temas || []).find(t => t.id === activeTheme);
+      if (found && found.class) document.body.classList.add(found.class);
+    }
+
+    function exportDataBackup() {
+      const backupData = {
+        cat_coins: userCoins,
+        cat_paw_coins: userPawCoins,
+        cat_stats: catStats,
+        cat_inventory: userInventory,
+        cat_unlocked: unlockedItems,
+        cat_equipped: equippedItems,
+        cat_item_colors: itemColors,
+        cat_active_eye_color: activeEyeColor,
+        cat_active_pupil: activePupil,
+        cat_active_breed: activeBreed,
+        cat_active_theme: activeTheme,
+        cat_active_effect: activeEffect,
+        cat_last_reward_date: localStorage.getItem('cat_last_reward_date'),
+        cat_last_opened_period: localStorage.getItem('cat_last_opened_period'),
+        backup_date: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_gatinho.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.cat_coins !== undefined) userCoins = data.cat_coins;
+          if (data.cat_paw_coins !== undefined) userPawCoins = data.cat_paw_coins;
+          if (data.cat_stats) catStats = data.cat_stats;
+          if (data.cat_inventory) userInventory = data.cat_inventory;
+          if (Array.isArray(data.cat_unlocked)) unlockedItems = data.cat_unlocked;
+          if (Array.isArray(data.cat_equipped)) equippedItems = data.cat_equipped;
+          if (data.cat_item_colors) itemColors = data.cat_item_colors;
+          if (data.cat_active_eye_color) activeEyeColor = data.cat_active_eye_color;
+          if (data.cat_active_pupil) activePupil = data.cat_active_pupil;
+          if (data.cat_active_breed) activeBreed = data.cat_active_breed;
+          if (data.cat_active_theme) activeTheme = data.cat_active_theme;
+          if (data.cat_active_effect) activeEffect = data.cat_active_effect;
+          if (data.cat_last_reward_date) localStorage.setItem('cat_last_reward_date', data.cat_last_reward_date);
+          if (data.cat_last_opened_period) localStorage.setItem('cat_last_opened_period', data.cat_last_opened_period);
+
+          saveStats();
+          updateLetterHoldingState();
+          renderInventorySlots();
+          renderCurrentShopTab();
+          alert('Backup restaurado com sucesso! Seus dados voltaram.');
+        } catch (err) {
+          alert('Erro ao carregar o arquivo de backup.');
+        }
+      };
+      reader.readAsText(file);
     }
 
     function openChangelog(e) {
@@ -1603,8 +2029,6 @@
         document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
       }
     }
-
-    function applyManualTheme() {}
 
     let catAudio = null;
     try { catAudio = new Audio('gato_1.mp3'); } catch(e){}
