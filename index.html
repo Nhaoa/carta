@@ -862,7 +862,7 @@
 
   <canvas id="fx-canvas"></canvas>
 
-  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO CORRIGIDO -->
+<!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO CORRIGIDO -->
   <div class="side-nav-container" id="side-nav-container">
     <div class="side-nav-box">
       <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()">
@@ -877,6 +877,9 @@
       </button>
       <button class="side-btn" id="backpack-toggle-btn" onclick="toggleBackpack(event)">
         <span>🎒 Mochila</span>
+      </button>
+      <button class="side-btn" onclick="openLetter(event)">
+        <span>✉️ Ler Carta</span>
       </button>
     </div>
     <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral">
@@ -1109,7 +1112,7 @@
     </div>
   </main>
 
-  <!-- BARRA INFERIOR - COM NOVO BOTÃO DE LER CARTA -->
+<!-- BARRA INFERIOR -->
   <nav class="bottom-nav-bar">
     <button class="bottom-nav-btn" onclick="openFoodStall(event)">
       <span class="icon">🏪</span>
@@ -1118,10 +1121,6 @@
     <button class="bottom-nav-btn" onclick="openMinigame(event)">
       <span class="icon">🎮</span>
       <span>Brincar</span>
-    </button>
-    <button class="bottom-nav-btn" onclick="openLetter(event)">
-      <span class="icon">✉️</span>
-      <span>Ler Carta</span>
     </button>
     <button class="bottom-nav-btn" onclick="openShop(event)">
       <span class="icon">✨</span>
@@ -1572,26 +1571,35 @@
       });
     }
 
-    function buyFoodItem(foodId) {
+function buyFoodItem(foodId) {
       const food = FOOD_ITEMS.find(f => f.id === foodId);
       if (!food) return;
 
       if (userPawCoins >= food.price) {
+        // Deduz moedas e adiciona ao inventário
         userPawCoins -= food.price;
         userInventory[foodId] = (userInventory[foodId] || 0) + 1;
+        
+        // Salva as mudanças locais
         saveStats();
         playPaperSound();
+        
+        // Força a atualização visual em tempo real
         renderInventorySlots();
+        updateWalletUI(); // Atualiza a carteira aberta ou fechada na hora
+        
+        // Cria efeitos visuais na tela
         createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 6);
 
+        // Reação alegre do Vendedor (Animação e Diálogo)
         triggerVendorHappyAnimation();
         const thanks = VENDOR_THANKS[Math.floor(Math.random() * VENDOR_THANKS.length)];
         setVendorSpeech(thanks);
       } else {
+        // Quando faltam recursos
         setVendorSpeech("Miau... faltam patinhas! Jogue no 'Brincar' lá fora! 🐾");
       }
     }
-
     /* INVENTÁRIO */
     function renderInventorySlots() {
       const container = document.getElementById('inventory-slots-container');
@@ -1701,37 +1709,53 @@
       document.addEventListener('pointerup', onPointerUp);
     }
 
-    function feedCat(foodId) {
+function feedCat(foodId) {
       if (!userInventory[foodId] || userInventory[foodId] <= 0) return;
 
       const food = FOOD_ITEMS.find(f => f.id === foodId);
       if (!food) return;
 
+      // Decrementa o item
       userInventory[foodId]--;
-      if (userInventory[foodId] <= 0) delete userInventory[foodId];
+      if (userInventory[foodId] <= 0) {
+        delete userInventory[foodId];
+      }
 
+      // Atualiza os status
       catStats.hunger = Math.min(100, catStats.hunger + food.hunger);
       catStats.health = Math.min(100, catStats.health + food.health);
       catStats.energy = Math.min(100, catStats.energy + food.energy);
       catStats.happiness = Math.min(100, catStats.happiness + food.joy);
 
+      // Salva e força a atualização imediata da interface
       playPaperSound();
       playMeowSound();
       saveStats();
-      renderInventorySlots();
+      renderInventorySlots(); // Atualização em tempo real da mochila na tela
+
+      // Abre a boca do gatinho (revela a variante 'mouth-hungry')
+      const mouthVariants = ['mouth-cat-path', 'mouth-tongue-path', 'mouth-vampire-path', 'mouth-smile-path', 'mouth-sad'];
+      mouthVariants.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
 
       const hungryMouth = document.getElementById('mouth-hungry');
-      if (hungryMouth) hungryMouth.style.display = 'block';
+      if (hungryMouth) {
+        hungryMouth.style.display = 'block';
+      }
 
+      // Partículas
       const rect = catWrapper.getBoundingClientRect();
       createFloatingParticles(rect.left + rect.width / 2, rect.top + 60, 8);
 
+      // Após 1 segundo, retorna a boca ao normal de acordo com a nova pontuação
       setTimeout(() => {
         if (hungryMouth) hungryMouth.style.display = 'none';
         updateCatVisualExpression();
-      }, 700);
+        applyMouthAndExpressions();
+      }, 1000);
     }
-
     /* =========================================================
        5. LOJA VIP & PALETA DE CORES PARA ITENS E EFEITOS
     ========================================================= */
