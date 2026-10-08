@@ -123,6 +123,7 @@
       background: #faf4e6;
     }
 
+    /* GAVETA DE STATUS NO TOPO */
     .status-container {
       position: fixed;
       top: 0;
@@ -224,6 +225,7 @@
       transition: transform 0.2s ease, opacity 0.3s ease;
     }
 
+    /* GATINHO E ANIMAÇÕES */
     .cat-wrapper {
       position: relative;
       width: 230px;
@@ -245,7 +247,6 @@
       filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
     }
 
-    /* Animações Corporais */
     .anim-body-group {
       transform-origin: 100px 145px;
       animation: catBreathe 3.5s ease-in-out infinite alternate;
@@ -283,6 +284,7 @@
       95% { transform: rotate(-2deg); }
     }
 
+    /* BARRA INFERIOR */
     .bottom-nav-bar {
       position: fixed;
       bottom: 0;
@@ -315,7 +317,7 @@
     .bottom-nav-btn:active { transform: scale(0.92); }
     .bottom-nav-btn span.icon { font-size: 1.45rem; }
 
-    /* Modal da Loja VIP */
+    /* PREVIEW DA LOJA VIP */
     .shop-preview-box {
       width: 100%;
       height: 90px;
@@ -445,7 +447,7 @@
     .action-btn:hover { transform: translateY(-2px); }
     .action-btn:active { transform: translateY(1px); }
 
-    /* Tenda de Comidas */
+    /* TENDA DE COMIDA */
     .stall-modal-paper {
       background: #fdf7ec;
       border: 2.5px solid var(--charcoal);
@@ -580,6 +582,7 @@
       cursor: pointer;
     }
 
+    /* INVENTÁRIO */
     .inventory-tray {
       background: var(--card-bg);
       border: 2px solid var(--charcoal);
@@ -791,17 +794,17 @@
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
 
-    <!-- Gatinho com Rabo Preenchido e Expressões -->
+    <!-- Gatinho com Orelhas Realistas e Rabo Preenchido -->
     <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
       <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
         <defs>
           <clipPath id="left-eye-clip"><ellipse cx="68" cy="98" rx="26" ry="24"/></clipPath>
           <clipPath id="right-eye-clip"><ellipse cx="122" cy="98" rx="26" ry="24"/></clipPath>
-          <clipPath id="cat-head-clip"><path d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z"/></clipPath>
+          <clipPath id="cat-head-clip"><path id="cat-head-clip-path" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z"/></clipPath>
           <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
         </defs>
 
-        <!-- Rabo com Animação -->
+        <!-- Rabo Totalmente Preenchido e com Animação -->
         <g class="anim-tail">
           <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
                 fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
@@ -821,10 +824,14 @@
             </g>
           </g>
 
-          <!-- Cabeça -->
+          <!-- Cabeça (com Orelhas Reais Rebaixadas no Modo Avião) -->
           <g class="anim-ears">
-            <path id="cat-head" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+            <!-- Cabeça Normal -->
+            <path id="cat-head-normal" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+            <!-- Cabeça Modo Avião (Orelhas Reais Baixas) -->
+            <path id="cat-head-airplane" d="M 44,82 C 28,68 18,78 36,86 C 54,88 80,72 98,72 C 116,72 142,88 160,86 C 178,78 168,68 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" style="display: none;"/>
 
+            <!-- Pelagens da Cabeça -->
             <g clip-path="url(#cat-head-clip)" id="breed-markings">
               <g id="breed-siamese" style="display: none;">
                 <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
@@ -845,12 +852,6 @@
                 <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
               </g>
             </g>
-
-            <!-- Modo Avião -->
-            <g id="expr-airplane-ears" style="display: none;">
-              <polygon points="42,54 22,70 54,66" fill="#e58e45" stroke="#2b2725" stroke-width="3"/>
-              <polygon points="154,54 174,70 142,66" fill="#e58e45" stroke="#2b2725" stroke-width="3"/>
-            </g>
           </g>
 
           <!-- Olhos e Piscar -->
@@ -863,7 +864,13 @@
                 <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
                 <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
               </g>
+              <!-- Olhar Anime (Estrelinhas Duplas) -->
+              <g id="anime-sparkle-left" style="display: none;">
+                <polygon points="68,86 70,91 75,92 70,94 68,99 66,94 61,92 66,91" fill="#ffffff"/>
+                <circle cx="74" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
             </g>
+
             <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
             <g clip-path="url(#right-eye-clip)">
               <g id="pupil-right-group">
@@ -871,6 +878,11 @@
                 <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
                 <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
                 <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <!-- Olhar Anime (Estrelinhas Duplas) -->
+              <g id="anime-sparkle-right" style="display: none;">
+                <polygon points="122,86 124,91 129,92 124,94 122,99 120,94 115,92 120,91" fill="#ffffff"/>
+                <circle cx="128" cy="103" r="3.2" fill="#ffffff"/>
               </g>
             </g>
           </g>
@@ -1004,7 +1016,7 @@
           <ellipse cx="98" cy="56" rx="8" ry="9" fill="#9b59b6" stroke="#331908" stroke-width="1.5"/>
           <path d="M 120,65 C 118,50 128,45 136,50 C 144,45 154,50 152,65 Z" fill="#d7b899" stroke="#331908" stroke-width="1.5"/>
           <rect x="310" y="44" width="12" height="21" rx="3" fill="#5dade2" stroke="#331908" stroke-width="1.5"/>
-          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd29b" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd2b0" stroke="#331908" stroke-width="1.5"/>
         </svg>
 
         <div class="vendor-cat-container">
@@ -1056,7 +1068,7 @@
     </div>
   </div>
 
-  <!-- MODAL: LOJINHA VIP COMPLETA COM BOCAS E EXPRESSÕES -->
+  <!-- MODAL: LOJINHA VIP COMPLETA -->
   <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
@@ -1099,12 +1111,12 @@
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Atualizações 📜</h3>
       <div class="changelog-content">
         <div class="changelog-entry">
-          <div class="changelog-version">v3.2 - Bocas, Expressões e Catálogo Seguro</div>
+          <div class="changelog-version">v3.3 - Ícones Fiéis e Orelhas Realistas</div>
           <div class="changelog-date">07 de Outubro de 2026</div>
           <ul class="changelog-list">
-            <li>Adicionadas as opções cosméticas de Bocas (:3, linguinha, vampiro) e Expressões.</li>
-            <li>Correção de renderização com catálogo fallback completo.</li>
-            <li>Rabo fechado com cor de pelagem e animações sincronizadas.</li>
+            <li>As opções de bocas, expressões e pupilas agora usam miniaturas fiéis em SVG.</li>
+            <li>Orelhas em modo avião redesenhadas na geometria real da cabeça do gato.</li>
+            <li>Olhar Anime agora projeta brilhos e estrelas distintos sobre os olhos.</li>
           </ul>
         </div>
       </div>
@@ -1113,92 +1125,8 @@
 
   <script>
     /* =========================================================
-       CATÁLOGO PADRÃO COMPLETO (FALLBACK SEGURO)
+       1. ESTADOS, SALVAMENTO E TEMPORIZADORES
     ========================================================= */
-    const DEFAULT_CATALOG_EMBEDDED = {
-      tintas: [
-        { id: 'c_preto', nome: 'Grafite Escuro', hex: '#2b2725' },
-        { id: 'c_cinza', nome: 'Cinza Suave', hex: '#7a736e' },
-        { id: 'c_marrom', nome: 'Chocolate', hex: '#4a3528' },
-        { id: 'c_ambar', nome: 'Âmbar Dourado', hex: '#c48b36' },
-        { id: 'c_laranja', nome: 'Laranja Queimado', hex: '#d96b27' },
-        { id: 'c_vermelho', nome: 'Vinho Aveludado', hex: '#872b2b' },
-        { id: 'c_rosa', nome: 'Pêssego Suave', hex: '#d98b82' },
-        { id: 'c_roxo', nome: 'Ametista Profundo', hex: '#5b3a6e' },
-        { id: 'c_azul_escuro', nome: 'Azul Meia-Noite', hex: '#223854' },
-        { id: 'c_azul_claro', nome: 'Azul Céu', hex: '#4f83a8' },
-        { id: 'c_verde_escuro', nome: 'Verde Musgo', hex: '#375239' },
-        { id: 'c_verde_claro', nome: 'Verde Sálvia', hex: '#5f8263' },
-        { id: 'c_creme', nome: 'Baunilha Claro', hex: '#f0e3ce' },
-        { id: 'c_dourado', nome: 'Ouro Nobre', hex: '#dfb15b' }
-      ],
-      acessorios: [
-        { 
-          id: 'bowtie', nome: 'Gravatinha Borboleta', preco: 1,
-          svg: `<svg viewBox="0 0 60 40" width="46" height="32"><polygon points="12,10 12,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><polygon points="48,10 48,30 30,20" fill="COLOR" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="20" r="4.5" fill="#c48b36"/></svg>`
-        },
-        { 
-          id: 'glasses', nome: 'Óculos com Hastes', preco: 2,
-          svg: `<svg viewBox="0 0 76 35" width="54" height="26"><line x1="4" y1="14" x2="18" y2="18" stroke="COLOR" stroke-width="2.5"/><line x1="72" y1="14" x2="58" y2="18" stroke="COLOR" stroke-width="2.5"/><circle cx="28" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><circle cx="48" cy="18" r="12" fill="none" stroke="COLOR" stroke-width="3"/><path d="M 40,18 Q 38,13 36,18" fill="none" stroke="COLOR" stroke-width="3"/></svg>`
-        },
-        { 
-          id: 'flower', nome: 'Florzinha Delicada', preco: 3,
-          svg: `<svg viewBox="0 0 50 50" width="38" height="38"><circle cx="20" cy="18" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="30" cy="13" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="36" cy="22" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="28" cy="30" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="18" cy="26" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2"/><circle cx="26" cy="22" r="4.5" fill="COLOR"/></svg>`
-        },
-        { 
-          id: 'crown', nome: 'Coroa Imperial', preco: 4,
-          svg: `<svg viewBox="0 0 60 40" width="46" height="30"><path d="M 10,12 L 18,28 L 30,6 L 42,28 L 50,12 L 48,34 L 12,34 Z" fill="COLOR" stroke="#2b2725" stroke-width="2.5"/><circle cx="30" cy="6" r="2.5" fill="#c48b36"/></svg>`
-        }
-      ],
-      bocas: [
-        { id: 'mouth_cat', nome: 'Gatinho Fofo (:3)', preco: 0, icone: 'ω' },
-        { id: 'mouth_tongue', nome: 'Linguinha de Fora (:P)', preco: 2, icone: '👅' },
-        { id: 'mouth_vampire', nome: 'Dentinho de Vampiro', preco: 3, icone: '🧛' },
-        { id: 'mouth_smile', nome: 'Sorriso Amplo', preco: 2, icone: '‿' }
-      ],
-      expressoes: [
-        { id: 'expr_neutral', nome: 'Expressão Padrão', preco: 0, icone: '🐱' },
-        { id: 'expr_anime', nome: 'Olhar Curioso Anime', preco: 2, icone: '✨' },
-        { id: 'expr_airplane', nome: 'Orelhas em Modo Avião', preco: 3, icone: '✈️' },
-        { id: 'expr_determined', nome: 'Determinado / Focado', preco: 2, icone: '😼' }
-      ],
-      pupilas: [
-        { id: 'pupil_round', nome: 'Olhar Curioso (Normal)', preco: 0, icone: '●' },
-        { id: 'pupil_slit', nome: 'Fenda Felina (Caçador)', preco: 2, icone: '❙' },
-        { id: 'pupil_sparkle', nome: 'Olhar Brilhante (Anime)', preco: 3, icone: '✦' }
-      ],
-      olhos: [
-        { id: 'eye_charcoal', nome: 'Grafite Preto', hex: '#2b2725', preco: 0, icone: '👁️' },
-        { id: 'eye_blue', nome: 'Azul Safira (Siamês)', hex: '#3466b0', preco: 2, icone: '💎' },
-        { id: 'eye_amber', nome: 'Âmbar Dourado', hex: '#c47d25', preco: 2, icone: '🍯' },
-        { id: 'eye_emerald', nome: 'Verde Esmeralda', hex: '#2e6b3e', preco: 3, icone: '🌿' },
-        { id: 'eye_violet', nome: 'Violeta Profundo', hex: '#633974', preco: 3, icone: '🔮' }
-      ],
-      racas: [
-        { id: 'breed_default', nome: 'Branco Clássico', preco: 0, icone: '⚪' },
-        { id: 'breed_siamese', nome: 'Siamês Real', preco: 3, icone: '🤎' },
-        { id: 'breed_tuxedo', nome: 'Frajola Real', preco: 3, icone: '🖤' },
-        { id: 'breed_orange', nome: 'Laranja Listrado', preco: 4, icone: '🧡' }
-      ],
-      temas: [
-        { id: 'theme_default', nome: 'Pergaminho', preco: 0, icone: '📜', class: '' },
-        { id: 'theme_cafe', nome: 'Carvão & Café', preco: 3, icone: '☕', class: 'theme-cafe' },
-        { id: 'theme_night', nome: 'Noite Estrelada', preco: 5, icone: '🌌', class: 'theme-night' }
-      ],
-      efeitos: [
-        { id: 'fx_hearts', nome: 'Corações', preco: 0, icone: '🤍', type: 'heart' },
-        { id: 'fx_leaves', nome: 'Folhas de Outono', preco: 2, icone: '🍂', type: 'leaf' },
-        { id: 'fx_stars', nome: 'Estrelinhas', preco: 3, icone: '✨', type: 'star' }
-      ]
-    };
-
-    function getCatalog() {
-      if (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.bocas) {
-        return window.CATALOGO_COSMETICOS;
-      }
-      return DEFAULT_CATALOG_EMBEDDED;
-    }
-
     const FOOD_ITEMS = [
       { id: 'food_bread', name: 'Pão Quentinho', icon: '🍞', price: 2, hunger: +18, health: 0, energy: +5, joy: +2 },
       { id: 'food_starfruit', name: 'Fruta Estrela', icon: '🍏', price: 3, hunger: +22, health: +5, energy: 0, joy: +10 },
@@ -1226,6 +1154,10 @@
     let activeTheme = localStorage.getItem('cat_active_theme') || 'theme_default';
     let activeEffect = localStorage.getItem('cat_active_effect') || 'heart';
     let currentShopTab = 'acessorios';
+
+    function getCatalog() {
+      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : {};
+    }
 
     function saveStats() {
       localStorage.setItem('cat_stats', JSON.stringify(catStats));
@@ -1386,7 +1318,9 @@
       }
     }
 
-    /* TENDA DE COMIDA */
+    /* =========================================================
+       2. TENDA DE COMIDA
+    ========================================================= */
     const VENDOR_GREETINGS = [
       "Miau! Seja muito bem-vindo à feira! 🧺",
       "Tudo fresquinho, colhido hoje mesmo! 🍲",
@@ -1477,6 +1411,7 @@
       }
     }
 
+    /* INVENTÁRIO */
     function renderInventorySlots() {
       const container = document.getElementById('inventory-slots-container');
       container.innerHTML = '';
@@ -1615,7 +1550,9 @@
       checkDailyReward();
     }
 
-    /* LOJA VIP */
+    /* =========================================================
+       3. LOJA VIP COM RENDERIZAÇÃO DE SVGS FIÉIS
+    ========================================================= */
     function openShop(e) {
       if (e) e.stopPropagation();
       document.getElementById('shop-modal').classList.add('open');
@@ -1808,8 +1745,18 @@
         const card = document.createElement('div');
         card.className = 'shop-card';
 
+        // Renderiza SVG se existir, caso contrário ícone ou círculo de cor
+        let visualPreview = '';
+        if (item.svg) {
+          visualPreview = `<div class="shop-card-svg-preview">${item.svg}</div>`;
+        } else if (item.hex) {
+          visualPreview = `<div style="width: 32px; height: 32px; border-radius: 50%; background: ${item.hex}; border: 1.5px solid var(--charcoal); margin: 6px 0;"></div>`;
+        } else {
+          visualPreview = `<div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>`;
+        }
+
         card.innerHTML = `
-          <div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>
+          ${visualPreview}
           <div class="shop-card-name">${item.nome}</div>
           <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${item.preco} 🐟`}</div>
           <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
@@ -1894,9 +1841,11 @@
       document.getElementById('color-modal').classList.remove('open');
     }
 
+    /* APLICAÇÕES VISUAIS DO GATO */
     function applyBreeds() {
       const bodyPath = document.getElementById('cat-body');
-      const headPath = document.getElementById('cat-head');
+      const headNormal = document.getElementById('cat-head-normal');
+      const headAirplane = document.getElementById('cat-head-airplane');
       const tailPath = document.getElementById('cat-tail');
       const tailStripes = document.getElementById('tail-stripes');
 
@@ -1907,26 +1856,30 @@
       if (tailStripes) tailStripes.style.display = 'none';
 
       bodyPath.setAttribute('fill', '#fffdf9');
-      headPath.setAttribute('fill', '#fffdf9');
+      headNormal.setAttribute('fill', '#fffdf9');
+      headAirplane.setAttribute('fill', '#fffdf9');
       tailPath.setAttribute('fill', '#fffdf9');
       tailPath.setAttribute('stroke', '#2b2725');
 
       if (activeBreed === 'breed_siamese') {
         bodyPath.setAttribute('fill', '#ebdcc9');
-        headPath.setAttribute('fill', '#ebdcc9');
+        headNormal.setAttribute('fill', '#ebdcc9');
+        headAirplane.setAttribute('fill', '#ebdcc9');
         tailPath.setAttribute('fill', '#3d281d');
         tailPath.setAttribute('stroke', '#2b2725');
         document.getElementById('breed-siamese').style.display = 'block';
       } else if (activeBreed === 'breed_tuxedo') {
         bodyPath.setAttribute('fill', '#fffdf9');
-        headPath.setAttribute('fill', '#fffdf9');
+        headNormal.setAttribute('fill', '#fffdf9');
+        headAirplane.setAttribute('fill', '#fffdf9');
         tailPath.setAttribute('fill', '#2b2725');
         tailPath.setAttribute('stroke', '#2b2725');
         document.getElementById('breed-tuxedo').style.display = 'block';
         document.getElementById('body-tuxedo').style.display = 'block';
       } else if (activeBreed === 'breed_orange') {
         bodyPath.setAttribute('fill', '#e58e45');
-        headPath.setAttribute('fill', '#e58e45');
+        headNormal.setAttribute('fill', '#e58e45');
+        headAirplane.setAttribute('fill', '#e58e45');
         tailPath.setAttribute('fill', '#e58e45');
         tailPath.setAttribute('stroke', '#b3581d');
         if (tailStripes) tailStripes.style.display = 'block';
@@ -1936,6 +1889,7 @@
     }
 
     function applyMouthAndExpressions() {
+      // Bocas
       ['mouth-cat-path', 'mouth-tongue-path', 'mouth-vampire-path', 'mouth-smile-path'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -1952,10 +1906,31 @@
       const activeMouthEl = document.getElementById(selectedMouthId);
       if (activeMouthEl) activeMouthEl.style.display = 'block';
 
-      const airplaneEl = document.getElementById('expr-airplane-ears');
+      // Expressão de Orelhas em Modo Avião (Modifica a cabeça real)
+      const headNormal = document.getElementById('cat-head-normal');
+      const headAirplane = document.getElementById('cat-head-airplane');
+      const headClipPath = document.getElementById('cat-head-clip-path');
+
+      if (activeExpr === 'expr_airplane') {
+        headNormal.style.display = 'none';
+        headAirplane.style.display = 'block';
+        headClipPath.setAttribute('d', headAirplane.getAttribute('d'));
+      } else {
+        headNormal.style.display = 'block';
+        headAirplane.style.display = 'none';
+        headClipPath.setAttribute('d', headNormal.getAttribute('d'));
+      }
+
+      // Sobrancelhas de Determinado
       const detEl = document.getElementById('expr-determined-brows');
-      if (airplaneEl) airplaneEl.style.display = (activeExpr === 'expr_airplane') ? 'block' : 'none';
       if (detEl) detEl.style.display = (activeExpr === 'expr_determined') ? 'block' : 'none';
+
+      // Olhar Anime
+      const animeSparkleL = document.getElementById('anime-sparkle-left');
+      const animeSparkleR = document.getElementById('anime-sparkle-right');
+      const isAnime = (activeExpr === 'expr_anime');
+      if (animeSparkleL) animeSparkleL.style.display = isAnime ? 'block' : 'none';
+      if (animeSparkleR) animeSparkleR.style.display = isAnime ? 'block' : 'none';
     }
 
     function applyEyeColorAndPupils() {
@@ -1970,7 +1945,7 @@
 
       if (activePupil === 'pupil_slit') {
         document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
-      } else if (activePupil === 'pupil_sparkle' || activeExpr === 'expr_anime') {
+      } else if (activePupil === 'pupil_sparkle') {
         document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
       } else {
         document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
