@@ -1393,7 +1393,27 @@
         arrow.innerText = '▼';
       }
     }
+/* =========================================================
+       RESGATE DIÁRIO MANUAL (CARTEIRA)
+    ========================================================= */
+    function checkDailyRewardManual() {
+      if (isStatusCritical()) {
+        alert("O gatinho está muito debilitado ou com fome para pescar hoje... Cuide dele primeiro! 😿");
+        return;
+      }
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('cat_last_reward_date');
 
+      if (lastClaim !== today) {
+        userCoins += 1;
+        localStorage.setItem('cat_last_reward_date', today);
+        saveStats();
+        playPaperSound();
+        alert("🎁 Você resgatou 1 Peixinho Diário com sucesso! 🐟");
+      } else {
+        alert("Você já resgatou o peixinho de hoje! Volte amanhã 🐾");
+      }
+    }
     /* =========================================================
        3. CONTROLE DA MOCHILA (EXIBIR E OCULTAR / OCULTA POR PADRÃO)
     ========================================================= */
