@@ -3,21 +3,23 @@
 ========================================================= */
 
 function toggleBackpack(e) {
-  if (e) e.stopPropagation();
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
   const tray = document.getElementById('inventory-tray');
   const btn = document.getElementById('backpack-toggle-btn');
   if (!tray) return;
 
-  const isHidden = !tray.classList.contains('visible') || tray.style.display === 'none';
+  const isHidden = tray.style.display === 'none' || !tray.classList.contains('visible');
 
   if (isHidden) {
     tray.style.display = 'block';
-    requestAnimationFrame(() => {
-      tray.classList.add('visible');
-    });
-    if (btn) btn.classList.add('active');
     renderInventorySlots();
-    tray.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Força reflow antes de adicionar classe para a transição funcionar
+    void tray.offsetWidth;
+    tray.classList.add('visible');
+    if (btn) btn.classList.add('active');
   } else {
     tray.classList.remove('visible');
     if (btn) btn.classList.remove('active');
