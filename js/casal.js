@@ -1,5 +1,6 @@
 /* =========================================================
-   SISTEMA DE CASAL: PERFIL, VÍNCULO, STREAK, NFC E CÓDIGO DNA
+   SISTEMA DE CASAL: PERFIL, VÍNCULO, STREAK, NFC, QR CODE
+   E CARINHO REMOTO
 ========================================================= */
 
 let partnerData = JSON.parse(localStorage.getItem('cat_partner_data') || 'null');
@@ -30,7 +31,7 @@ function exportMyCatDNA() {
   return btoa(encodeURIComponent(JSON.stringify(dnaObj)));
 }
 
-// Importa e salva o parceiro via código
+// Importa e guarda o parceiro via código
 function importPartnerDNA(dnaString) {
   try {
     const raw = decodeURIComponent(atob(dnaString.trim()));
@@ -41,7 +42,7 @@ function importPartnerDNA(dnaString) {
     registerCoupleCheckin();
     renderCoupleTabUI();
     renderPartnerCatStage();
-    alert('🐾 Vínculo estabelecido com sucesso! O gatinho do seu amor agora está com você.');
+    alert('🐾 Vínculo estabelecido com sucesso! O gatinho do seu amor agora está consigo.');
     return true;
   } catch (err) {
     alert('Código de parceiro inválido ou corrompido.');
@@ -49,7 +50,7 @@ function importPartnerDNA(dnaString) {
   }
 }
 
-// Registro diário de conexão e cálculo de Streak
+// Registo diário de conexão e cálculo de Streak
 function registerCoupleCheckin() {
   const today = new Date().toDateString();
   if (coupleStreak.lastCheckinDate === today) return;
@@ -70,24 +71,24 @@ function registerCoupleCheckin() {
   coupleStreak.lastCheckinDate = today;
   coupleStreak.ribbonCoins += 1; // 1 Laço de Afeto diário
 
-  // Bônus no 7º dia consecutivo
+  // Bónus no 7º dia consecutivo
   if (coupleStreak.current % 7 === 0) {
     coupleStreak.ribbonCoins += 5;
-    alert(`🎉 Incrível! ${coupleStreak.current} dias de streak juntos! Bônus de +5 Laços 🎀!`);
+    alert(`🎉 Incrível! ${coupleStreak.current} dias de streak juntos! Bónus de +5 Laços 🎀!`);
   }
 
   localStorage.setItem('cat_couple_streak', JSON.stringify(coupleStreak));
 }
 
-// Iniciar leitura NFC com diagnóstico claro de erro
+// Iniciar leitura NFC com diagnóstico de permissão
 async function startNFCSharing() {
   if (!('NDEFReader' in window)) {
-    alert('NFC não suportado neste navegador. Utilize o QR Code ou o link direto!');
+    alert('NFC não suportado neste navegador. Utilize o QR Code ou a ligação direta!');
     return;
   }
 
   if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-    alert('Aviso: O navegador bloqueia o NFC sem HTTPS seguro. Use o site hospedado em HTTPS ou use o QR Code!');
+    alert('Aviso: O navegador bloqueia o NFC sem HTTPS seguro. Utilize o site hospedado em HTTPS ou utilize o QR Code!');
     return;
   }
 
@@ -95,7 +96,7 @@ async function startNFCSharing() {
     const ndef = new NDEFReader();
     await ndef.scan();
 
-    alert('📡 Sensor ativado! Aproxime uma tag NFC ou o celular do seu amor...');
+    alert('📡 Sensor ativado! Aproxime uma tag NFC ou o telemóvel do seu amor...');
 
     ndef.onreading = (event) => {
       const decoder = new TextDecoder();
@@ -117,15 +118,15 @@ async function startNFCSharing() {
   }
 }
 
-// Compartilhar link direto por WhatsApp
+// Partilhar ligação direta por WhatsApp
 function sharePartnerLink() {
   const dna = exportMyCatDNA();
   const url = `${window.location.origin}${window.location.pathname}?parceiro=${dna}`;
-  const msg = encodeURIComponent(`Amor, aqui está o vínculo do meu gatinho para você abrir no jogo! 🐾💖\n${url}`);
+  const msg = encodeURIComponent(`Amor, aqui está o vínculo do meu gatinho para abrires no jogo! 🐾💖\n${url}`);
   window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
 }
 
-// Exibir QR Code na tela para o outro escanear
+// Exibir QR Code no ecrã para o parceiro ler
 function showPartnerQRCode() {
   const dna = exportMyCatDNA();
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(dna)}`;
@@ -135,26 +136,82 @@ function showPartnerQRCode() {
 
   container.innerHTML = `
     <div style="text-align: center; padding: 10px;">
-      <p style="font-weight: bold; margin-bottom: 8px; color: #542c13;">Aponte a câmera dela para o QR Code:</p>
+      <p style="font-weight: bold; margin-bottom: 8px; color: #542c13;">Aponte a câmara dela para o QR Code:</p>
       <img src="${qrUrl}" alt="QR Code do Gatinho" style="border: 2.5px solid var(--charcoal); border-radius: 12px; margin-bottom: 10px; background: white; padding: 6px;" />
       <button class="action-btn" style="width: 100%; justify-content: center;" onclick="renderCoupleTabUI()">⬅ Voltar</button>
     </div>
   `;
 }
 
-// Auto-conectar se abriu por link compartilhado (?parceiro=...)
+// Enviar carinho para a parceira via ligação do WhatsApp
+function sendRemotePet() {
+  const url = `${window.location.origin}${window.location.pathname}?carinho=1`;
+  const msg = encodeURIComponent(`Psst... Mandei-te um carinho e um ronrom no jogo! Abre aqui para receber: 🐾💖\n${url}`);
+  window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+}
+
+// Executar animação e efeito visual ao receber carinho remoto
+function triggerReceivedRemotePet() {
+  playMeowSound();
+  
+  // Chuva de partículas comemorativas no centro do ecrã
+  createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 16);
+
+  const regEyes = document.getElementById('regular-eyes');
+  const hapEyes = document.getElementById('happy-eyes');
+  const wrapper = document.getElementById('cat-wrapper');
+  const bubble = document.getElementById('speech-bubble');
+
+  if (regEyes) regEyes.style.display = 'none';
+  if (hapEyes) hapEyes.style.display = 'block';
+  if (wrapper) wrapper.classList.add('petting');
+
+  if (bubble) {
+    bubble.innerText = "O seu amor acabou de lhe mandar um carinho com muito amor! 🐾💖";
+    bubble.style.display = 'block';
+    bubble.classList.remove('fade-out');
+  }
+
+  // Bonificação de alegria e saúde
+  catStats.happiness = Math.min(100, catStats.happiness + 15);
+  catStats.health = Math.min(100, catStats.health + 5);
+  saveStats();
+
+  setTimeout(() => {
+    if (regEyes) regEyes.style.display = 'block';
+    if (hapEyes) hapEyes.style.display = 'none';
+    if (wrapper) wrapper.classList.remove('petting');
+    if (bubble) {
+      setTimeout(() => {
+        bubble.classList.add('fade-out');
+        setTimeout(() => { bubble.style.display = 'none'; }, 400);
+      }, 5000);
+    }
+  }, 2500);
+}
+
+// Leitura de parâmetros na URL (?parceiro=... ou ?carinho=1)
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const dnaParam = params.get('parceiro');
+  const carinhoParam = params.get('carinho');
+
   if (dnaParam) {
     setTimeout(() => {
       importPartnerDNA(dnaParam);
       window.history.replaceState({}, document.title, window.location.pathname);
     }, 600);
   }
+
+  if (carinhoParam) {
+    setTimeout(() => {
+      triggerReceivedRemotePet();
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }, 800);
+  }
 });
 
-// Renderiza a interface do modal do casal
+// Renderização da interface do modal do casal
 function renderCoupleTabUI() {
   const statusContainer = document.getElementById('couple-status-container');
   if (!statusContainer) return;
@@ -162,11 +219,11 @@ function renderCoupleTabUI() {
   if (!partnerData) {
     statusContainer.innerHTML = `
       <div style="text-align: center; padding: 14px 6px;">
-        <p style="font-size: 1.05rem; margin-bottom: 12px; color: var(--pencil);">Vocês ainda não vincularam os gatinhos!</p>
+        <p style="font-size: 1.05rem; margin-bottom: 12px; color: var(--pencil);">Ainda não vincularam os vossos gatinhos!</p>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <button class="action-btn" style="justify-content: center; background: #eef7e8;" onclick="sharePartnerLink()">💬 Enviar Link para Ela (WhatsApp)</button>
+          <button class="action-btn" style="justify-content: center; background: #eef7e8;" onclick="sharePartnerLink()">💬 Enviar Ligação para Ela (WhatsApp)</button>
           <button class="action-btn" style="justify-content: center;" onclick="showPartnerQRCode()">📷 Mostrar QR Code para Ela</button>
-          <button class="action-btn" style="justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Meu Código DNA</button>
+          <button class="action-btn" style="justify-content: center;" onclick="copyMyDNACode()">📋 Copiar o Meu Código DNA</button>
           <button class="action-btn" style="justify-content: center;" onclick="promptPartnerCode()">📥 Inserir Código Dela</button>
           <button class="action-btn" style="justify-content: center; font-size: 0.82rem;" onclick="startNFCSharing()">📲 Tentar Toque NFC</button>
         </div>
@@ -215,7 +272,11 @@ function renderCoupleTabUI() {
         </div>
       </div>
 
-      <div style="display: flex; gap: 8px; margin-top: 10px;">
+      <button class="action-btn" style="width: 100%; justify-content: center; margin-top: 8px; background: #faeedb; color: #542c13;" onclick="sendRemotePet()">
+        💌 Mandar Carinho / Ronrom Remoto
+      </button>
+
+      <div style="display: flex; gap: 8px; margin-top: 8px;">
         <button class="action-btn" style="flex: 1; font-size: 0.8rem; justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Meu Código</button>
         <button class="action-btn" style="flex: 1; font-size: 0.8rem; justify-content: center;" onclick="promptPartnerCode()">🔄 Atualizar Código Dela</button>
       </div>
@@ -248,7 +309,7 @@ function promptPartnerCode() {
   if (code) importPartnerDNA(code);
 }
 
-// Desenha miniatura SVG com os atributos de um gato especificado
+// Desenha a miniatura SVG com os atributos exatos do gatinho parceiro
 function renderMiniCatInside(containerId, catAttrs) {
   const container = document.getElementById(containerId);
   if (!container || !catAttrs) return;
@@ -258,13 +319,13 @@ function renderMiniCatInside(containerId, catAttrs) {
   const clone = mainSvg.cloneNode(true);
   clone.removeAttribute('id');
 
-  // Ajusta cores dos olhos
+  // Cores dos olhos
   const eyeL = clone.querySelector('#eye-bg-left');
   const eyeR = clone.querySelector('#eye-bg-right');
   if (eyeL) eyeL.setAttribute('fill', catAttrs.eyeColor || '#2b2725');
   if (eyeR) eyeR.setAttribute('fill', catAttrs.eyeColor || '#2b2725');
 
-  // Base do corpo e rabo
+  // Base do corpo e cauda
   const body = clone.querySelector('#cat-body');
   const head = clone.querySelector('#cat-head-normal');
   const tail = clone.querySelector('#cat-tail');
@@ -278,13 +339,12 @@ function renderMiniCatInside(containerId, catAttrs) {
   }
   if (tailStripes) tailStripes.style.display = 'none';
 
-  // Esconde todas as pelagens antes de ativar a correta
+  // Esconder marcações antes de aplicar a raça selecionada
   ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
     const el = clone.querySelector('#' + id);
     if (el) el.style.display = 'none';
   });
 
-  // Raças
   if (catAttrs.breed === 'breed_siamese') {
     if (body) body.setAttribute('fill', '#ebdcc9');
     if (head) head.setAttribute('fill', '#ebdcc9');
@@ -311,7 +371,7 @@ function renderMiniCatInside(containerId, catAttrs) {
     if (oBody) oBody.style.display = 'block';
   }
 
-  // Acessórios e cores
+  // Acessórios e cores personalizadas
   const colors = catAttrs.itemColors || {};
   ['bowtie', 'glasses', 'flower', 'crown'].forEach(acc => {
     const el = clone.querySelector('#cosmetic-' + acc);
