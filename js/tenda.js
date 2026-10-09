@@ -1,4 +1,48 @@
 /* =========================================================
+   TENDA DE COMIDA
+========================================================= */
+
+window.openFoodStall = function(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('stall-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  renderFoodStallShelf();
+};
+
+window.closeFoodStall = function(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('stall-modal');
+  if (modal) modal.classList.remove('open');
+};
+
+function renderFoodStallShelf() {
+  const grid = document.getElementById('stall-shelf-grid');
+  if (!grid) return;
+  grid.innerHTML = `
+    <div class="shelf-item-card" onclick="buyFood('food_salmon', 1)">
+      <span style="font-size: 2rem;">🐟</span>
+      <b>Salmão</b>
+      <span>1 🐟</span>
+    </div>
+    <div class="shelf-item-card" onclick="buyFood('food_milk', 1)">
+      <span style="font-size: 2rem;">🥛</span>
+      <b>Leite</b>
+      <span>1 🐟</span>
+    </div>
+  `;
+}
+
+window.buyFood = function(id, price) {
+  if (window.catStats.fishCoins < price) {
+    alert('Peixinhos insuficientes!');
+    return;
+  }
+  window.catStats.fishCoins -= price;
+  window.userInventory[id] = (window.userInventory[id] || 0) + 1;
+  window.saveStats();
+  alert('Comida comprada com sucesso!');
+};/* =========================================================
    TENDA DE COMIDA, VENDEDOR E COMPRAS
 ========================================================= */
 
