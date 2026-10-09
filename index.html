@@ -1287,24 +1287,141 @@
 
     /* INVENTÁRIO */
 
+    /* MOCHILA RÚSTICA PERSONALIZADA COM SCROLL */
     .inventory-tray {
-
-      background: var(--card-bg);
-
-      border: 2px solid var(--charcoal);
-
-      border-radius: 18px;
-
-      padding: 10px 14px;
-
+      background: linear-gradient(180deg, #8b5226 0%, #683a17 100%);
+      border: 3.5px solid #3c1e0a;
+      border-radius: 22px;
+      padding: 18px 14px 14px;
       width: 100%;
-
       max-width: 440px;
+      margin-top: 15px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.15);
+      position: relative;
+      display: none;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+      transform: translateY(12px);
+      box-sizing: border-box;
+    }
+    .inventory-tray.visible {
+      display: block;
+      transform: translateY(0);
+    }
 
-      margin-top: 10px;
+    /* Detalhe da fivela/fecho de couro da mochila no topo */
+    .inventory-tray::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 52px;
+      height: 18px;
+      background: #4a270f;
+      border: 2px solid #281105;
+      border-radius: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+    .inventory-tray::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 10px;
+      border: 2px solid #d4af37;
+      border-radius: 3px;
+      z-index: 3;
+    }
 
-      box-shadow: 2px 4px 0 rgba(0,0,0,0.1);
+    /* Fundo interno tipo lona/linho acolchoado com costura */
+    .inventory-stitch {
+      border: 2px dashed #b98450;
+      border-radius: 16px;
+      padding: 10px 12px;
+      background: #502b12;
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.4);
+    }
 
+    .inventory-title {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #fae19c;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+    }
+
+    /* Container de itens com scroll horizontal suave */
+    .inventory-slots {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 6px 4px 10px;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+    }
+
+    /* Barra de rolagem estilizada combinando com a madeira/couro */
+    .inventory-slots::-webkit-scrollbar {
+      height: 6px;
+    }
+    .inventory-slots::-webkit-scrollbar-track {
+      background: rgba(40, 17, 5, 0.4);
+      border-radius: 10px;
+    }
+    .inventory-slots::-webkit-scrollbar-thumb {
+      background: #b98450;
+      border-radius: 10px;
+      border: 1px solid #3c1e0a;
+    }
+    .inventory-slots {
+      scrollbar-width: thin;
+      scrollbar-color: #b98450 rgba(40, 17, 5, 0.4);
+    }
+
+    /* Compartimentos acolchoados para cada alimento */
+    .inventory-slot {
+      flex: 0 0 66px;
+      height: 68px;
+      background: radial-gradient(circle, #fffdf8 50%, #f1e2c9 100%);
+      border: 2px solid #3c1e0a;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: grab;
+      touch-action: none;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.7), 0 3px 6px rgba(0,0,0,0.25);
+      transition: transform 0.15s ease;
+    }
+    .inventory-slot:active {
+      cursor: grabbing;
+      transform: scale(0.94);
+    }
+    .slot-icon {
+      font-size: 2rem;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
+    }
+    .slot-qty {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: #c0392b;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 1px 6px;
+      border-radius: 10px;
+      border: 1.5px solid #281105;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .inventory-title {
@@ -2668,16 +2785,25 @@
       const btn = document.getElementById('backpack-toggle-btn');
       if (!tray) return;
 
-      if (!tray.classList.contains('visible') && tray.style.display !== 'block') {
-        tray.classList.add('visible');
+      const isHidden = !tray.classList.contains('visible') || tray.style.display === 'none';
+
+      if (isHidden) {
         tray.style.display = 'block';
+        // Pequeno atraso para a animação CSS rodar suavemente
+        requestAnimationFrame(() => {
+          tray.classList.add('visible');
+        });
         if (btn) btn.classList.add('active');
         renderInventorySlots();
         tray.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
         tray.classList.remove('visible');
-        tray.style.display = 'none';
         if (btn) btn.classList.remove('active');
+        setTimeout(() => {
+          if (!tray.classList.contains('visible')) {
+            tray.style.display = 'none';
+          }
+        }, 280);
       }
     }
 
