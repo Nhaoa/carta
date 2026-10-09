@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
   
-  <!-- PeerJS (Conexão Multiplayer em Tempo Real) -->
+  <!-- PeerJS -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <!-- Estilos e Dados -->
@@ -264,30 +264,30 @@
         </svg>
       </div>
 
-      <!-- 2. GATINHO PARCEIRO (ESTRUTURA FIXA NO HTML, CONTROLADA EXCLUSIVAMENTE POR DISPLAY) -->
+      <!-- 2. GATINHO PARCEIRO -->
       <div class="cat-wrapper partner-cat" id="partner-cat-wrapper" style="display: none;" onclick="openCoupleModal(event)">
         <span class="cat-label-tag" id="partner-label-tag">Parceira</span>
         <div id="partner-svg-slot" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;"></div>
       </div>
     </div>
 
-    <!-- MOCHILA DE COMIDINHAS COM SCROLL -->
+    <!-- MOCHILA DE COMIDINHAS -->
     <div class="inventory-tray" id="inventory-tray">
       <div class="inventory-stitch">
         <div class="inventory-title">
           <span>🎒 Mochila de Comidinhas</span>
-          <span style="font-size: 0.8rem; font-weight: normal; color: #ffd6ad;">Arraste até um gato para comer!</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: #ffd6ad;">Toque ou arraste para alimentar!</span>
         </div>
         <div class="inventory-slots" id="inventory-slots-container"></div>
       </div>
     </div>
   </main>
 
-  <!-- BARRA INFERIOR COM DOCK E FOCO CENTRAL -->
+  <!-- BARRA INFERIOR COM DOCK -->
   <div class="bottom-nav-wrapper">
     <div class="nav-swipe-hint" id="nav-swipe-hint">
       <span class="hint-arrow left">◀</span>
-      <span>Deslize para trocar</span>
+      <span>Toque ou deslize</span>
       <span class="hint-arrow right">▶</span>
     </div>
     <nav class="bottom-nav-bar" id="bottom-nav-carousel">
@@ -308,7 +308,7 @@
     </nav>
   </div>
 
-  <!-- MODAL: CARTEIRA TEMÁTICA DE COURO -->
+  <!-- MODAL: CARTEIRA -->
   <div class="modal-backdrop" id="wallet-modal" onclick="closeWalletModal(event)">
     <div class="wallet-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" style="background: #331908; color: #fae19c; border-color: #9c6c42;" onclick="closeWalletModal(event)">✕</button>
@@ -406,7 +406,7 @@
     </div>
   </div>
 
-  <!-- MODAL: LOJINHA VIP COMPLETA -->
+  <!-- MODAL: LOJINHA VIP -->
   <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
@@ -434,32 +434,24 @@
     <div class="modal-paper color-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
-      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
       <div class="color-grid" id="color-picker-grid"></div>
     </div>
   </div>
 
-  <!-- MODAL: NOVIDADES (CHANGELOG) -->
+  <!-- MODAL: CHANGELOG -->
   <div class="modal-backdrop" id="changelog-modal" onclick="closeChangelog(event)">
     <div class="modal-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeChangelog(event)">✕</button>
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Novidades 📜</h3>
-      <div class="changelog-content">
-        <div class="changelog-entry">
-          <div class="changelog-version">v4.1 - Gatinhos Lado a Lado & Sincronização de Status</div>
-          <div class="changelog-date">08 de Outubro de 2026</div>
-          <ul class="changelog-list">
-            <li>Gatos posicionados lado a lado no palco principal com identificador.</li>
-            <li>Sincronização em tempo real das necessidades vitais (fome, energia, etc.).</li>
-            <li>Alimentação mútua arrastando comidinhas diretamente pro gato parceiro.</li>
-            <li>Opção de desvinculação facilitada no Diário de Casal.</li>
-          </ul>
-        </div>
+      <div class="changelog-content" style="margin-top: 10px;">
+        <p>• Suporte multiplayer WebRTC P2P e vínculo por DNA.</p>
+        <p>• Gatinhos exibidos lado a lado no palco.</p>
+        <p>• Mochila e tenda com drag & drop restaurados.</p>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: ÁLBUM DO CASAL E VÍNCULO MULTIPLAYER -->
+  <!-- MODAL: ÁLBUM DO CASAL -->
   <div class="modal-backdrop" id="couple-modal" onclick="closeCoupleModal(event)">
     <div class="couple-paper" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeCoupleModal(event)">✕</button>
@@ -468,7 +460,7 @@
     </div>
   </div>
 
-  <!-- SCRIPTS MODULARES (EM ORDEM DE CARREGAMENTO) -->
+  <!-- SCRIPTS EM ORDEM CORRETA -->
   <script src="js/estado.js"></script>
   <script src="js/efeitos.js"></script>
   <script src="js/gato.js"></script>
