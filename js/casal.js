@@ -584,15 +584,27 @@ function promptPartnerCode() {
 }
 
 function openCoupleModal(e) {
-  if (e) e.stopPropagation();
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  const modal = document.getElementById('couple-modal');
+  if (!modal) return;
+  
+  modal.classList.add('open');
+  // Renderiza a interface após garantir que o modal está visível no DOM
   renderCoupleTabUI();
-  document.getElementById('couple-modal').classList.add('open');
 }
 
 function closeCoupleModal(e) {
-  if (e) e.stopPropagation();
-  document.getElementById('couple-modal').classList.remove('open');
-}/* =========================================================
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  const modal = document.getElementById('couple-modal');
+  if (modal) modal.classList.remove('open');
+}
+/* =========================================================
    SISTEMA DE CASAL: PERFIL, VÍNCULO, STREAK, NFC, QR CODE
    E SINCRONIZAÇÃO DE STATUS
 ========================================================= */
