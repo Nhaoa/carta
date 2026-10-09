@@ -1,4 +1,24 @@
 /* =========================================================
+   COMPORTAMENTO DO GATINHO PRINCIPAL
+========================================================= */
+
+window.handleCatClick = function(e) {
+  if (e) e.stopPropagation();
+  window.catStats.happiness = Math.min(100, window.catStats.happiness + 5);
+  window.saveStats();
+  window.createFloatingParticles(e.clientX, e.clientY, 8);
+  openLetter();
+};
+
+window.renderCatAppearence = function() {
+  const mainSvg = document.getElementById('main-cat-svg');
+  if (!mainSvg) return;
+
+  const eyeL = mainSvg.querySelector('#eye-bg-left');
+  const eyeR = mainSvg.querySelector('#eye-bg-right');
+  if (eyeL) eyeL.setAttribute('fill', window.activeEyeColor || '#2b2725');
+  if (eyeR) eyeR.setAttribute('fill', window.activeEyeColor || '#2b2725');
+};/* =========================================================
    VISUAL DO GATO, EXPRESSÕES, CARINHO E COSMÉTICOS
 ========================================================= */
 
