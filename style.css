@@ -936,3 +936,77 @@ body {
   overflow: hidden;
   margin-top: 10px;
 }
+/* =========================================================
+   ESTILOS DO MODAL DE CASAL & ÁLBUM DE VÍNCULO
+========================================================= */
+.couple-paper {
+  background: #fdf5ec;
+  border: 3px solid #542c13;
+  border-radius: 22px;
+  max-width: 440px;
+  width: 100%;
+  padding: 24px 16px;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.35);
+  position: relative;
+}
+.couple-card-stitch {
+  border: 2px dashed #b98450;
+  border-radius: 16px;
+  padding: 12px;
+  background: #fffdf9;
+}
+.couple-cats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  background: radial-gradient(circle, #faeedb 0%, #f4dec3 100%);
+  border-radius: 14px;
+  border: 1.5px solid #d4b896;
+  padding: 8px;
+}
+.couple-cat-box {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.couple-cat-box svg {
+  width: 100%;
+  height: 100%;
+}
+.couple-heart-divider {
+  font-size: 1.8rem;
+  animation: pulseHeart 1.4s infinite alternate ease-in-out;
+}
+@keyframes pulseHeart {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1.25); }
+}
+.couple-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.couple-stat-item {
+  background: #faeedb;
+  border: 1.5px solid #c9a87c;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.couple-stat-item .stat-icon { font-size: 1.4rem; }
+.couple-stat-item .stat-value { font-size: 1.1rem; font-weight: bold; color: #4a2912; margin: 2px 0; }
+.couple-stat-item .stat-label { font-size: 0.75rem; color: #7a6350; }
+.couple-match-score {
+  background: #f7eee1;
+  border: 1.5px solid #c9a87c;
+  border-radius: 12px;
+  padding: 8px 12px;
+  text-align: center;
+}
