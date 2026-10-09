@@ -1,4 +1,64 @@
 /* =========================================================
+   MULTIPLAYER P2P (PEERJS)
+========================================================= */
+
+window.myPeerId = localStorage.getItem('cat_my_peer_id') || ('cat_' + Math.random().toString(36).substring(2, 8));
+localStorage.setItem('cat_my_peer_id', window.myPeerId);
+
+let peer = null;
+let activeConnection = null;
+
+function initMultiplayer() {
+  if (typeof Peer === 'undefined') return;
+  peer = new Peer(window.myPeerId);
+
+  peer.on('open', () => {
+    if (window.partnerData && window.partnerData.peerId) {
+      connectToPartner(window.partnerData.peerId);
+    }
+  });
+
+  peer.on('connection', conn => {
+    setupConnection(conn);
+  });
+}
+
+function connectToPartner(targetId) {
+  if (!peer || activeConnection) return;
+  const conn = peer.connect(targetId);
+  setupConnection(conn);
+}
+
+function setupConnection(conn) {
+  conn.on('open', () => {
+    activeConnection = conn;
+    const badge = document.getElementById('couple-online-indicator');
+    if (badge) badge.innerText = '🟢 Ao Vivo Juntos';
+  });
+
+  conn.on('data', data => {
+    if (data.type === 'CARINHO') {
+      window.createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 16);
+      alert('Seu amor acabou de te mandar um carinho! 🐾💖');
+    }
+  });
+
+  conn.on('close', () => {
+    activeConnection = null;
+    const badge = document.getElementById('couple-online-indicator');
+    if (badge) badge.innerText = '⚪ Desconectado';
+  });
+}
+
+window.sendMultiplayerPacket = function(data) {
+  if (activeConnection && activeConnection.open) {
+    activeConnection.send(data);
+    return true;
+  }
+  return false;
+};
+
+window.addEventListener('DOMContentLoaded', initMultiplayer);/* =========================================================
    CONEXÃO MULTIPLAYER EM TEMPO REAL (PEERJS / WEBRTC)
 ========================================================= */
 
