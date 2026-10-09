@@ -79,7 +79,7 @@
       position: relative;
       user-select: none;
       transition: background-color 0.5s ease, color 0.5s ease;
-      padding-bottom: 95px;
+      padding-bottom: 110px;
     }
 
     #fx-canvas {
@@ -89,7 +89,7 @@
       z-index: 1;
     }
 
-    /* PAINEL LATERAL SUPERIOR ESQUERDO CORRIGIDO */
+    /* PAINEL LATERAL SUPERIOR ESQUERDO */
     .side-nav-container {
       position: fixed;
       top: 10px;
@@ -331,7 +331,7 @@
       95% { transform: rotate(-2deg); }
     }
 
-    /* BARRA INFERIOR */
+    /* BARRA INFERIOR MODERNA COM DESTAQUE DINÂMICO */
     .bottom-nav-bar {
       position: fixed;
       bottom: 0;
@@ -339,30 +339,66 @@
       right: 0;
       background: var(--card-bg);
       border-top: 2.5px solid var(--charcoal);
-      padding: 8px 14px;
+      padding: 10px 24px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       z-index: 50;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 -4px 14px rgba(0,0,0,0.1);
+      min-height: 72px;
     }
 
     .bottom-nav-btn {
       background: transparent;
-      border: none;
+      border: 1.5px solid transparent;
+      border-radius: 16px;
+      padding: 6px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 2px;
       font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: bold;
       color: var(--charcoal);
       cursor: pointer;
-      transition: transform 0.15s;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0.65;
+      transform: scale(0.9);
     }
-    .bottom-nav-btn:active { transform: scale(0.92); }
-    .bottom-nav-btn span.icon { font-size: 1.45rem; }
+
+    .bottom-nav-btn span.icon {
+      font-size: 1.35rem;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .bottom-nav-btn span.label {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* BOTÃO EM FOCO: MAIOR, ELEVADO E CENTRALIZADO VISUALMENTE */
+    .bottom-nav-btn.active-focus {
+      opacity: 1;
+      transform: translateY(-8px) scale(1.18);
+      background: #faeed7;
+      border-color: var(--amber);
+      box-shadow: 0 6px 14px rgba(196, 139, 54, 0.28), 0 2px 0 var(--charcoal);
+      padding: 8px 18px;
+    }
+
+    .bottom-nav-btn.active-focus span.icon {
+      transform: scale(1.15);
+    }
+
+    .bottom-nav-btn.active-focus span.label {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #7a480e;
+    }
+
+    .bottom-nav-btn:active {
+      transform: scale(0.92);
+    }
 
     /* CARTEIRA TEMÁTICA DE COURO */
     .wallet-paper {
@@ -832,9 +868,12 @@
 
   <canvas id="fx-canvas"></canvas>
 
-  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO COM BOTÃO SEMPRE ACESSÍVEL -->
+  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO COM O BOTÃO DE LER CARTA -->
   <div class="side-nav-container collapsed" id="side-nav-container">
     <div class="side-nav-box">
+      <button class="side-btn" onclick="openLetter(event)">
+        <span>💌 Ler Carta</span>
+      </button>
       <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()">
         <span id="auto-time-icon">⏰</span>
         <span id="auto-time-text">Tema Auto</span>
@@ -894,7 +933,7 @@
   </div>
 
   <main class="stage">
-    <!-- Balão de fala que se auto-oculta quando é apenas informativo de releitura -->
+    <!-- Balão de fala que se auto-oculta após 4s quando for releitura -->
     <div class="speech-bubble" id="speech-bubble" onclick="openLetter(event)">
       Psst... toque no gatinho para abrir a cartinha!🐾
     </div>
@@ -909,7 +948,7 @@
           <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
         </defs>
 
-        <!-- Rabo com Preenchimento Sólido -->
+        <!-- Rabo -->
         <g class="anim-tail">
           <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
                 fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
@@ -1080,23 +1119,19 @@
     </div>
   </main>
 
-  <!-- BARRA INFERIOR COM O NOVO BOTÃO DE LER CARTA -->
-  <nav class="bottom-nav-bar">
-    <button class="bottom-nav-btn" onclick="openFoodStall(event)">
+  <!-- BARRA INFERIOR MODERNA: BOTÃO ATIVO COM FOCO/DESTACADO -->
+  <nav class="bottom-nav-bar" id="bottom-nav-bar">
+    <button class="bottom-nav-btn active-focus" id="nav-btn-foods" onclick="handleBottomNavClick(this, openFoodStall)">
       <span class="icon">🏪</span>
-      <span>Comidas</span>
+      <span class="label">Comidas</span>
     </button>
-    <button class="bottom-nav-btn" onclick="openLetter(event)">
-      <span class="icon">💌</span>
-      <span>Ler Carta</span>
-    </button>
-    <button class="bottom-nav-btn" onclick="openMinigame(event)">
+    <button class="bottom-nav-btn" id="nav-btn-play" onclick="handleBottomNavClick(this, openMinigame)">
       <span class="icon">🎮</span>
-      <span>Brincar</span>
+      <span class="label">Brincar</span>
     </button>
-    <button class="bottom-nav-btn" onclick="openShop(event)">
+    <button class="bottom-nav-btn" id="nav-btn-shop" onclick="handleBottomNavClick(this, openShop)">
       <span class="icon">✨</span>
-      <span>Loja VIP</span>
+      <span class="label">Loja VIP</span>
     </button>
   </nav>
 
@@ -1246,13 +1281,12 @@
       <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Novidades 📜</h3>
       <div class="changelog-content">
         <div class="changelog-entry">
-          <div class="changelog-version">v3.5 - Melhorias de Navegação & Mochila</div>
-          <div class="changelog-date">08 de Outubro de 2026</div>
+          <div class="changelog-version">v3.6 - Foco na Barra Inferior & Carta no Menu Lateral</div>
+          <div class="changelog-date">09 de Outubro de 2026</div>
           <ul class="changelog-list" style="margin-left: 20px; margin-top: 8px; font-size: 1.05rem;">
-            <li>Seta retrátil corrigida: agora permanece visível na tela para reabrir o menu quando quiser.</li>
-            <li>Mochila tematizada em couro e retrátil através do botão do menu lateral.</li>
-            <li>Novo botão de "💌 Ler Carta" fixado na barra de navegação inferior.</li>
-            <li>Balão de dicas com auto-fechamento temporário após alguns segundos.</li>
+            <li>Botão de ler a cartinha movido exclusivamente para o menu lateral esquerdo.</li>
+            <li>Barra de navegação inferior com foco interativo: o botão ativo fica maior, centralizado e destacado, reduzindo suavemente os outros.</li>
+            <li>Melhorias nos modais e na usabilidade dos atalhos.</li>
           </ul>
         </div>
       </div>
@@ -1325,7 +1359,7 @@
     }
 
     /* =========================================================
-       2. CONTROLE DE MENUS E MOCHILA
+       2. CONTROLE DE MENUS, NAVEGAÇÃO E MOCHILA
     ========================================================= */
     let sideNavOpen = false;
     let statusVisible = false;
@@ -1382,6 +1416,17 @@
       } else {
         tray.classList.add('collapsed');
         if (btn) btn.classList.remove('active');
+      }
+    }
+
+    /* CONTROLE DE FOCO DOS BOTÕES INFERIORES */
+    function handleBottomNavClick(clickedBtn, actionCallback) {
+      document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+        btn.classList.remove('active-focus');
+      });
+      clickedBtn.classList.add('active-focus');
+      if (typeof actionCallback === 'function') {
+        actionCallback();
       }
     }
 
@@ -2332,9 +2377,8 @@
         letterGroup.style.display = 'none';
         idlePaws.style.display = 'block';
         
-        // Exibe o balão por alguns segundos avisando que a carta pode ser relida, e então oculta suavemente
         bubble.classList.remove('fade-out');
-        bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Você pode reler a cartinha quando quiser pelo botão abaixo! 💌";
+        bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Você pode reler a cartinha no menu lateral! 💌";
         
         clearTimeout(speechBubbleTimer);
         speechBubbleTimer = setTimeout(() => {
