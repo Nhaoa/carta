@@ -262,13 +262,14 @@ function applyPartnerReactions(clone, stats) {
 }
 
 // Desenha a miniatura SVG limpando o container e evitando auto-aninhamento
+// Renderiza o SVG dentro do container garantindo limpeza total prévia
 function renderMiniCatInside(containerId, catAttrs) {
   const container = document.getElementById(containerId);
   if (!container || !catAttrs) return;
   const mainSvg = document.getElementById('main-cat-svg');
   if (!mainSvg) return;
 
-  // Limpa completamente o container antes de inserir qualquer elemento
+  // Limpa completamente antes de injetar
   container.innerHTML = '';
 
   const clone = mainSvg.cloneNode(true);
@@ -359,15 +360,28 @@ function renderMiniCatInside(containerId, catAttrs) {
   container.appendChild(clone);
 }
 
-// Renderiza o gato parceiro ao lado do principal ou remove completamente se não houver parceiro
+// Controla o gatinho do parceiro usando estritamente o slot fixo
 function renderPartnerCatStage() {
-  const existingPartner = document.getElementById('partner-cat-wrapper');
+  const wrapper = document.getElementById('partner-cat-wrapper');
+  const slot = document.getElementById('partner-svg-slot');
+  const label = document.getElementById('partner-label-tag');
 
-  // Se NÃO houver parceiro válido, remove o elemento do DOM imediatamente
+  if (!wrapper || !slot) return;
+
+  // Se não houver parceiro conectado, oculta e esvazia
   if (!partnerData || !partnerData.breed) {
-    if (existingPartner) existingPartner.remove();
+    wrapper.style.display = 'none';
+    slot.innerHTML = '';
     return;
   }
+
+  // Se houver parceiro, exibe e renderiza apenas dentro do slot SVG
+  wrapper.style.display = 'flex';
+  if (label) label.innerText = partnerData.name || 'Parceira';
+  renderMiniCatInside('partner-svg-slot', partnerData);
+}
+
+
 
   const duoContainer = document.getElementById('cats-duo-stage');
   if (!duoContainer) return;
