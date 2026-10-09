@@ -9,6 +9,946 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
   
+  <!-- PeerJS (Conexão Multiplayer em Tempo Real) -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+  <!-- Estilos e Dados -->
+  <link rel="stylesheet" href="style.css">
+  <script src="dados/mensagens.js"></script>
+  <script src="dados/cosmeticos.js"></script>
+</head>
+<body>
+
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO -->
+  <div class="side-nav-container collapsed" id="side-nav-container">
+    <div class="side-nav-box">
+      <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()">
+        <span id="auto-time-icon">⏰</span>
+        <span id="auto-time-text">Tema Auto</span>
+      </button>
+      <button class="side-btn" onclick="openChangelog(event)">
+        <span>📜 Novidades</span>
+      </button>
+      <button class="side-btn" onclick="openWalletModal(event)">
+        <span>👛 Carteira</span>
+      </button>
+      <button class="side-btn" id="backpack-toggle-btn" onclick="toggleBackpack(event)">
+        <span>🎒 Mochila</span>
+      </button>
+      <button class="side-btn" onclick="openLetter(event)">
+        <span>✉️ Ler Carta</span>
+      </button>
+      <button class="side-btn" onclick="openCoupleModal(event)">
+        <span>💖 Vínculo do Casal</span>
+      </button>
+    </div>
+    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral">
+      <span id="side-nav-arrow">▶</span>
+    </div>
+  </div>
+
+  <!-- STATUS MINIMALISTA (CENTRO TOPO) -->
+  <div class="status-container hidden" id="status-container">
+    <div class="status-squares-row">
+      <div class="status-square" title="Fome">
+        <div class="status-fill" id="fill-hunger"></div>
+        <svg class="status-icon-svg" viewBox="0 0 32 32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 6 C8 7, 6 12, 9 17 C12 22, 18 23, 22 20 C26 17, 26 10, 21 7 C18 5, 16 5, 14 6 Z"/>
+          <path d="M9 17 L6 20"/>
+          <circle cx="5" cy="21" r="1.5"/>
+          <circle cx="7" cy="23" r="1.5"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Energia">
+        <div class="status-fill" id="fill-energy"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Alegria">
+        <div class="status-fill" id="fill-happiness"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 8 L6 4 L10 7 Q12 6.5 14 7 L18 4 L20 8 Q21.5 12 20 16 Q18 20 12 20 Q6 20 4 16 Q2.5 12 4 8 Z"/>
+          <path d="M7 11 Q8.5 9.5 10 11"/>
+          <path d="M14 11 Q15.5 9.5 17 11"/>
+          <path d="M9.5 14 Q12 16.5 14.5 14"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Saúde">
+        <div class="status-fill" id="fill-health"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5 v14 M5 12 h14"/>
+        </svg>
+      </div>
+    </div>
+    <div class="status-toggle-tab" onclick="toggleStatusVisibility()" title="Ocultar/Exibir Status">
+      <span id="status-arrow-icon">▼</span>
+    </div>
+  </div>
+
+  <main class="stage">
+    <div class="speech-bubble" id="speech-bubble">
+      Psst... toque no gatinho para abrir a cartinha!🐾
+    </div>
+
+    <!-- Gatinho Interativo -->
+    <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
+      <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
+        <defs>
+          <clipPath id="left-eye-clip"><ellipse cx="68" cy="98" rx="26" ry="24"/></clipPath>
+          <clipPath id="right-eye-clip"><ellipse cx="122" cy="98" rx="26" ry="24"/></clipPath>
+          <clipPath id="cat-head-clip"><path id="cat-head-clip-path" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z"/></clipPath>
+          <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
+        </defs>
+
+        <g class="anim-tail">
+          <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
+                fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+          <path id="tail-stripes" d="M 166,114 Q 172,120 162,128" fill="none" stroke="#b3581d" stroke-width="3" style="display: none;"/>
+        </g>
+
+        <g class="anim-body-group">
+          <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+          <g clip-path="url(#cat-body-clip)" id="body-markings">
+            <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
+            <g id="body-orange" style="display: none;">
+              <path d="M 60,140 Q 75,145 70,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <path d="M 138,140 Q 123,145 128,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="98" cy="144" rx="14" ry="10" fill="#fffdf9"/>
+            </g>
+          </g>
+
+          <g class="anim-ears">
+            <path id="cat-head-normal" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+            <path id="cat-head-airplane" d="M 44,82 C 28,68 18,78 36,86 C 54,88 80,72 98,72 C 116,72 142,88 160,86 C 178,78 168,68 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" style="display: none;"/>
+
+            <g clip-path="url(#cat-head-clip)" id="breed-markings">
+              <g id="breed-siamese" style="display: none;">
+                <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
+                <polygon points="156,30 131,70 166,70" fill="#3d281d"/>
+                <path d="M 64,112 Q 98,78 132,112 Q 98,140 64,112 Z" fill="#3d281d"/>
+              </g>
+              <g id="breed-tuxedo" style="display: none;">
+                <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
+                <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
+                <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
+                <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
+              </g>
+              <g id="breed-orange" style="display: none;">
+                <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
+                <circle cx="98" cy="116" r="4" fill="#d98270"/>
+                <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+          </g>
+
+          <g id="regular-eyes" class="anim-eye-blink">
+            <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#left-eye-clip)">
+              <g id="pupil-left-group">
+                <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <g id="anime-sparkle-left" style="display: none;">
+                <polygon points="68,86 70,91 75,92 70,94 68,99 66,94 61,92 66,91" fill="#ffffff"/>
+                <circle cx="74" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
+            </g>
+
+            <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#right-eye-clip)">
+              <g id="pupil-right-group">
+                <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <g id="anime-sparkle-right" style="display: none;">
+                <polygon points="122,86 124,91 129,92 124,94 122,99 120,94 115,92 120,91" fill="#ffffff"/>
+                <circle cx="128" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
+            </g>
+          </g>
+
+          <g id="expr-determined-brows" style="display: none;">
+            <line x1="50" y1="78" x2="74" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="146" y1="78" x2="122" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+
+          <g id="sleepy-eyelids" style="display: none;">
+            <path d="M 42,94 Q 68,110 94,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path d="M 96,94 Q 122,110 148,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="happy-eyes" style="display: none;">
+            <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- Bocas -->
+          <g id="mouth-variants">
+            <path id="mouth-cat-path" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <g id="mouth-tongue-path" style="display: none;">
+              <path d="M 94,115 Q 98,119 102,115" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <path d="M 96,117 C 96,122 100,122 100,117 Z" fill="#e74c3c" stroke="#2b2725" stroke-width="1.5"/>
+            </g>
+            <g id="mouth-vampire-path" style="display: none;">
+              <path d="M 93,116 Q 98,120 103,116" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <polygon points="95,116 96,120 97,116" fill="#fff" stroke="#2b2725" stroke-width="1.5"/>
+              <polygon points="99,116 100,120 101,116" fill="#fff" stroke="#2b2725" stroke-width="1.5"/>
+            </g>
+            <path id="mouth-smile-path" d="M 92,114 Q 98,123 104,114" fill="none" stroke="#2b2725" stroke-width="2.8" stroke-linecap="round" style="display: none;"/>
+          </g>
+
+          <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
+          <ellipse id="mouth-hungry" cx="98" cy="118" rx="4" ry="6" fill="#2b2725" style="display: none;"/>
+
+          <g id="happy-blush" style="display: none;">
+            <ellipse cx="50" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+            <ellipse cx="146" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+          </g>
+
+          <g id="sick-mark" style="display: none;">
+            <rect x="130" y="60" width="16" height="7" rx="3" fill="#e5c898" stroke="#2b2725" stroke-width="1.5" transform="rotate(25 130 60)"/>
+          </g>
+
+          <g id="idle-paws" style="display: none;">
+            <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="cat-letter-group">
+            <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+            <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <!-- Acessórios -->
+          <g id="cosmetic-bowtie" style="display: none;">
+            <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          </g>
+          <g id="cosmetic-glasses" style="display: none;">
+            <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
+          </g>
+          <g id="cosmetic-flower" style="display: none;">
+            <circle class="flower-petal" cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="64" cy="52" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="56" cy="60" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="46" cy="56" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="flower-center" cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
+          </g>
+          <g id="cosmetic-crown" style="display: none;">
+            <path id="crown-body" d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle id="crown-gem" cx="98" cy="42" r="2.5" fill="#c48b36"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- MOCHILA DE COMIDINHAS COM SCROLL E TEXTURA DE COURO -->
+    <div class="inventory-tray" id="inventory-tray">
+      <div class="inventory-stitch">
+        <div class="inventory-title">
+          <span>🎒 Mochila de Comidinhas</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: #ffd6ad;">Arraste até o gato para comer!</span>
+        </div>
+        <div class="inventory-slots" id="inventory-slots-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BARRA INFERIOR COM DOCK E FOCO CENTRAL -->
+  <div class="bottom-nav-wrapper">
+    <div class="nav-swipe-hint" id="nav-swipe-hint">
+      <span class="hint-arrow left">◀</span>
+      <span>Deslize para trocar</span>
+      <span class="hint-arrow right">▶</span>
+    </div>
+    <nav class="bottom-nav-bar" id="bottom-nav-carousel">
+      <div class="nav-spacer"></div>
+      <button class="bottom-nav-btn" data-index="0" onclick="handleNavClick(0, openFoodStall, event)">
+        <span class="icon">🏪</span>
+        <span>Comidas</span>
+      </button>
+      <button class="bottom-nav-btn active-focus" data-index="1" onclick="handleNavClick(1, openMinigame, event)">
+        <span class="icon">🎮</span>
+        <span>Brincar</span>
+      </button>
+      <button class="bottom-nav-btn" data-index="2" onclick="handleNavClick(2, openShop, event)">
+        <span class="icon">✨</span>
+        <span>Loja VIP</span>
+      </button>
+      <div class="nav-spacer"></div>
+    </nav>
+  </div>
+
+  <!-- MODAL: CARTEIRA TEMÁTICA DE COURO -->
+  <div class="modal-backdrop" id="wallet-modal" onclick="closeWalletModal(event)">
+    <div class="wallet-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" style="background: #331908; color: #fae19c; border-color: #9c6c42;" onclick="closeWalletModal(event)">✕</button>
+      <div class="wallet-clasp"></div>
+      <div class="wallet-stitch">
+        <h3 style="font-family: 'Caveat', cursive; font-size: 2rem; text-align: center; color: #fae19c;">Minha Carteira</h3>
+        <div class="wallet-compartment">
+          <div class="wallet-coin-label">
+            <span style="font-size: 1.6rem;">🐟</span>
+            <span>Peixinhos (Diários)</span>
+          </div>
+          <div class="wallet-coin-val" id="wallet-coin-val">0</div>
+        </div>
+        <div class="wallet-compartment">
+          <div class="wallet-coin-label">
+            <span style="font-size: 1.6rem;">🐾</span>
+            <span>Patinhas (Brincadeiras)</span>
+          </div>
+          <div class="wallet-coin-val" id="wallet-paw-val">0</div>
+        </div>
+        <button class="action-btn" style="margin-top: 6px; width: 100%; justify-content: center; background: #6e4425; color: #fae19c; border-color: #331908;" onclick="checkDailyRewardManual()">
+          🎁 Resgatar Peixinho Diário
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TENDA DE COMIDA -->
+  <div class="modal-backdrop" id="stall-modal" onclick="closeFoodStall(event)">
+    <div class="stall-modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeFoodStall(event)">✕</button>
+      <div class="stall-canopy"></div>
+      <div class="stall-scene">
+        <svg class="stall-backdrop-svg" viewBox="0 0 460 175" preserveAspectRatio="none">
+          <rect x="8" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
+          <rect x="430" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
+          <rect x="30" y="65" width="400" height="12" fill="#844c23" stroke="#4a2811" stroke-width="2"/>
+          <rect x="52" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
+          <circle cx="62" cy="37" r="4" fill="#f39c12"/>
+          <path d="M 52,24 L 62,14 L 72,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
+          <rect x="388" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
+          <circle cx="398" cy="37" r="4" fill="#f39c12"/>
+          <path d="M 388,24 L 398,14 L 408,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
+          <ellipse cx="98" cy="56" rx="8" ry="9" fill="#9b59b6" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 120,65 C 118,50 128,45 136,50 C 144,45 154,50 152,65 Z" fill="#d7b899" stroke="#331908" stroke-width="1.5"/>
+          <rect x="310" y="44" width="12" height="21" rx="3" fill="#5dade2" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd29b" stroke="#331908" stroke-width="1.5"/>
+        </svg>
+
+        <div class="vendor-cat-container">
+          <div class="vendor-speech-bubble" id="vendor-speech-bubble">Miau! Tudo fresquinho! 🍲</div>
+          <svg class="vendor-cat-svg" id="vendor-cat-svg" viewBox="0 0 100 95">
+            <path d="M 20,48 C 18,28 20,16 28,20 C 38,24 52,40 62,40 C 72,40 86,24 94,20 C 102,16 104,28 100,48 C 105,68 95,84 62,84 C 28,84 15,68 20,48 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path class="vendor-ear-left" d="M 22,23 Q 36,28 32,46 L 20,38 Z" fill="#d97a36"/>
+            <path class="vendor-ear-right" d="M 96,23 Q 82,28 86,46 L 98,38 Z" fill="#4a3528"/>
+            <ellipse cx="78" cy="60" rx="9" ry="6" fill="#d97a36"/>
+            <g id="vendor-eyes-normal">
+              <ellipse cx="44" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
+              <ellipse cx="78" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
+              <circle cx="46.5" cy="54" r="2" fill="#fff"/>
+              <circle cx="80.5" cy="54" r="2" fill="#fff"/>
+            </g>
+            <g id="vendor-eyes-happy" style="display: none;">
+              <path d="M 38,58 Q 44,50 50,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M 72,58 Q 78,50 84,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            </g>
+            <path d="M 58,66 Q 62,70 66,66" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="62" cy="63" r="2.2" fill="#d98270"/>
+            <polygon points="38,80 62,94 86,80" fill="#c0392b" stroke="#2b2725" stroke-width="2.5"/>
+            <ellipse cx="42" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <ellipse cx="80" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stall-shelf-grid" id="stall-shelf-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CARTA -->
+  <div class="modal-backdrop" id="letter-modal" onclick="closeLetter(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeLetter(event)">✕</button>
+      <div style="font-family: 'Caveat', cursive; font-size: 1.7rem; font-weight: 700; margin-bottom: 20px; white-space: pre-line;" id="letter-content"></div>
+      <div style="text-align: right; border-top: 1px dashed var(--amber); padding-top: 10px;" id="letter-footer"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: MINIJOGO -->
+  <div class="modal-backdrop" id="game-modal" onclick="closeMinigame(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeMinigame(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Pegue a Patinha! 🎮</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light);">Toque nos itens para ganhar 🐾 e comprar comidinhas!</p>
+      <div class="game-arena" id="game-arena"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: LOJINHA VIP COMPLETA -->
+  <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
+      <div class="shop-preview-box">
+        <div id="shop-mini-cat-container"></div>
+        <span class="shop-preview-label">Visualização ao Vivo 🐾</span>
+      </div>
+      <div class="shop-tabs">
+        <button class="shop-tab-btn active" onclick="switchShopTab('acessorios')">Acessórios</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('bocas')">Bocas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('expressoes')">Expressões</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('pupilas')">Pupilas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('olhos')">Olhos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('racas')">Raças</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('temas')">Temas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('efeitos')">Efeitos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('backup')">Backup</button>
+      </div>
+      <div class="shop-content-area" id="shop-content-area"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: PALETA DE CORES -->
+  <div class="modal-backdrop" id="color-modal" onclick="closeColorModal(event)">
+    <div class="modal-paper color-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
+      <div class="color-grid" id="color-picker-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVIDADES (CHANGELOG) -->
+  <div class="modal-backdrop" id="changelog-modal" onclick="closeChangelog(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeChangelog(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Novidades 📜</h3>
+      <div class="changelog-content">
+        <div class="changelog-entry">
+          <div class="changelog-version">v4.0 - Arquitetura Modular & Base Multiplayer</div>
+          <div class="changelog-date">08 de Outubro de 2026</div>
+          <ul class="changelog-list">
+            <li>Projeto completamente modularizado em scripts dedicados.</li>
+            <li>Mochila com design rústico de couro e scroll horizontal infinito.</li>
+            <li>Dock inferior deslizante com foco central nos modos de jogo.</li>
+            <li>Conexão de casal ao vivo em tempo real via PeerJS (WebRTC).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ÁLBUM DO CASAL E VÍNCULO MULTIPLAYER -->
+  <div class="modal-backdrop" id="couple-modal" onclick="closeCoupleModal(event)">
+    <div class="couple-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeCoupleModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 2rem; text-align: center; color: #542c13; margin-bottom: 6px;">Diário de Nós Dois 🐾</h3>
+      <div id="couple-status-container"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS MODULARES (EM ORDEM DE CARREGAMENTO) -->
+  <script src="js/estado.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/gato.js"></script>
+  <script src="js/inventario.js"></script>
+  <script src="js/tenda.js"></script>
+  <script src="js/minigame.js"></script>
+  <script src="js/casal.js"></script>
+  <script src="js/multiplayer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uma Cartinha Para Você 🐾</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
+  
+  <!-- PeerJS (Conexão Multiplayer em Tempo Real) -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+  <!-- Estilos e Dados -->
+  <link rel="stylesheet" href="style.css">
+  <script src="dados/mensagens.js"></script>
+  <script src="dados/cosmeticos.js"></script>
+</head>
+<body>
+
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO -->
+  <div class="side-nav-container collapsed" id="side-nav-container">
+    <div class="side-nav-box">
+      <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()">
+        <span id="auto-time-icon">⏰</span>
+        <span id="auto-time-text">Tema Auto</span>
+      </button>
+      <button class="side-btn" onclick="openChangelog(event)">
+        <span>📜 Novidades</span>
+      </button>
+      <button class="side-btn" onclick="openWalletModal(event)">
+        <span>👛 Carteira</span>
+      </button>
+      <button class="side-btn" id="backpack-toggle-btn" onclick="toggleBackpack(event)">
+        <span>🎒 Mochila</span>
+      </button>
+      <button class="side-btn" onclick="openLetter(event)">
+        <span>✉️ Ler Carta</span>
+      </button>
+      <button class="side-btn" onclick="openCoupleModal(event)">
+        <span>💖 Vínculo do Casal</span>
+      </button>
+    </div>
+    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral">
+      <span id="side-nav-arrow">▶</span>
+    </div>
+  </div>
+
+  <!-- STATUS MINIMALISTA (CENTRO TOPO) -->
+  <div class="status-container hidden" id="status-container">
+    <div class="status-squares-row">
+      <div class="status-square" title="Fome">
+        <div class="status-fill" id="fill-hunger"></div>
+        <svg class="status-icon-svg" viewBox="0 0 32 32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 6 C8 7, 6 12, 9 17 C12 22, 18 23, 22 20 C26 17, 26 10, 21 7 C18 5, 16 5, 14 6 Z"/>
+          <path d="M9 17 L6 20"/>
+          <circle cx="5" cy="21" r="1.5"/>
+          <circle cx="7" cy="23" r="1.5"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Energia">
+        <div class="status-fill" id="fill-energy"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Alegria">
+        <div class="status-fill" id="fill-happiness"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 8 L6 4 L10 7 Q12 6.5 14 7 L18 4 L20 8 Q21.5 12 20 16 Q18 20 12 20 Q6 20 4 16 Q2.5 12 4 8 Z"/>
+          <path d="M7 11 Q8.5 9.5 10 11"/>
+          <path d="M14 11 Q15.5 9.5 17 11"/>
+          <path d="M9.5 14 Q12 16.5 14.5 14"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Saúde">
+        <div class="status-fill" id="fill-health"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5 v14 M5 12 h14"/>
+        </svg>
+      </div>
+    </div>
+    <div class="status-toggle-tab" onclick="toggleStatusVisibility()" title="Ocultar/Exibir Status">
+      <span id="status-arrow-icon">▼</span>
+    </div>
+  </div>
+
+  <main class="stage">
+    <div class="speech-bubble" id="speech-bubble">
+      Psst... toque no gatinho para abrir a cartinha!🐾
+    </div>
+
+    <!-- Gatinho Interativo -->
+    <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
+      <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
+        <defs>
+          <clipPath id="left-eye-clip"><ellipse cx="68" cy="98" rx="26" ry="24"/></clipPath>
+          <clipPath id="right-eye-clip"><ellipse cx="122" cy="98" rx="26" ry="24"/></clipPath>
+          <clipPath id="cat-head-clip"><path id="cat-head-clip-path" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z"/></clipPath>
+          <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
+        </defs>
+
+        <g class="anim-tail">
+          <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
+                fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+          <path id="tail-stripes" d="M 166,114 Q 172,120 162,128" fill="none" stroke="#b3581d" stroke-width="3" style="display: none;"/>
+        </g>
+
+        <g class="anim-body-group">
+          <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+          <g clip-path="url(#cat-body-clip)" id="body-markings">
+            <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
+            <g id="body-orange" style="display: none;">
+              <path d="M 60,140 Q 75,145 70,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <path d="M 138,140 Q 123,145 128,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="98" cy="144" rx="14" ry="10" fill="#fffdf9"/>
+            </g>
+          </g>
+
+          <g class="anim-ears">
+            <path id="cat-head-normal" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+            <path id="cat-head-airplane" d="M 44,82 C 28,68 18,78 36,86 C 54,88 80,72 98,72 C 116,72 142,88 160,86 C 178,78 168,68 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" style="display: none;"/>
+
+            <g clip-path="url(#cat-head-clip)" id="breed-markings">
+              <g id="breed-siamese" style="display: none;">
+                <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
+                <polygon points="156,30 131,70 166,70" fill="#3d281d"/>
+                <path d="M 64,112 Q 98,78 132,112 Q 98,140 64,112 Z" fill="#3d281d"/>
+              </g>
+              <g id="breed-tuxedo" style="display: none;">
+                <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
+                <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
+                <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
+                <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
+              </g>
+              <g id="breed-orange" style="display: none;">
+                <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
+                <circle cx="98" cy="116" r="4" fill="#d98270"/>
+                <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+          </g>
+
+          <g id="regular-eyes" class="anim-eye-blink">
+            <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#left-eye-clip)">
+              <g id="pupil-left-group">
+                <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <g id="anime-sparkle-left" style="display: none;">
+                <polygon points="68,86 70,91 75,92 70,94 68,99 66,94 61,92 66,91" fill="#ffffff"/>
+                <circle cx="74" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
+            </g>
+
+            <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#right-eye-clip)">
+              <g id="pupil-right-group">
+                <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <g id="anime-sparkle-right" style="display: none;">
+                <polygon points="122,86 124,91 129,92 124,94 122,99 120,94 115,92 120,91" fill="#ffffff"/>
+                <circle cx="128" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
+            </g>
+          </g>
+
+          <g id="expr-determined-brows" style="display: none;">
+            <line x1="50" y1="78" x2="74" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="146" y1="78" x2="122" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+
+          <g id="sleepy-eyelids" style="display: none;">
+            <path d="M 42,94 Q 68,110 94,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path d="M 96,94 Q 122,110 148,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="happy-eyes" style="display: none;">
+            <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- Bocas -->
+          <g id="mouth-variants">
+            <path id="mouth-cat-path" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <g id="mouth-tongue-path" style="display: none;">
+              <path d="M 94,115 Q 98,119 102,115" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <path d="M 96,117 C 96,122 100,122 100,117 Z" fill="#e74c3c" stroke="#2b2725" stroke-width="1.5"/>
+            </g>
+            <g id="mouth-vampire-path" style="display: none;">
+              <path d="M 93,116 Q 98,120 103,116" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <polygon points="95,116 96,120 97,116" fill="#fff" stroke="#2b2725" stroke-width="1.5"/>
+              <polygon points="99,116 100,120 101,116" fill="#fff" stroke="#2b2725" stroke-width="1.5"/>
+            </g>
+            <path id="mouth-smile-path" d="M 92,114 Q 98,123 104,114" fill="none" stroke="#2b2725" stroke-width="2.8" stroke-linecap="round" style="display: none;"/>
+          </g>
+
+          <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
+          <ellipse id="mouth-hungry" cx="98" cy="118" rx="4" ry="6" fill="#2b2725" style="display: none;"/>
+
+          <g id="happy-blush" style="display: none;">
+            <ellipse cx="50" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+            <ellipse cx="146" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+          </g>
+
+          <g id="sick-mark" style="display: none;">
+            <rect x="130" y="60" width="16" height="7" rx="3" fill="#e5c898" stroke="#2b2725" stroke-width="1.5" transform="rotate(25 130 60)"/>
+          </g>
+
+          <g id="idle-paws" style="display: none;">
+            <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="cat-letter-group">
+            <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+            <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <!-- Acessórios -->
+          <g id="cosmetic-bowtie" style="display: none;">
+            <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          </g>
+          <g id="cosmetic-glasses" style="display: none;">
+            <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
+          </g>
+          <g id="cosmetic-flower" style="display: none;">
+            <circle class="flower-petal" cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="64" cy="52" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="56" cy="60" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="46" cy="56" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="flower-center" cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
+          </g>
+          <g id="cosmetic-crown" style="display: none;">
+            <path id="crown-body" d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle id="crown-gem" cx="98" cy="42" r="2.5" fill="#c48b36"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- MOCHILA DE COMIDINHAS COM SCROLL E TEXTURA DE COURO -->
+    <div class="inventory-tray" id="inventory-tray">
+      <div class="inventory-stitch">
+        <div class="inventory-title">
+          <span>🎒 Mochila de Comidinhas</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: #ffd6ad;">Arraste até o gato para comer!</span>
+        </div>
+        <div class="inventory-slots" id="inventory-slots-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BARRA INFERIOR COM DOCK E FOCO CENTRAL -->
+  <div class="bottom-nav-wrapper">
+    <div class="nav-swipe-hint" id="nav-swipe-hint">
+      <span class="hint-arrow left">◀</span>
+      <span>Deslize para trocar</span>
+      <span class="hint-arrow right">▶</span>
+    </div>
+    <nav class="bottom-nav-bar" id="bottom-nav-carousel">
+      <div class="nav-spacer"></div>
+      <button class="bottom-nav-btn" data-index="0" onclick="handleNavClick(0, openFoodStall, event)">
+        <span class="icon">🏪</span>
+        <span>Comidas</span>
+      </button>
+      <button class="bottom-nav-btn active-focus" data-index="1" onclick="handleNavClick(1, openMinigame, event)">
+        <span class="icon">🎮</span>
+        <span>Brincar</span>
+      </button>
+      <button class="bottom-nav-btn" data-index="2" onclick="handleNavClick(2, openShop, event)">
+        <span class="icon">✨</span>
+        <span>Loja VIP</span>
+      </button>
+      <div class="nav-spacer"></div>
+    </nav>
+  </div>
+
+  <!-- MODAL: CARTEIRA TEMÁTICA DE COURO -->
+  <div class="modal-backdrop" id="wallet-modal" onclick="closeWalletModal(event)">
+    <div class="wallet-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" style="background: #331908; color: #fae19c; border-color: #9c6c42;" onclick="closeWalletModal(event)">✕</button>
+      <div class="wallet-clasp"></div>
+      <div class="wallet-stitch">
+        <h3 style="font-family: 'Caveat', cursive; font-size: 2rem; text-align: center; color: #fae19c;">Minha Carteira</h3>
+        <div class="wallet-compartment">
+          <div class="wallet-coin-label">
+            <span style="font-size: 1.6rem;">🐟</span>
+            <span>Peixinhos (Diários)</span>
+          </div>
+          <div class="wallet-coin-val" id="wallet-coin-val">0</div>
+        </div>
+        <div class="wallet-compartment">
+          <div class="wallet-coin-label">
+            <span style="font-size: 1.6rem;">🐾</span>
+            <span>Patinhas (Brincadeiras)</span>
+          </div>
+          <div class="wallet-coin-val" id="wallet-paw-val">0</div>
+        </div>
+        <button class="action-btn" style="margin-top: 6px; width: 100%; justify-content: center; background: #6e4425; color: #fae19c; border-color: #331908;" onclick="checkDailyRewardManual()">
+          🎁 Resgatar Peixinho Diário
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TENDA DE COMIDA -->
+  <div class="modal-backdrop" id="stall-modal" onclick="closeFoodStall(event)">
+    <div class="stall-modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeFoodStall(event)">✕</button>
+      <div class="stall-canopy"></div>
+      <div class="stall-scene">
+        <svg class="stall-backdrop-svg" viewBox="0 0 460 175" preserveAspectRatio="none">
+          <rect x="8" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
+          <rect x="430" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
+          <rect x="30" y="65" width="400" height="12" fill="#844c23" stroke="#4a2811" stroke-width="2"/>
+          <rect x="52" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
+          <circle cx="62" cy="37" r="4" fill="#f39c12"/>
+          <path d="M 52,24 L 62,14 L 72,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
+          <rect x="388" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
+          <circle cx="398" cy="37" r="4" fill="#f39c12"/>
+          <path d="M 388,24 L 398,14 L 408,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
+          <ellipse cx="98" cy="56" rx="8" ry="9" fill="#9b59b6" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 120,65 C 118,50 128,45 136,50 C 144,45 154,50 152,65 Z" fill="#d7b899" stroke="#331908" stroke-width="1.5"/>
+          <rect x="310" y="44" width="12" height="21" rx="3" fill="#5dade2" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd29b" stroke="#331908" stroke-width="1.5"/>
+        </svg>
+
+        <div class="vendor-cat-container">
+          <div class="vendor-speech-bubble" id="vendor-speech-bubble">Miau! Tudo fresquinho! 🍲</div>
+          <svg class="vendor-cat-svg" id="vendor-cat-svg" viewBox="0 0 100 95">
+            <path d="M 20,48 C 18,28 20,16 28,20 C 38,24 52,40 62,40 C 72,40 86,24 94,20 C 102,16 104,28 100,48 C 105,68 95,84 62,84 C 28,84 15,68 20,48 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path class="vendor-ear-left" d="M 22,23 Q 36,28 32,46 L 20,38 Z" fill="#d97a36"/>
+            <path class="vendor-ear-right" d="M 96,23 Q 82,28 86,46 L 98,38 Z" fill="#4a3528"/>
+            <ellipse cx="78" cy="60" rx="9" ry="6" fill="#d97a36"/>
+            <g id="vendor-eyes-normal">
+              <ellipse cx="44" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
+              <ellipse cx="78" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
+              <circle cx="46.5" cy="54" r="2" fill="#fff"/>
+              <circle cx="80.5" cy="54" r="2" fill="#fff"/>
+            </g>
+            <g id="vendor-eyes-happy" style="display: none;">
+              <path d="M 38,58 Q 44,50 50,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M 72,58 Q 78,50 84,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            </g>
+            <path d="M 58,66 Q 62,70 66,66" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="62" cy="63" r="2.2" fill="#d98270"/>
+            <polygon points="38,80 62,94 86,80" fill="#c0392b" stroke="#2b2725" stroke-width="2.5"/>
+            <ellipse cx="42" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <ellipse cx="80" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stall-shelf-grid" id="stall-shelf-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CARTA -->
+  <div class="modal-backdrop" id="letter-modal" onclick="closeLetter(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeLetter(event)">✕</button>
+      <div style="font-family: 'Caveat', cursive; font-size: 1.7rem; font-weight: 700; margin-bottom: 20px; white-space: pre-line;" id="letter-content"></div>
+      <div style="text-align: right; border-top: 1px dashed var(--amber); padding-top: 10px;" id="letter-footer"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: MINIJOGO -->
+  <div class="modal-backdrop" id="game-modal" onclick="closeMinigame(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeMinigame(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Pegue a Patinha! 🎮</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light);">Toque nos itens para ganhar 🐾 e comprar comidinhas!</p>
+      <div class="game-arena" id="game-arena"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: LOJINHA VIP COMPLETA -->
+  <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
+      <div class="shop-preview-box">
+        <div id="shop-mini-cat-container"></div>
+        <span class="shop-preview-label">Visualização ao Vivo 🐾</span>
+      </div>
+      <div class="shop-tabs">
+        <button class="shop-tab-btn active" onclick="switchShopTab('acessorios')">Acessórios</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('bocas')">Bocas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('expressoes')">Expressões</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('pupilas')">Pupilas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('olhos')">Olhos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('racas')">Raças</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('temas')">Temas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('efeitos')">Efeitos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('backup')">Backup</button>
+      </div>
+      <div class="shop-content-area" id="shop-content-area"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: PALETA DE CORES -->
+  <div class="modal-backdrop" id="color-modal" onclick="closeColorModal(event)">
+    <div class="modal-paper color-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
+      <div class="color-grid" id="color-picker-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVIDADES (CHANGELOG) -->
+  <div class="modal-backdrop" id="changelog-modal" onclick="closeChangelog(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeChangelog(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Novidades 📜</h3>
+      <div class="changelog-content">
+        <div class="changelog-entry">
+          <div class="changelog-version">v4.0 - Arquitetura Modular & Base Multiplayer</div>
+          <div class="changelog-date">08 de Outubro de 2026</div>
+          <ul class="changelog-list">
+            <li>Projeto completamente modularizado em scripts dedicados.</li>
+            <li>Mochila com design rústico de couro e scroll horizontal infinito.</li>
+            <li>Dock inferior deslizante com foco central nos modos de jogo.</li>
+            <li>Conexão de casal ao vivo em tempo real via PeerJS (WebRTC).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ÁLBUM DO CASAL E VÍNCULO MULTIPLAYER -->
+  <div class="modal-backdrop" id="couple-modal" onclick="closeCoupleModal(event)">
+    <div class="couple-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeCoupleModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 2rem; text-align: center; color: #542c13; margin-bottom: 6px;">Diário de Nós Dois 🐾</h3>
+      <div id="couple-status-container"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS MODULARES (EM ORDEM DE CARREGAMENTO) -->
+  <script src="js/estado.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/gato.js"></script>
+  <script src="js/inventario.js"></script>
+  <script src="js/tenda.js"></script>
+  <script src="js/minigame.js"></script>
+  <script src="js/casal.js"></script>
+  <script src="js/multiplayer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uma Cartinha Para Você 🐾</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
+  
   <!-- Estilos e Dados -->
   <link rel="stylesheet" href="style.css">
   <script src="dados/mensagens.js"></script>
