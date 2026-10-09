@@ -1,5 +1,5 @@
 /* =========================================================
-   COMPORTAMENTO, EXPRESSÕES E VISUAL COMPLETO DO GATINHO
+   COMPORTAMENTO, EXPRESSÕES, CARTA E VISUAL DO GATINHO
 ========================================================= */
 
 window.activeBreed = localStorage.getItem('cat_breed') || 'breed_white';
@@ -61,7 +61,6 @@ window.renderCatAppearence = function() {
   const tail = svg.querySelector('#cat-tail');
   const tailStripes = svg.querySelector('#tail-stripes');
 
-  // Reset base
   if (body) body.setAttribute('fill', '#fffdf9');
   if (head) head.setAttribute('fill', '#fffdf9');
   if (tail) {
@@ -186,4 +185,15 @@ window.applyMouthAndExpressions = function() {
   } else if (window.catStats.happiness >= 75) {
     if (blush) blush.style.display = 'block';
   }
+};
+
+// Alternar entre segurar a carta e exibir as patinhas livres
+window.setCatHoldingLetter = function(isHolding) {
+  const svg = document.getElementById('main-cat-svg');
+  if (!svg) return;
+  const letterGroup = svg.querySelector('#cat-letter-group');
+  const idlePaws = svg.querySelector('#idle-paws');
+
+  if (letterGroup) letterGroup.style.display = isHolding ? 'block' : 'none';
+  if (idlePaws) idlePaws.style.display = isHolding ? 'none' : 'block';
 };
