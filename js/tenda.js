@@ -1,4 +1,80 @@
 /* =========================================================
+   TENDA DE COMIDA RÚSTICA COM VENDEDOR INTERATIVO
+========================================================= */
+
+window.openFoodStall = function(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('stall-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  renderFoodStallShelf();
+};
+
+window.closeFoodStall = function(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('stall-modal');
+  if (modal) modal.classList.remove('open');
+};
+
+function renderFoodStallShelf() {
+  const grid = document.getElementById('stall-shelf-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const foodList = (typeof FOOD_ITEMS !== 'undefined') ? FOOD_ITEMS : [
+    { id: 'food_salmon', name: 'Salmão Fresco', icon: '🐟', price: 2, hunger: 35, joy: 20 },
+    { id: 'food_milk', name: 'Tigela de Leite', icon: '🥛', price: 1, hunger: 15, joy: 10 },
+    { id: 'food_treat', name: 'Biscoitinho', icon: '🍪', price: 1, hunger: 20, joy: 25 },
+    { id: 'food_tuna', name: 'Lata de Atum', icon: '🥫', price: 2, hunger: 40, joy: 20 },
+    { id: 'food_shrimp', name: 'Camarãozin', icon: '🦐', price: 3, hunger: 45, joy: 30 }
+  ];
+
+  foodList.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'shelf-item-card';
+    card.innerHTML = `
+      <span class="shelf-item-icon">${item.icon}</span>
+      <span class="shelf-item-name">${item.name}</span>
+      <span class="shelf-item-price">${item.price} 🐟</span>
+      <button class="shelf-buy-btn" onclick="buyFoodItem('${item.id}', ${item.price}, '${item.name}')">Comprar</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+window.buyFoodItem = function(foodId, price, foodName) {
+  if (window.catStats.fishCoins < price) {
+    const bubble = document.getElementById('vendor-speech-bubble');
+    if (bubble) bubble.innerText = "Miau... você não tem peixinhos suficientes! 🐟❌";
+    return;
+  }
+
+  window.catStats.fishCoins -= price;
+  window.userInventory[foodId] = (window.userInventory[foodId] || 0) + 1;
+  window.saveStats();
+
+  // Reação do gato vendedor
+  const vendorCat = document.getElementById('vendor-cat-svg');
+  const bubble = document.getElementById('vendor-speech-bubble');
+  const eyesNormal = document.getElementById('vendor-eyes-normal');
+  const eyesHappy = document.getElementById('vendor-eyes-happy');
+
+  if (vendorCat) vendorCat.classList.add('happy');
+  if (eyesNormal) eyesNormal.style.display = 'none';
+  if (eyesHappy) eyesHappy.style.display = 'block';
+
+  if (bubble) bubble.innerText = `Obrigado! Um ${foodName} fresquinho pra você! 🍲💖`;
+  if (typeof window.playPaperSound === 'function') window.playPaperSound();
+
+  setTimeout(() => {
+    if (vendorCat) vendorCat.classList.remove('happy');
+    if (eyesNormal) eyesNormal.style.display = 'block';
+    if (eyesHappy) eyesHappy.style.display = 'none';
+  }, 1200);
+
+  // Atualizar a mochila se estiver aberta
+  window.renderInventorySlots();
+};/* =========================================================
    TENDA DE COMIDA
 ========================================================= */
 
