@@ -332,39 +332,89 @@
     }
 
     /* BARRA INFERIOR MODERNA COM DESTAQUE DINÂMICO */
-    .bottom-nav-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card-bg);
-      border-top: 2.5px solid var(--charcoal);
-      padding: 10px 24px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 50;
-      box-shadow: 0 -4px 14px rgba(0,0,0,0.1);
-      min-height: 72px;
-    }
+   /* BARRA INFERIOR COM ROLAGEM HORIZONTAL E CENTRALIZAÇÃO */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-top: 2.5px solid var(--charcoal);
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  z-index: 50;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.1);
+  min-height: 76px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Oculta scrollbar no Firefox */
+}
+.bottom-nav-bar::-webkit-scrollbar {
+  display: none; /* Oculta scrollbar no Chrome/Safari */
+}
 
-    .bottom-nav-btn {
-      background: transparent;
-      border: 1.5px solid transparent;
-      border-radius: 16px;
-      padding: 6px 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      font-family: inherit;
-      color: var(--charcoal);
-      cursor: pointer;
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      opacity: 0.65;
-      transform: scale(0.9);
-    }
+/* Espaçador flexível nas pontas para permitir que o 1º e o último cheguem ao centro */
+.bottom-nav-bar::before,
+.bottom-nav-bar::after {
+  content: '';
+  flex: 0 0 calc(50vw - 45px);
+}
+
+.bottom-nav-btn {
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 18px;
+  padding: 6px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: inherit;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              opacity 0.3s ease, 
+              background-color 0.3s ease, 
+              box-shadow 0.3s ease;
+  opacity: 0.6;
+  transform: scale(0.88);
+  flex: 0 0 auto; /* Impede que os botões encolham ao adicionar mais itens */
+}
+
+.bottom-nav-btn span.icon {
+  font-size: 1.35rem;
+  transition: transform 0.3s ease;
+}
+
+.bottom-nav-btn span.label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* BOTÃO EM DESTAQUE NO CENTRO */
+.bottom-nav-btn.active-focus {
+  opacity: 1;
+  transform: translateY(-6px) scale(1.15);
+  background: #faeed7;
+  border-color: var(--amber);
+  box-shadow: 0 6px 14px rgba(196, 139, 54, 0.28), 0 2px 0 var(--charcoal);
+  padding: 8px 18px;
+}
+
+.bottom-nav-btn.active-focus span.icon {
+  transform: scale(1.1);
+}
+
+.bottom-nav-btn.active-focus span.label {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #7a480e;
+}
 
     .bottom-nav-btn span.icon {
       font-size: 1.35rem;
@@ -1420,15 +1470,35 @@
     }
 
     /* CONTROLE DE FOCO DOS BOTÕES INFERIORES */
-    function handleBottomNavClick(clickedBtn, actionCallback) {
-      document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
-        btn.classList.remove('active-focus');
-      });
-      clickedBtn.classList.add('active-focus');
-      if (typeof actionCallback === 'function') {
-        actionCallback();
-      }
-    }
+/* CONTROLE DE FOCO E CENTRALIZAÇÃO AUTOMÁTICA */
+function handleBottomNavClick(clickedBtn, actionCallback) {
+  // 1. Atualiza classes de foco
+  document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+    btn.classList.remove('active-focus');
+  });
+  clickedBtn.classList.add('active-focus');
+
+  // 2. Centraliza o botão na barra
+  const navBar = document.getElementById('bottom-nav-bar');
+  if (navBar) {
+    const navWidth = navBar.clientWidth;
+    const btnLeft = clickedBtn.offsetLeft;
+    const btnWidth = clickedBtn.offsetWidth;
+
+    // Calcula o scroll necessário para deixar o centro do botão no centro da barra
+    const targetScroll = btnLeft - (navWidth / 2) + (btnWidth / 2);
+
+    navBar.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
+    });
+  }
+
+  // 3. Executa a ação do botão (abrir modal/jogo/loja)
+  if (typeof actionCallback === 'function') {
+    actionCallback();
+  }
+}
 
     /* =========================================================
        3. MODAL CARTEIRA
