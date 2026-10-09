@@ -331,6 +331,2644 @@
       95% { transform: rotate(-2deg); }
     }
 
+    /* BARRA INFERIOR MODERNA COM CARROSSEL E CENTRALIZAÇÃO */
+    .bottom-nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-top: 2.5px solid var(--charcoal);
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.1);
+      min-height: 76px;
+      overflow: hidden;
+    }
+
+    .bottom-nav-track {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: transform;
+    }
+
+    .bottom-nav-btn {
+      background: transparent;
+      border: 1.5px solid transparent;
+      border-radius: 18px;
+      padding: 6px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-family: inherit;
+      color: var(--charcoal);
+      cursor: pointer;
+      opacity: 0.55;
+      transform: scale(0.85);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+
+    .bottom-nav-btn span.icon {
+      font-size: 1.35rem;
+      transition: transform 0.3s ease;
+    }
+
+    .bottom-nav-btn span.label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .bottom-nav-btn.active-focus {
+      opacity: 1;
+      transform: translateY(-6px) scale(1.15);
+      background: #faeed7;
+      border-color: var(--amber);
+      box-shadow: 0 6px 14px rgba(196, 139, 54, 0.28), 0 2px 0 var(--charcoal);
+      padding: 8px 18px;
+    }
+
+    .bottom-nav-btn.active-focus span.icon {
+      transform: scale(1.12);
+    }
+
+    .bottom-nav-btn.active-focus span.label {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #7a480e;
+    }
+
+    /* CARTEIRA TEMÁTICA DE COURO */
+    .wallet-paper {
+      background: #54331b;
+      border: 3px solid #331908;
+      border-radius: 20px;
+      padding: 24px 18px;
+      color: #f7eee1;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.4), inset 0 0 12px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .wallet-stitch {
+      border: 1.5px dashed #9c6c42;
+      border-radius: 14px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .wallet-clasp {
+      width: 44px;
+      height: 22px;
+      background: #c48b36;
+      border: 2px solid #331908;
+      border-radius: 0 0 10px 10px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .wallet-compartment {
+      background: #6e4425;
+      border: 1.5px solid #331908;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .wallet-coin-label {
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wallet-coin-val {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #fae19c;
+    }
+
+    /* MOCHILA TEMATIZADA DE COURO E RETRÁTIL */
+    .inventory-tray {
+      background: #5e3b22;
+      border: 3px solid #381f10;
+      border-radius: 20px;
+      padding: 10px 14px;
+      width: 100%;
+      max-width: 440px;
+      margin-top: 14px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25), inset 0 0 8px rgba(0,0,0,0.35);
+      position: relative;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .inventory-tray.collapsed {
+      display: none;
+    }
+
+    .inventory-stitch {
+      border: 1.5px dashed #a8794c;
+      border-radius: 14px;
+      padding: 8px 10px;
+    }
+
+    .inventory-title {
+      font-size: 1.05rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fae19c;
+    }
+
+    .inventory-slots {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 8px;
+      scrollbar-width: none;
+    }
+    .inventory-slots::-webkit-scrollbar { display: none; }
+
+    .inventory-slot {
+      flex: 0 0 62px;
+      height: 64px;
+      background: #7a4d2c;
+      border: 1.5px dashed #fae19c;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: grab;
+      touch-action: none;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .inventory-slot:active { cursor: grabbing; }
+    .slot-icon { font-size: 1.8rem; pointer-events: none; }
+    .slot-qty {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      background: #381f10;
+      color: #fae19c;
+      font-size: 0.75rem;
+      padding: 0 5px;
+      border-radius: 8px;
+      border: 1px solid #a8794c;
+    }
+
+    /* PREVIEW DA LOJA VIP */
+    .shop-preview-box {
+      width: 100%;
+      height: 90px;
+      background: #faf4e8;
+      border: 1.5px dashed var(--pencil-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .shop-preview-box svg {
+      width: 72px !important;
+      height: 72px !important;
+    }
+    .shop-preview-label {
+      position: absolute;
+      bottom: 3px;
+      right: 8px;
+      font-size: 0.8rem;
+      color: var(--pencil-light);
+    }
+
+    .shop-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1.5px solid var(--pencil-light);
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .shop-tabs::-webkit-scrollbar { display: none; }
+    .shop-tab-btn {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 16px;
+      background: var(--card-bg);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .shop-tab-btn.active {
+      background: var(--amber);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .shop-content-area {
+      overflow-y: auto;
+      flex: 1;
+      min-height: 220px;
+      max-height: 52vh;
+      padding-right: 4px;
+    }
+    .shop-items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .shop-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .shop-card-svg-preview {
+      width: 58px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .shop-card-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1px;
+      text-align: center;
+    }
+    .shop-card-price {
+      font-size: 0.85rem;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .palette-btn {
+      width: 100%;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1.5px dashed var(--charcoal);
+      background: #faf4e8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .action-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 24px;
+      padding: 6px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--charcoal);
+      cursor: pointer;
+      box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .action-btn:hover { transform: translateY(-2px); }
+    .action-btn:active { transform: translateY(1px); }
+
+    /* TENDA DE COMIDA */
+    .stall-modal-paper {
+      background: #fdf7ec;
+      border: 2.5px solid var(--charcoal);
+      border-radius: 20px;
+      max-width: 460px;
+      width: 100%;
+      padding: 0 0 16px 0;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stall-canopy {
+      width: 100%;
+      height: 48px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #b84040,
+        #b84040 20px,
+        #f4ede1 20px,
+        #f4ede1 40px
+      );
+      border-bottom: 3px solid var(--charcoal);
+      position: relative;
+      z-index: 2;
+    }
+
+    .stall-scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 12px 14px 0;
+      background: radial-gradient(circle at 50% 30%, #e9f0df 0%, #dbdfcb 100%);
+      border-bottom: 4px solid var(--wood-dark);
+      position: relative;
+      min-height: 175px;
+    }
+    .stall-scene::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 22px;
+      background: #844c23;
+      border-top: 2.5px solid #4a2811;
+      z-index: 1;
+    }
+
+    .stall-backdrop-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .vendor-cat-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      margin-bottom: 2px;
+    }
+
+    .vendor-speech-bubble {
+      background: #ffffff;
+      border: 2px solid var(--charcoal);
+      border-radius: 14px;
+      padding: 4px 12px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      box-shadow: 1px 3px 0 rgba(0,0,0,0.12);
+      text-align: center;
+      max-width: 280px;
+    }
+
+    .vendor-cat-svg {
+      width: 100px;
+      height: 94px;
+      transform-origin: bottom center;
+      animation: vendorBob 2.8s ease-in-out infinite alternate;
+    }
+    .vendor-cat-svg.happy { animation: vendorHappy 0.6s ease-in-out 2; }
+    @keyframes vendorBob {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(2.5px) scale(1.01, 0.99); }
+    }
+    @keyframes vendorHappy {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.05, 0.95); }
+    }
+
+    .stall-shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 12px 14px;
+      background: #ebd2b0;
+      border-bottom: 4px solid var(--wood-dark);
+    }
+    .shelf-item-card {
+      background: #fff9ef;
+      border: 2px solid var(--wood-dark);
+      border-radius: 12px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 2px 3px 0 rgba(99, 56, 27, 0.25);
+    }
+    .shelf-item-icon { font-size: 2.1rem; }
+    .shelf-item-name { font-weight: bold; font-size: 0.92rem; text-align: center; }
+    .shelf-item-price { color: var(--amber); font-size: 0.88rem; font-weight: bold; margin: 2px 0; }
+    .shelf-buy-btn {
+      width: 100%;
+      background: #e8c187;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 3px 0;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .modal-paper {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 18px;
+      max-width: 440px;
+      width: 100%;
+      padding: 30px 18px 18px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .color-paper { max-width: 360px; z-index: 120; }
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      overflow-y: auto;
+      max-height: 320px;
+      padding: 4px;
+    }
+    .color-swatch-card {
+      border: 1.5px solid var(--charcoal);
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      background: #fffdf9;
+    }
+    .color-swatch-card.active { box-shadow: 0 0 0 2.5px var(--amber); }
+    .color-swatch-circle { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,0.2); margin-bottom: 4px; }
+    .color-swatch-name { font-size: 0.75rem; text-align: center; line-height: 1.1; }
+  </style>
+</head>
+<body>
+
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO COM O BOTÃO DE LER CARTA -->
+  <div class="side-nav-container collapsed" id="side-nav-container">
+    <div class="side-nav-box">
+      <button class="side-btn" onclick="openLetter(event)">
+        <span>💌 Ler Carta</span>
+      </button>
+      <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()">
+        <span id="auto-time-icon">⏰</span>
+        <span id="auto-time-text">Tema Auto</span>
+      </button>
+      <button class="side-btn" onclick="openChangelog(event)">
+        <span>📜 Novidades</span>
+      </button>
+      <button class="side-btn" onclick="openWalletModal(event)">
+        <span>👛 Carteira</span>
+      </button>
+      <button class="side-btn" id="backpack-toggle-btn" onclick="toggleInventoryTray(event)">
+        <span>🎒 Mochila</span>
+      </button>
+    </div>
+    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral">
+      <span id="side-nav-arrow">▶</span>
+    </div>
+  </div>
+
+  <!-- STATUS MINIMALISTA (CENTRO TOPO) -->
+  <div class="status-container" id="status-container">
+    <div class="status-squares-row">
+      <div class="status-square" title="Fome">
+        <div class="status-fill" id="fill-hunger"></div>
+        <svg class="status-icon-svg" viewBox="0 0 32 32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 6 C8 7, 6 12, 9 17 C12 22, 18 23, 22 20 C26 17, 26 10, 21 7 C18 5, 16 5, 14 6 Z"/>
+          <path d="M9 17 L6 20"/>
+          <circle cx="5" cy="21" r="1.5"/>
+          <circle cx="7" cy="23" r="1.5"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Energia">
+        <div class="status-fill" id="fill-energy"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Alegria">
+        <div class="status-fill" id="fill-happiness"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 8 L6 4 L10 7 Q12 6.5 14 7 L18 4 L20 8 Q21.5 12 20 16 Q18 20 12 20 Q6 20 4 16 Q2.5 12 4 8 Z"/>
+          <path d="M7 11 Q8.5 9.5 10 11"/>
+          <path d="M14 11 Q15.5 9.5 17 11"/>
+          <path d="M9.5 14 Q12 16.5 14.5 14"/>
+        </svg>
+      </div>
+      <div class="status-square" title="Saúde">
+        <div class="status-fill" id="fill-health"></div>
+        <svg class="status-icon-svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5 v14 M5 12 h14"/>
+        </svg>
+      </div>
+    </div>
+    <div class="status-toggle-tab" onclick="toggleStatusVisibility()" title="Ocultar/Exibir Status">
+      <span id="status-arrow-icon">▲</span>
+    </div>
+  </div>
+
+  <main class="stage">
+    <!-- Balão de fala -->
+    <div class="speech-bubble" id="speech-bubble" onclick="openLetter(event)">
+      Psst... toque no gatinho para abrir a cartinha!🐾
+    </div>
+
+    <!-- Gatinho Interativo -->
+    <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
+      <svg class="cat-svg" viewBox="0 0 200 200" id="main-cat-svg">
+        <defs>
+          <clipPath id="left-eye-clip"><ellipse cx="68" cy="98" rx="26" ry="24"/></clipPath>
+          <clipPath id="right-eye-clip"><ellipse cx="122" cy="98" rx="26" ry="24"/></clipPath>
+          <clipPath id="cat-head-clip"><path id="cat-head-clip-path" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z"/></clipPath>
+          <clipPath id="cat-body-clip"><path d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z"/></clipPath>
+        </defs>
+
+        <!-- Rabo -->
+        <g class="anim-tail">
+          <path id="cat-tail" d="M 134,152 C 158,150 178,136 172,120 C 166,108 154,116 150,126 C 146,134 136,146 130,154 Z" 
+                fill="#fffdf9" stroke="#2b2725" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+          <path id="tail-stripes" d="M 166,114 Q 172,120 162,128" fill="none" stroke="#b3581d" stroke-width="3" style="display: none;"/>
+        </g>
+
+        <!-- Corpo e Cabeça -->
+        <g class="anim-body-group">
+          <path id="cat-body" d="M 64,136 C 58,150 56,168 68,172 C 78,175 84,164 88,152 C 94,152 104,152 110,152 C 114,164 120,175 130,172 C 142,168 140,150 134,136 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+          <g clip-path="url(#cat-body-clip)" id="body-markings">
+            <g id="body-tuxedo" style="display: none;"><path d="M 50,130 L 78,130 L 78,180 L 50,180 Z" fill="#2b2725"/><path d="M 120,130 L 150,130 L 150,180 L 120,180 Z" fill="#2b2725"/></g>
+            <g id="body-orange" style="display: none;">
+              <path d="M 60,140 Q 75,145 70,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <path d="M 138,140 Q 123,145 128,155" stroke="#b3581d" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="98" cy="144" rx="14" ry="10" fill="#fffdf9"/>
+            </g>
+          </g>
+
+          <g class="anim-ears">
+            <path id="cat-head-normal" d="M 44,82 C 40,54 44,38 52,42 C 64,48 82,70 98,70 C 114,70 132,48 144,42 C 152,38 156,54 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+            <path id="cat-head-airplane" d="M 44,82 C 28,68 18,78 36,86 C 54,88 80,72 98,72 C 116,72 142,88 160,86 C 178,78 168,68 152,82 C 160,112 142,138 98,138 C 54,138 36,112 44,82 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" style="display: none;"/>
+
+            <g clip-path="url(#cat-head-clip)" id="breed-markings">
+              <g id="breed-siamese" style="display: none;">
+                <polygon points="40,30 65,70 30,70" fill="#3d281d"/>
+                <polygon points="156,30 131,70 166,70" fill="#3d281d"/>
+                <path d="M 64,112 Q 98,78 132,112 Q 98,140 64,112 Z" fill="#3d281d"/>
+              </g>
+              <g id="breed-tuxedo" style="display: none;">
+                <rect x="30" y="30" width="140" height="120" fill="#2b2725"/>
+                <polygon points="48,48 54,42 62,60" fill="#3d3835"/>
+                <polygon points="148,48 142,42 134,60" fill="#3d3835"/>
+                <path d="M 98,72 L 82,106 Q 64,112 64,124 Q 98,144 132,124 Q 132,112 114,106 Z" fill="#fffdf9"/>
+              </g>
+              <g id="breed-orange" style="display: none;">
+                <ellipse cx="98" cy="126" rx="22" ry="14" fill="#fffdf9"/>
+                <circle cx="98" cy="116" r="4" fill="#d98270"/>
+                <path d="M 98,60 L 98,75" stroke="#b3581d" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M 88,54 Q 90,66 84,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 108,54 Q 106,66 112,76" stroke="#b3581d" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+          </g>
+
+          <g id="regular-eyes" class="anim-eye-blink">
+            <ellipse id="eye-bg-left" cx="68" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#left-eye-clip)">
+              <g id="pupil-left-group">
+                <path class="pupil-normal" d="M 68,93 C 68,90 64,87 61,89 C 58,91 58,95 61,98 L 68,104 L 75,98 C 78,95 78,91 75,89 C 72,87 68,90 68,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="76" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="68" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="64" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <g id="anime-sparkle-left" style="display: none;">
+                <polygon points="68,86 70,91 75,92 70,94 68,99 66,94 61,92 66,91" fill="#ffffff"/>
+                <circle cx="74" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
+            </g>
+
+            <ellipse id="eye-bg-right" cx="122" cy="98" rx="26" ry="24" fill="#2b2725" stroke="#2b2725" stroke-width="2"/>
+            <g clip-path="url(#right-eye-clip)">
+              <g id="pupil-right-group">
+                <path class="pupil-normal" d="M 122,93 C 122,90 118,87 115,89 C 112,91 112,95 115,98 L 122,104 L 129,98 C 132,95 132,91 129,89 C 126,87 122,90 122,93 Z" fill="#ffffff"/>
+                <circle class="pupil-normal" cx="130" cy="103" r="2.8" fill="#ffffff"/>
+                <ellipse class="pupil-slit" cx="122" cy="98" rx="4" ry="20" fill="#151210" style="display: none;"/>
+                <circle class="pupil-sparkle" cx="118" cy="94" r="7" fill="#ffffff" style="display: none;"/>
+              </g>
+              <g id="anime-sparkle-right" style="display: none;">
+                <polygon points="122,86 124,91 129,92 124,94 122,99 120,94 115,92 120,91" fill="#ffffff"/>
+                <circle cx="128" cy="103" r="3.2" fill="#ffffff"/>
+              </g>
+            </g>
+          </g>
+
+          <g id="expr-determined-brows" style="display: none;">
+            <line x1="50" y1="78" x2="74" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="146" y1="78" x2="122" y2="84" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+
+          <g id="sleepy-eyelids" style="display: none;">
+            <path d="M 42,94 Q 68,110 94,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path d="M 96,94 Q 122,110 148,94 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="happy-eyes" style="display: none;">
+            <path d="M 52,100 Q 68,82 84,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 106,100 Q 122,82 138,100" fill="none" stroke="#2b2725" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- Bocas -->
+          <g id="mouth-variants">
+            <path id="mouth-cat-path" d="M 94,116 Q 98,121 102,116" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <g id="mouth-tongue-path" style="display: none;">
+              <path d="M 94,115 Q 98,119 102,115" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <path d="M 96,117 C 96,122 100,122 100,117 Z" fill="#e74c3c" stroke="#2b2725" stroke-width="1.5"/>
+            </g>
+            <g id="mouth-vampire-path" style="display: none;">
+              <path d="M 93,116 Q 98,120 103,116" fill="none" stroke="#2b2725" stroke-width="2.5"/>
+              <polygon points="95,116 96,120 97,116" fill="#fff" stroke="#2b2725" stroke-width="1"/>
+              <polygon points="99,116 100,120 101,116" fill="#fff" stroke="#2b2725" stroke-width="1"/>
+            </g>
+            <path id="mouth-smile-path" d="M 92,114 Q 98,123 104,114" fill="none" stroke="#2b2725" stroke-width="2.8" stroke-linecap="round" style="display: none;"/>
+          </g>
+
+          <path id="mouth-sad" d="M 94,120 Q 98,114 102,120" fill="none" stroke="#2b2725" stroke-width="3" stroke-linecap="round" style="display: none;"/>
+          <ellipse id="mouth-hungry" cx="98" cy="118" rx="4" ry="6" fill="#2b2725" style="display: none;"/>
+
+          <g id="happy-blush" style="display: none;">
+            <ellipse cx="50" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+            <ellipse cx="146" cy="112" rx="6" ry="3.5" fill="#e89c9c" opacity="0.6"/>
+          </g>
+
+          <g id="sick-mark" style="display: none;">
+            <rect x="130" y="60" width="16" height="7" rx="3" fill="#e5c898" stroke="#2b2725" stroke-width="1.5" transform="rotate(25 130 60)"/>
+          </g>
+
+          <g id="idle-paws" style="display: none;">
+            <ellipse cx="80" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="116" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <g id="cat-letter-group">
+            <rect x="70" y="130" width="56" height="38" rx="4" fill="#fffdf9" stroke="#2b2725" stroke-width="3.5"/>
+            <path d="M 70,132 L 98,150 L 126,132" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <ellipse cx="69" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <ellipse cx="127" cy="144" rx="7.5" ry="6.5" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+          </g>
+
+          <!-- Acessórios -->
+          <g id="cosmetic-bowtie" style="display: none;">
+            <polygon id="bowtie-left" points="83,123 83,139 96,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <polygon id="bowtie-right" points="113,123 113,139 100,131" fill="#2b2725" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="bowtie-center" cx="98" cy="131" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="1.5"/>
+          </g>
+          <g id="cosmetic-glasses" style="display: none;">
+            <path id="glasses-leg-left" d="M 39,94 L 20,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <path id="glasses-leg-right" d="M 151,94 L 170,86" fill="none" stroke="#2b2725" stroke-width="3.2" stroke-linecap="round"/>
+            <circle id="glasses-left" cx="66" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <circle id="glasses-right" cx="124" cy="98" r="28" fill="none" stroke="#2b2725" stroke-width="3.8"/>
+            <path id="glasses-bridge" d="M 94,98 Q 95,91 96,98" fill="none" stroke="#2b2725" stroke-width="3.8" stroke-linecap="round"/>
+          </g>
+          <g id="cosmetic-flower" style="display: none;">
+            <circle class="flower-petal" cx="48" cy="48" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="58" cy="42" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="64" cy="52" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="56" cy="60" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle class="flower-petal" cx="46" cy="56" r="6" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <circle id="flower-center" cx="54" cy="52" r="4.5" fill="#c48b36" stroke="#2b2725" stroke-width="2"/>
+          </g>
+          <g id="cosmetic-crown" style="display: none;">
+            <path id="crown-body" d="M 80,48 L 86,60 L 98,42 L 110,60 L 116,48 L 114,64 L 82,64 Z" fill="#ecd29b" stroke="#2b2725" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle id="crown-gem" cx="98" cy="42" r="2.5" fill="#c48b36"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- MOCHILA TEMATIZADA DE COURO (INICIA OCULTA/COLAPSADA) -->
+    <div class="inventory-tray collapsed" id="inventory-tray">
+      <div class="inventory-stitch">
+        <div class="inventory-title">
+          <span>🎒 Mochila de Comidinhas</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: #ecd29b;">Arraste até o gato!</span>
+        </div>
+        <div class="inventory-slots" id="inventory-slots-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BARRA INFERIOR MODERNA: CENTRALIZAÇÃO E EFEITO CARROSSEL -->
+  <nav class="bottom-nav-bar" id="bottom-nav-bar">
+    <div class="bottom-nav-track" id="bottom-nav-track">
+      <button class="bottom-nav-btn active-focus" id="nav-btn-foods" onclick="handleBottomNavClick(this, openFoodStall)">
+        <span class="icon">🏪</span>
+        <span class="label">Comidas</span>
+      </button>
+      <button class="bottom-nav-btn" id="nav-btn-play" onclick="handleBottomNavClick(this, openMinigame)">
+        <span class="icon">🎮</span>
+        <span class="label">Brincar</span>
+      </button>
+      <button class="bottom-nav-btn" id="nav-btn-shop" onclick="handleBottomNavClick(this, openShop)">
+        <span class="icon">✨</span>
+        <span class="label">Loja VIP</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MODAL: CARTEIRA TEMÁTICA DE COURO -->
+  <div class="modal-backdrop" id="wallet-modal" onclick="closeWalletModal(event)">
+    <div class="wallet-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" style="background: #331908; color: #fae19c; border-color: #9c6c42;" onclick="closeWalletModal(event)">✕</button>
+      <div class="wallet-clasp"></div>
+      <div class="wallet-stitch">
+        <h3 style="font-family: 'Caveat', cursive; font-size: 2rem; text-align: center; color: #fae19c;">Minha Carteira</h3>
+        
+        <div class="wallet-compartment">
+          <div class="wallet-coin-label">
+            <span style="font-size: 1.6rem;">🐟</span>
+            <span>Peixinhos (Diários)</span>
+          </div>
+          <div class="wallet-coin-val" id="wallet-coin-val">0</div>
+        </div>
+
+        <div class="wallet-compartment">
+          <div class="wallet-coin-label">
+            <span style="font-size: 1.6rem;">🐾</span>
+            <span>Patinhas (Brincadeiras)</span>
+          </div>
+          <div class="wallet-coin-val" id="wallet-paw-val">0</div>
+        </div>
+
+        <button class="action-btn" style="margin-top: 6px; width: 100%; justify-content: center; background: #6e4425; color: #fae19c; border-color: #331908;" onclick="checkDailyRewardManual()">
+          🎁 Resgatar Peixinho Diário
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TENDA DE COMIDA -->
+  <div class="modal-backdrop" id="stall-modal" onclick="closeFoodStall(event)">
+    <div class="stall-modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeFoodStall(event)">✕</button>
+      <div class="stall-canopy"></div>
+      
+      <div class="stall-scene">
+        <svg class="stall-backdrop-svg" viewBox="0 0 460 175" preserveAspectRatio="none">
+          <rect x="8" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
+          <rect x="430" y="0" width="22" height="175" fill="#5c3417" stroke="#331908" stroke-width="2"/>
+          <rect x="30" y="65" width="400" height="12" fill="#844c23" stroke="#4a2811" stroke-width="2"/>
+          <rect x="52" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
+          <circle cx="62" cy="37" r="4" fill="#f39c12"/>
+          <path d="M 52,24 L 62,14 L 72,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
+          <rect x="388" y="24" width="20" height="26" rx="4" fill="#fae19c" stroke="#331908" stroke-width="2"/>
+          <circle cx="398" cy="37" r="4" fill="#f39c12"/>
+          <path d="M 388,24 L 398,14 L 408,24 Z" fill="#5c3417" stroke="#331908" stroke-width="1.5"/>
+          <ellipse cx="98" cy="56" rx="8" ry="9" fill="#9b59b6" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 120,65 C 118,50 128,45 136,50 C 144,45 154,50 152,65 Z" fill="#d7b899" stroke="#331908" stroke-width="1.5"/>
+          <rect x="310" y="44" width="12" height="21" rx="3" fill="#5dade2" stroke="#331908" stroke-width="1.5"/>
+          <path d="M 335,65 C 333,52 342,47 350,52 C 358,47 367,52 365,65 Z" fill="#ecd29b" stroke="#331908" stroke-width="1.5"/>
+        </svg>
+
+        <div class="vendor-cat-container">
+          <div class="vendor-speech-bubble" id="vendor-speech-bubble">Miau! Tudo fresquinho! 🍲</div>
+          <svg class="vendor-cat-svg" id="vendor-cat-svg" viewBox="0 0 100 95">
+            <path d="M 20,48 C 18,28 20,16 28,20 C 38,24 52,40 62,40 C 72,40 86,24 94,20 C 102,16 104,28 100,48 C 105,68 95,84 62,84 C 28,84 15,68 20,48 Z" fill="#fffdf9" stroke="#2b2725" stroke-width="3"/>
+            <path class="vendor-ear-left" d="M 22,23 Q 36,28 32,46 L 20,38 Z" fill="#d97a36"/>
+            <path class="vendor-ear-right" d="M 96,23 Q 82,28 86,46 L 98,38 Z" fill="#4a3528"/>
+            <ellipse cx="78" cy="60" rx="9" ry="6" fill="#d97a36"/>
+            <g id="vendor-eyes-normal">
+              <ellipse cx="44" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
+              <ellipse cx="78" cy="56" rx="6.5" ry="7.5" fill="#2b2725"/>
+              <circle cx="46.5" cy="54" r="2" fill="#fff"/>
+              <circle cx="80.5" cy="54" r="2" fill="#fff"/>
+            </g>
+            <g id="vendor-eyes-happy" style="display: none;">
+              <path d="M 38,58 Q 44,50 50,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M 72,58 Q 78,50 84,58" fill="none" stroke="#2b2725" stroke-width="3.5" stroke-linecap="round"/>
+            </g>
+            <path d="M 58,66 Q 62,70 66,66" fill="none" stroke="#2b2725" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="62" cy="63" r="2.2" fill="#d98270"/>
+            <polygon points="38,80 62,94 86,80" fill="#c0392b" stroke="#2b2725" stroke-width="2.5"/>
+            <ellipse cx="42" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+            <ellipse cx="80" cy="86" rx="7.5" ry="5.5" fill="#fffdf9" stroke="#2b2725" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stall-shelf-grid" id="stall-shelf-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CARTA -->
+  <div class="modal-backdrop" id="letter-modal" onclick="closeLetter(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeLetter(event)">✕</button>
+      <div style="font-family: 'Caveat', cursive; font-size: 1.7rem; font-weight: 700; margin-bottom: 20px; white-space: pre-line;" id="letter-content"></div>
+      <div style="text-align: right; border-top: 1px dashed var(--amber); padding-top: 10px;" id="letter-footer"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: MINIJOGO -->
+  <div class="modal-backdrop" id="game-modal" onclick="closeMinigame(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeMinigame(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Pegue a Patinha! 🎮</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light);">Toque nos itens para ganhar 🐾 e comprar comidinhas!</p>
+      <div class="game-arena" id="game-arena"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: LOJINHA VIP COMPLETA -->
+  <div class="shop-modal modal-backdrop" id="shop-modal" onclick="closeShop(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeShop(event)">✕</button>
+      
+      <div class="shop-preview-box">
+        <div id="shop-mini-cat-container"></div>
+        <span class="shop-preview-label">Visualização ao Vivo 🐾</span>
+      </div>
+
+      <div class="shop-tabs">
+        <button class="shop-tab-btn active" onclick="switchShopTab('acessorios')">Acessórios</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('bocas')">Bocas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('expressoes')">Expressões</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('pupilas')">Pupilas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('olhos')">Olhos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('racas')">Raças</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('temas')">Temas</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('efeitos')">Efeitos</button>
+        <button class="shop-tab-btn" onclick="switchShopTab('backup')">Backup</button>
+      </div>
+
+      <div class="shop-content-area" id="shop-content-area"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: PALETA DE CORES -->
+  <div class="modal-backdrop" id="color-modal" onclick="closeColorModal(event)">
+    <div class="modal-paper color-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeColorModal(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Escolha uma Tinta (1 🐟)</h3>
+      <p style="text-align: center; font-size: 0.9rem; color: var(--pencil-light); margin-bottom: 8px;">Compre cores vibrantes para o seu item!</p>
+      <div class="color-grid" id="color-picker-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVIDADES (CHANGELOG) -->
+  <div class="modal-backdrop" id="changelog-modal" onclick="closeChangelog(event)">
+    <div class="modal-paper" onclick="event.stopPropagation()">
+      <button class="close-modal-btn" onclick="closeChangelog(event)">✕</button>
+      <h3 style="font-family: 'Caveat', cursive; font-size: 1.8rem; text-align: center;">Registro de Novidades 📜</h3>
+      <div class="changelog-content">
+        <div class="changelog-entry">
+          <div class="changelog-version">v3.7 - Carrossel Dinâmico e Centralização Fluida</div>
+          <div class="changelog-date">09 de Outubro de 2026</div>
+          <ul class="changelog-list" style="margin-left: 20px; margin-top: 8px; font-size: 1.05rem;">
+            <li>Botão ativo sempre centralizado no painel inferior, movendo os outros suavemente.</li>
+            <li>Botão de ler a cartinha mantido no painel retrátil esquerdo.</li>
+            <li>Mochila retrátil em couro com suporte a drag & drop.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. ESTADOS, ECONOMIA E INVENTÁRIO
+    ========================================================= */
+    const FOOD_ITEMS = [
+      { id: 'food_bread', name: 'Pão Quentinho', icon: '🍞', price: 2, hunger: +18, health: 0, energy: +5, joy: +2 },
+      { id: 'food_starfruit', name: 'Fruta Estrela', icon: '🍏', price: 3, hunger: +22, health: +5, energy: 0, joy: +10 },
+      { id: 'food_salmon', name: 'Sachê Salmão', icon: '🐟', price: 4, hunger: +35, health: +8, energy: 0, joy: +12 },
+      { id: 'food_steak', name: 'Bife Suculento', icon: '🥩', price: 5, hunger: +45, health: +5, energy: +12, joy: +15 },
+      { id: 'food_milk', name: 'Leitinho Fresco', icon: '🥛', price: 2, hunger: +15, health: +2, energy: +18, joy: +8 },
+      { id: 'food_potion', name: 'Poção Revigorante', icon: '🧪', price: 6, hunger: +20, health: +35, energy: +10, joy: +5 }
+    ];
+
+    let userInventory = JSON.parse(localStorage.getItem('cat_inventory') || '{"food_bread": 2, "food_milk": 1}');
+    let catStats = JSON.parse(localStorage.getItem('cat_stats') || JSON.stringify({
+      hunger: 80, energy: 80, happiness: 85, health: 95, lastUpdate: Date.now()
+    }));
+
+    let userCoins = parseInt(localStorage.getItem('cat_coins') || '0', 10);
+    let userPawCoins = parseInt(localStorage.getItem('cat_paw_coins') || '20', 10);
+    let unlockedItems = JSON.parse(localStorage.getItem('cat_unlocked') || '["theme_default", "fx_hearts", "breed_default", "eye_charcoal", "pupil_round", "mouth_cat", "expr_neutral", "bowtie_color_c_preto", "glasses_color_c_preto", "flower_color_c_ambar", "crown_color_c_ambar"]');
+    let equippedItems = JSON.parse(localStorage.getItem('cat_equipped') || '["fx_hearts"]');
+    let itemColors = JSON.parse(localStorage.getItem('cat_item_colors') || '{"bowtie":"#2b2725","glasses":"#2b2725","flower":"#c48b36","crown":"#ecd29b"}');
+    let activeEyeColor = localStorage.getItem('cat_active_eye_color') || '#2b2725';
+    let activePupil = localStorage.getItem('cat_active_pupil') || 'pupil_round';
+    let activeBreed = localStorage.getItem('cat_active_breed') || 'breed_default';
+    let activeMouth = localStorage.getItem('cat_active_mouth') || 'mouth_cat';
+    let activeExpr = localStorage.getItem('cat_active_expr') || 'expr_neutral';
+    let activeTheme = localStorage.getItem('cat_active_theme') || 'theme_default';
+    let activeEffect = localStorage.getItem('cat_active_effect') || 'heart';
+    let effectColor = localStorage.getItem('cat_effect_color') || '#c48b36';
+    let currentShopTab = 'acessorios';
+
+    function getCatalog() {
+      return (window.CATALOGO_COSMETICOS && window.CATALOGO_COSMETICOS.acessorios) ? window.CATALOGO_COSMETICOS : {};
+    }
+
+    function saveStats() {
+      localStorage.setItem('cat_stats', JSON.stringify(catStats));
+      localStorage.setItem('cat_inventory', JSON.stringify(userInventory));
+      localStorage.setItem('cat_paw_coins', userPawCoins);
+      localStorage.setItem('cat_coins', userCoins);
+      localStorage.setItem('cat_unlocked', JSON.stringify(unlockedItems));
+      localStorage.setItem('cat_equipped', JSON.stringify(equippedItems));
+      localStorage.setItem('cat_item_colors', JSON.stringify(itemColors));
+      localStorage.setItem('cat_active_eye_color', activeEyeColor);
+      localStorage.setItem('cat_active_pupil', activePupil);
+      localStorage.setItem('cat_active_breed', activeBreed);
+      localStorage.setItem('cat_active_mouth', activeMouth);
+      localStorage.setItem('cat_active_expr', activeExpr);
+      localStorage.setItem('cat_active_theme', activeTheme);
+      localStorage.setItem('cat_active_effect', activeEffect);
+      localStorage.setItem('cat_effect_color', effectColor);
+
+      renderStatusBars();
+      updateCatVisualExpression();
+      applyEquippedCosmetics();
+      applyBreeds();
+      applyEyeColorAndPupils();
+      applyMouthAndExpressions();
+      updateMiniPreview();
+      updateWalletUI();
+      if (!autoTimeEnabled) applyManualTheme();
+    }
+
+    /* =========================================================
+       2. CONTROLE DE MENUS, NAVEGAÇÃO E MOCHILA
+    ========================================================= */
+    let sideNavOpen = false;
+    let statusVisible = false;
+    let backpackOpen = false;
+
+    function toggleSideNav() {
+      sideNavOpen = !sideNavOpen;
+      const nav = document.getElementById('side-nav-container');
+      const arrow = document.getElementById('side-nav-arrow');
+      if (sideNavOpen) {
+        nav.classList.remove('collapsed');
+        arrow.innerText = '◀';
+        statusVisible = false;
+        applyStatusVisibility();
+      } else {
+        nav.classList.add('collapsed');
+        arrow.innerText = '▶';
+      }
+    }
+
+    function toggleStatusVisibility() {
+      statusVisible = !statusVisible;
+      if (statusVisible) {
+        sideNavOpen = false;
+        document.getElementById('side-nav-container').classList.add('collapsed');
+        document.getElementById('side-nav-arrow').innerText = '▶';
+      }
+      applyStatusVisibility();
+    }
+
+    function applyStatusVisibility() {
+      const container = document.getElementById('status-container');
+      const arrow = document.getElementById('status-arrow-icon');
+      if (statusVisible) {
+        container.classList.remove('hidden');
+        arrow.innerText = '▲';
+      } else {
+        container.classList.add('hidden');
+        arrow.innerText = '▼';
+      }
+    }
+
+    function toggleInventoryTray(e) {
+      if (e) e.stopPropagation();
+      backpackOpen = !backpackOpen;
+      const tray = document.getElementById('inventory-tray');
+      const btn = document.getElementById('backpack-toggle-btn');
+      
+      if (backpackOpen) {
+        tray.classList.remove('collapsed');
+        if (btn) btn.classList.add('active');
+        renderInventorySlots();
+        tray.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        tray.classList.add('collapsed');
+        if (btn) btn.classList.remove('active');
+      }
+    }
+
+    /* CENTRALIZAÇÃO DINÂMICA DO BOTÃO INFERIOR */
+    function centerNavButton(targetBtn) {
+      const track = document.getElementById('bottom-nav-track');
+      if (!track || !targetBtn) return;
+
+      const btnCenterInTrack = targetBtn.offsetLeft + targetBtn.offsetWidth / 2;
+      const trackCenter = track.offsetWidth / 2;
+      const offset = trackCenter - btnCenterInTrack;
+
+      track.style.transform = `translateX(${offset}px)`;
+    }
+
+    function handleBottomNavClick(clickedBtn, actionCallback) {
+      document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+        btn.classList.remove('active-focus');
+      });
+      clickedBtn.classList.add('active-focus');
+
+      requestAnimationFrame(() => {
+        centerNavButton(clickedBtn);
+      });
+
+      if (typeof actionCallback === 'function') {
+        actionCallback();
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      const activeBtn = document.querySelector('.bottom-nav-btn.active-focus');
+      if (activeBtn) centerNavButton(activeBtn);
+    });
+
+    /* =========================================================
+       3. MODAL CARTEIRA
+    ========================================================= */
+    function openWalletModal(e) {
+      if (e) e.stopPropagation();
+      updateWalletUI();
+      document.getElementById('wallet-modal').classList.add('open');
+    }
+
+    function closeWalletModal(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('wallet-modal').classList.remove('open');
+    }
+
+    function updateWalletUI() {
+      const wCoins = document.getElementById('wallet-coin-val');
+      const wPaws = document.getElementById('wallet-paw-val');
+      if (wCoins) wCoins.innerText = userCoins;
+      if (wPaws) wPaws.innerText = userPawCoins;
+    }
+
+    function checkDailyRewardManual() {
+      if (isStatusCritical()) {
+        alert("O gatinho está muito faminto ou fraco para pescar hoje... Alimente-o primeiro! 😿");
+        return;
+      }
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('cat_last_reward_date');
+
+      if (lastClaim !== today) {
+        userCoins += 1;
+        localStorage.setItem('cat_last_reward_date', today);
+        saveStats();
+        playPaperSound();
+        alert("🎁 Você resgatou 1 Peixinho Diário com sucesso! 🐟");
+      } else {
+        alert("Você já resgatou seu peixinho de hoje! Volte amanhã 🐾");
+      }
+    }
+
+    /* =========================================================
+       4. STATUS DO GATO E ALIMENTAÇÃO
+    ========================================================= */
+    function isStatusCritical() {
+      return catStats.hunger < 30 || catStats.energy < 30 || catStats.happiness < 30 || catStats.health < 30;
+    }
+
+    function updateCatStatsOverTime() {
+      const now = Date.now();
+      const elapsedMinutes = (now - catStats.lastUpdate) / (1000 * 60);
+
+      if (elapsedMinutes >= 1) {
+        const decayUnits = Math.floor(elapsedMinutes / 10);
+        if (decayUnits > 0) {
+          catStats.hunger = Math.max(0, catStats.hunger - decayUnits * 2);
+          catStats.energy = Math.max(0, catStats.energy - decayUnits * 1.5);
+          catStats.happiness = Math.max(0, catStats.happiness - decayUnits * 2);
+          
+          if (catStats.hunger < 25 || catStats.energy < 25) {
+            catStats.health = Math.max(0, catStats.health - decayUnits * 3);
+          }
+          catStats.lastUpdate = now;
+          saveStats();
+        }
+      }
+      renderStatusBars();
+      updateCatVisualExpression();
+    }
+
+    function updateCatVisualExpression() {
+      const wrapper = document.getElementById('cat-wrapper');
+      const sleepyEyelids = document.getElementById('sleepy-eyelids');
+      const mouthSad = document.getElementById('mouth-sad');
+      const mouthHungry = document.getElementById('mouth-hungry');
+      const happyBlush = document.getElementById('happy-blush');
+      const sickMark = document.getElementById('sick-mark');
+
+      wrapper.classList.remove('sick', 'sleepy');
+      sleepyEyelids.style.display = 'none';
+      mouthSad.style.display = 'none';
+      mouthHungry.style.display = 'none';
+      happyBlush.style.display = 'none';
+      sickMark.style.display = 'none';
+
+      if (catStats.health < 35) {
+        wrapper.classList.add('sick');
+        sickMark.style.display = 'block';
+        mouthSad.style.display = 'block';
+        return;
+      }
+      if (catStats.energy < 35) {
+        wrapper.classList.add('sleepy');
+        sleepyEyelids.style.display = 'block';
+        return;
+      }
+      if (catStats.hunger < 30) {
+        mouthHungry.style.display = 'block';
+        return;
+      }
+      if (catStats.happiness < 35) {
+        mouthSad.style.display = 'block';
+        return;
+      }
+      if (catStats.hunger >= 70 && catStats.energy >= 70 && catStats.happiness >= 70 && catStats.health >= 70) {
+        happyBlush.style.display = 'block';
+      }
+    }
+
+    function renderStatusBars() {
+      const updateSquareFill = (id, val) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.height = `${val}%`;
+        if (val <= 30) {
+          el.style.backgroundColor = '#c0392b';
+        } else if (val >= 70) {
+          el.style.backgroundColor = '#27ae60';
+        } else {
+          el.style.backgroundColor = 'var(--amber)';
+        }
+      };
+
+      updateSquareFill('fill-hunger', catStats.hunger);
+      updateSquareFill('fill-energy', catStats.energy);
+      updateSquareFill('fill-happiness', catStats.happiness);
+      updateSquareFill('fill-health', catStats.health);
+    }
+
+    /* TENDA DE COMIDA */
+    const VENDOR_GREETINGS = [
+      "Miau! Seja muito bem-vindo à feira! 🧺",
+      "Tudo fresquinho, colhido hoje mesmo! 🍲",
+      "Procurando algo gostoso pro seu bichano? 🐾",
+      "Sinta o cheirinho desse pão quente! 🍞"
+    ];
+
+    const VENDOR_THANKS = [
+      "Muito obrigado! Seu gatinho vai adorar! 😻",
+      "Miau! Excelente escolha, bem saboroso!",
+      "Embrulhado com muito carinho! Volte sempre!",
+      "Que delícia! Bom apetite pro seu bichano! 🐟"
+    ];
+
+    function setVendorSpeech(text) {
+      const bubble = document.getElementById('vendor-speech-bubble');
+      if (bubble) bubble.innerText = text;
+    }
+
+    function triggerVendorHappyAnimation() {
+      const catSvg = document.getElementById('vendor-cat-svg');
+      const eyesNormal = document.getElementById('vendor-eyes-normal');
+      const eyesHappy = document.getElementById('vendor-eyes-happy');
+
+      if (catSvg && eyesNormal && eyesHappy) {
+        catSvg.classList.add('happy');
+        eyesNormal.style.display = 'none';
+        eyesHappy.style.display = 'block';
+
+        setTimeout(() => {
+          catSvg.classList.remove('happy');
+          eyesNormal.style.display = 'block';
+          eyesHappy.style.display = 'none';
+        }, 1200);
+      }
+    }
+
+    function openFoodStall(e) {
+      if (e) e.stopPropagation();
+      renderFoodStallShelves();
+      const greeting = VENDOR_GREETINGS[Math.floor(Math.random() * VENDOR_GREETINGS.length)];
+      setVendorSpeech(greeting);
+      document.getElementById('stall-modal').classList.add('open');
+    }
+
+    function closeFoodStall(e) {
+      if (e) e.stopPropagation();
+      setVendorSpeech("Até a próxima visita! Miau! 👋");
+      setTimeout(() => {
+        document.getElementById('stall-modal').classList.remove('open');
+      }, 250);
+    }
+
+    function renderFoodStallShelves() {
+      const grid = document.getElementById('stall-shelf-grid');
+      grid.innerHTML = '';
+
+      FOOD_ITEMS.forEach(food => {
+        const card = document.createElement('div');
+        card.className = 'shelf-item-card';
+        card.innerHTML = `
+          <div class="shelf-item-icon">${food.icon}</div>
+          <div class="shelf-item-name">${food.name}</div>
+          <div class="shelf-item-price">${food.price} 🐾</div>
+          <button class="shelf-buy-btn" onclick="buyFoodItem('${food.id}')">Comprar</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function buyFoodItem(foodId) {
+      const food = FOOD_ITEMS.find(f => f.id === foodId);
+      if (!food) return;
+
+      if (userPawCoins >= food.price) {
+        userPawCoins -= food.price;
+        userInventory[foodId] = (userInventory[foodId] || 0) + 1;
+        saveStats();
+        playPaperSound();
+        renderInventorySlots();
+        createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 6);
+
+        triggerVendorHappyAnimation();
+        const thanks = VENDOR_THANKS[Math.floor(Math.random() * VENDOR_THANKS.length)];
+        setVendorSpeech(thanks);
+      } else {
+        setVendorSpeech("Miau... faltam patinhas! Jogue no 'Brincar' lá fora! 🐾");
+      }
+    }
+
+    /* INVENTÁRIO */
+    function renderInventorySlots() {
+      const container = document.getElementById('inventory-slots-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const ownedKeys = Object.keys(userInventory).filter(k => userInventory[k] > 0);
+
+      if (ownedKeys.length === 0) {
+        container.innerHTML = `<span style="font-size:0.95rem; color: #fae19c; padding: 8px;">A mochila está vazia. Visite a tenda de comidas!</span>`;
+        return;
+      }
+
+      ownedKeys.forEach(key => {
+        const food = FOOD_ITEMS.find(f => f.id === key);
+        if (!food) return;
+
+        const slot = document.createElement('div');
+        slot.className = 'inventory-slot';
+        slot.draggable = true;
+        slot.innerHTML = `
+          <span class="slot-icon">${food.icon}</span>
+          <span class="slot-qty">${userInventory[key]}</span>
+        `;
+
+        slot.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', key);
+        });
+
+        slot.addEventListener('pointerdown', (e) => {
+          handleTouchDragFood(e, key, food.icon);
+        });
+
+        container.appendChild(slot);
+      });
+    }
+
+    const catWrapper = document.getElementById('cat-wrapper');
+
+    catWrapper.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      catWrapper.classList.add('drag-over');
+    });
+
+    catWrapper.addEventListener('dragleave', () => {
+      catWrapper.classList.remove('drag-over');
+    });
+
+    catWrapper.addEventListener('drop', (e) => {
+      e.preventDefault();
+      catWrapper.classList.remove('drag-over');
+      const foodId = e.dataTransfer.getData('text/plain');
+      feedCat(foodId);
+    });
+
+    function handleTouchDragFood(event, foodId, iconChar) {
+      if (event.pointerType === 'mouse') return;
+
+      const floatingElem = document.createElement('div');
+      floatingElem.innerText = iconChar;
+      floatingElem.style.position = 'fixed';
+      floatingElem.style.fontSize = '2.4rem';
+      floatingElem.style.pointerEvents = 'none';
+      floatingElem.style.zIndex = '999';
+      floatingElem.style.transform = 'translate(-50%, -50%)';
+      floatingElem.style.left = `${event.clientX}px`;
+      floatingElem.style.top = `${event.clientY}px`;
+      document.body.appendChild(floatingElem);
+
+      function onPointerMove(e) {
+        floatingElem.style.left = `${e.clientX}px`;
+        floatingElem.style.top = `${e.clientY}px`;
+
+        const catRect = catWrapper.getBoundingClientRect();
+        if (
+          e.clientX >= catRect.left &&
+          e.clientX <= catRect.right &&
+          e.clientY >= catRect.top &&
+          e.clientY <= catRect.bottom
+        ) {
+          catWrapper.classList.add('drag-over');
+        } else {
+          catWrapper.classList.remove('drag-over');
+        }
+      }
+
+      function onPointerUp(e) {
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
+        floatingElem.remove();
+        catWrapper.classList.remove('drag-over');
+
+        const catRect = catWrapper.getBoundingClientRect();
+        if (
+          e.clientX >= catRect.left &&
+          e.clientX <= catRect.right &&
+          e.clientY >= catRect.top &&
+          e.clientY <= catRect.bottom
+        ) {
+          feedCat(foodId);
+        }
+      }
+
+      document.addEventListener('pointermove', onPointerMove);
+      document.addEventListener('pointerup', onPointerUp);
+    }
+
+    function feedCat(foodId) {
+      if (!userInventory[foodId] || userInventory[foodId] <= 0) return;
+
+      const food = FOOD_ITEMS.find(f => f.id === foodId);
+      if (!food) return;
+
+      userInventory[foodId]--;
+      if (userInventory[foodId] <= 0) delete userInventory[foodId];
+
+      catStats.hunger = Math.min(100, catStats.hunger + food.hunger);
+      catStats.health = Math.min(100, catStats.health + food.health);
+      catStats.energy = Math.min(100, catStats.energy + food.energy);
+      catStats.happiness = Math.min(100, catStats.happiness + food.joy);
+
+      playPaperSound();
+      playMeowSound();
+      saveStats();
+      renderInventorySlots();
+
+      const hungryMouth = document.getElementById('mouth-hungry');
+      hungryMouth.style.display = 'block';
+
+      const rect = catWrapper.getBoundingClientRect();
+      createFloatingParticles(rect.left + rect.width / 2, rect.top + 60, 8);
+
+      setTimeout(() => {
+        hungryMouth.style.display = 'none';
+        updateCatVisualExpression();
+      }, 700);
+    }
+
+    /* =========================================================
+       5. LOJA VIP & PALETA DE CORES
+    ========================================================= */
+    function openShop(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('shop-modal').classList.add('open');
+      renderCurrentShopTab();
+      updateMiniPreview();
+    }
+    function closeShop(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('shop-modal').classList.remove('open');
+    }
+
+    function updateMiniPreview() {
+      const container = document.getElementById('shop-mini-cat-container');
+      const mainSvg = document.getElementById('main-cat-svg');
+      if (container && mainSvg) {
+        container.innerHTML = mainSvg.outerHTML;
+      }
+    }
+
+    function switchShopTab(tabKey) {
+      currentShopTab = tabKey;
+      document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.shop-tab-btn')).find(b => b.getAttribute('onclick').includes(tabKey));
+      if (activeBtn) activeBtn.classList.add('active');
+      renderCurrentShopTab();
+    }
+
+    function renderCurrentShopTab() {
+      const area = document.getElementById('shop-content-area');
+      area.innerHTML = '';
+      const cat = getCatalog();
+
+      if (currentShopTab === 'acessorios') {
+        const grid = document.createElement('div');
+        grid.className = 'shop-items-grid';
+        (cat.acessorios || []).forEach(item => {
+          const isUnlocked = unlockedItems.includes(item.id);
+          const isEquipped = equippedItems.includes(item.id);
+          const currentColor = itemColors[item.id] || '#2b2725';
+          const card = document.createElement('div');
+          card.className = 'shop-card';
+
+          const svgRendered = (item.svg || '').replace(/COLOR/g, currentColor);
+          card.innerHTML = `
+            <div class="shop-card-svg-preview">${svgRendered}</div>
+            <div class="shop-card-name">${item.nome}</div>
+            <div class="shop-card-price">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
+            ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${item.id}', 'accessory', event)">🎨 Mudar Cor</button>` : ''}
+            <button class="action-btn" style="width: 100%; padding: 4px; font-size: 0.85rem; justify-content: center; ${isEquipped ? 'background: var(--amber); color: #fff;' : ''}" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
+              ${isUnlocked ? (isEquipped ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+            </button>
+          `;
+          grid.appendChild(card);
+        });
+        area.appendChild(grid);
+      } else if (currentShopTab === 'bocas') {
+        renderGenericTabGrid(area, cat.bocas || [], m => activeMouth === m.id, m => {
+          if (unlockedItems.includes(m.id)) {
+            activeMouth = m.id;
+          } else if (userCoins >= m.preco) {
+            userCoins -= m.preco;
+            unlockedItems.push(m.id);
+            activeMouth = m.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'expressoes') {
+        renderGenericTabGrid(area, cat.expressoes || [], ex => activeExpr === ex.id, ex => {
+          if (unlockedItems.includes(ex.id)) {
+            activeExpr = ex.id;
+          } else if (userCoins >= ex.preco) {
+            userCoins -= ex.preco;
+            unlockedItems.push(ex.id);
+            activeExpr = ex.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'pupilas') {
+        renderGenericTabGrid(area, cat.pupilas || [], p => activePupil === p.id, p => {
+          if (unlockedItems.includes(p.id)) {
+            activePupil = p.id;
+          } else if (userCoins >= p.preco) {
+            userCoins -= p.preco;
+            unlockedItems.push(p.id);
+            activePupil = p.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'olhos') {
+        renderGenericTabGrid(area, cat.olhos || [], o => activeEyeColor === o.hex, o => {
+          if (unlockedItems.includes(o.id)) {
+            activeEyeColor = o.hex;
+          } else if (userCoins >= o.preco) {
+            userCoins -= o.preco;
+            unlockedItems.push(o.id);
+            activeEyeColor = o.hex;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'racas') {
+        renderGenericTabGrid(area, cat.racas || [], r => activeBreed === r.id, r => {
+          if (unlockedItems.includes(r.id)) {
+            activeBreed = r.id;
+          } else if (userCoins >= r.preco) {
+            userCoins -= r.preco;
+            unlockedItems.push(r.id);
+            activeBreed = r.id;
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'temas') {
+        renderGenericTabGrid(area, cat.temas || [], t => activeTheme === t.id, t => {
+          if (unlockedItems.includes(t.id)) {
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+          } else if (userCoins >= t.preco) {
+            userCoins -= t.preco;
+            unlockedItems.push(t.id);
+            activeTheme = t.id;
+            if (autoTimeEnabled) toggleAutoTime();
+            playPaperSound();
+          } else {
+            alert('Peixinhos insuficientes! 🐟');
+            return;
+          }
+          saveStats();
+          renderCurrentShopTab();
+        });
+      } else if (currentShopTab === 'efeitos') {
+        const grid = document.createElement('div');
+        grid.className = 'shop-items-grid';
+        (cat.efeitos || []).forEach(e => {
+          const isUnlocked = unlockedItems.includes(e.id);
+          const isSelected = (activeEffect === e.type);
+          const card = document.createElement('div');
+          card.className = 'shop-card';
+
+          card.innerHTML = `
+            <div style="font-size: 2rem; margin: 2px 0;">${e.icone}</div>
+            <div class="shop-card-name">${e.nome}</div>
+            <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${e.preco} 🐟`}</div>
+            ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${e.id}', 'effect', event)">🎨 Cor do Efeito</button>` : ''}
+            <button class="action-btn" style="width: 100%; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
+              ${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+            </button>
+          `;
+
+          card.querySelector('button.action-btn').onclick = () => {
+            if (isUnlocked) {
+              activeEffect = e.type;
+            } else if (userCoins >= e.preco) {
+              userCoins -= e.preco;
+              unlockedItems.push(e.id);
+              activeEffect = e.type;
+              playPaperSound();
+            } else {
+              alert('Peixinhos insuficientes! 🐟');
+              return;
+            }
+            saveStats();
+            renderCurrentShopTab();
+          };
+
+          grid.appendChild(card);
+        });
+        area.appendChild(grid);
+      } else if (currentShopTab === 'backup') {
+        area.innerHTML = `
+          <div style="padding: 10px 4px; text-align: center;">
+            <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados com segurança:</p>
+            <div style="display: flex; gap: 10px;">
+              <button class="action-btn" style="flex: 1; justify-content: center;" onclick="exportDataBackup()">📥 Salvar Backup</button>
+              <button class="action-btn" style="flex: 1; justify-content: center;" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataBackup(event)">
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderGenericTabGrid(container, items, isSelectedFn, onSelect) {
+      const grid = document.createElement('div');
+      grid.className = 'shop-items-grid';
+      items.forEach(item => {
+        const isUnlocked = unlockedItems.includes(item.id);
+        const isSelected = isSelectedFn(item);
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+
+        let visualPreview = '';
+        if (item.svg) {
+          visualPreview = `<div class="shop-card-svg-preview">${item.svg}</div>`;
+        } else if (item.hex) {
+          visualPreview = `<div style="width: 32px; height: 32px; border-radius: 50%; background: ${item.hex}; border: 1.5px solid var(--charcoal); margin: 6px 0;"></div>`;
+        } else {
+          visualPreview = `<div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>`;
+        }
+
+        card.innerHTML = `
+          ${visualPreview}
+          <div class="shop-card-name">${item.nome}</div>
+          <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${item.preco} 🐟`}</div>
+          <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
+            ${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+          </button>
+        `;
+        card.querySelector('button').onclick = () => onSelect(item);
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
+    }
+
+    function handleAccessoryClick(id, preco) {
+      if (unlockedItems.includes(id)) {
+        equippedItems = equippedItems.includes(id) ? equippedItems.filter(x => x !== id) : [...equippedItems, id];
+      } else if (userCoins >= preco) {
+        userCoins -= preco;
+        unlockedItems.push(id);
+        equippedItems.push(id);
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    }
+
+    let colorTargetItemId = null;
+    let colorTargetType = 'accessory';
+
+    function openColorModal(targetId, type, event) {
+      if (event) event.stopPropagation();
+      colorTargetItemId = targetId;
+      colorTargetType = type;
+      const modal = document.getElementById('color-modal');
+      const grid = document.getElementById('color-picker-grid');
+      grid.innerHTML = '';
+
+      const cat = getCatalog();
+      const tintas = cat.tintas || [];
+      const currentColor = (type === 'effect') ? effectColor : (itemColors[targetId] || '#2b2725');
+
+      tintas.forEach(t => {
+        const colorKey = `${targetId}_color_${t.id}`;
+        const isUnlocked = unlockedItems.includes(colorKey) || (t.id === 'c_ambar' && type === 'effect') || (t.id === 'c_preto' && targetId !== 'flower' && targetId !== 'crown') || (t.id === 'c_ambar' && (targetId === 'flower' || targetId === 'crown'));
+        const isActive = currentColor === t.hex;
+
+        const card = document.createElement('div');
+        card.className = `color-swatch-card ${isActive ? 'active' : ''}`;
+        card.innerHTML = `
+          <div class="color-swatch-circle" style="background: ${t.hex}"></div>
+          <div class="color-swatch-name">${t.nome}</div>
+          <div style="font-size: 0.7rem; color: var(--amber); margin-top: 2px;">${isUnlocked ? '✓' : '1 🐟'}</div>
+        `;
+
+        card.onclick = (e) => {
+          e.stopPropagation();
+          if (isUnlocked) {
+            if (colorTargetType === 'effect') effectColor = t.hex;
+            else itemColors[colorTargetItemId] = t.hex;
+            saveStats();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else if (userCoins >= 1) {
+            userCoins -= 1;
+            unlockedItems.push(colorKey);
+            if (colorTargetType === 'effect') effectColor = t.hex;
+            else itemColors[colorTargetItemId] = t.hex;
+            playPaperSound();
+            saveStats();
+            closeColorModal();
+            renderCurrentShopTab();
+          } else {
+            alert('Você precisa de 1 peixinho para comprar esta tinta! 🐟');
+          }
+        };
+
+        grid.appendChild(card);
+      });
+
+      modal.classList.add('open');
+    }
+
+    function closeColorModal(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('color-modal').classList.remove('open');
+    }
+
+    /* APLICAÇÕES VISUAIS DO GATO */
+    function applyBreeds() {
+      const bodyPath = document.getElementById('cat-body');
+      const headNormal = document.getElementById('cat-head-normal');
+      const headAirplane = document.getElementById('cat-head-airplane');
+      const tailPath = document.getElementById('cat-tail');
+      const tailStripes = document.getElementById('tail-stripes');
+
+      ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      if (tailStripes) tailStripes.style.display = 'none';
+
+      bodyPath.setAttribute('fill', '#fffdf9');
+      headNormal.setAttribute('fill', '#fffdf9');
+      headAirplane.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('fill', '#fffdf9');
+      tailPath.setAttribute('stroke', '#2b2725');
+
+      if (activeBreed === 'breed_siamese') {
+        bodyPath.setAttribute('fill', '#ebdcc9');
+        headNormal.setAttribute('fill', '#ebdcc9');
+        headAirplane.setAttribute('fill', '#ebdcc9');
+        tailPath.setAttribute('fill', '#3d281d');
+        tailPath.setAttribute('stroke', '#2b2725');
+        document.getElementById('breed-siamese').style.display = 'block';
+      } else if (activeBreed === 'breed_tuxedo') {
+        bodyPath.setAttribute('fill', '#fffdf9');
+        headNormal.setAttribute('fill', '#fffdf9');
+        headAirplane.setAttribute('fill', '#fffdf9');
+        tailPath.setAttribute('fill', '#2b2725');
+        tailPath.setAttribute('stroke', '#2b2725');
+        document.getElementById('breed-tuxedo').style.display = 'block';
+        document.getElementById('body-tuxedo').style.display = 'block';
+      } else if (activeBreed === 'breed_orange') {
+        bodyPath.setAttribute('fill', '#e58e45');
+        headNormal.setAttribute('fill', '#e58e45');
+        headAirplane.setAttribute('fill', '#e58e45');
+        tailPath.setAttribute('fill', '#e58e45');
+        tailPath.setAttribute('stroke', '#b3581d');
+        if (tailStripes) tailStripes.style.display = 'block';
+        document.getElementById('breed-orange').style.display = 'block';
+        document.getElementById('body-orange').style.display = 'block';
+      }
+    }
+
+    function applyMouthAndExpressions() {
+      ['mouth-cat-path', 'mouth-tongue-path', 'mouth-vampire-path', 'mouth-smile-path'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+
+      const mouthMap = {
+        'mouth_cat': 'mouth-cat-path',
+        'mouth_tongue': 'mouth-tongue-path',
+        'mouth_vampire': 'mouth-vampire-path',
+        'mouth_smile': 'mouth-smile-path'
+      };
+
+      const selectedMouthId = mouthMap[activeMouth] || 'mouth-cat-path';
+      const activeMouthEl = document.getElementById(selectedMouthId);
+      if (activeMouthEl) activeMouthEl.style.display = 'block';
+
+      const headNormal = document.getElementById('cat-head-normal');
+      const headAirplane = document.getElementById('cat-head-airplane');
+      const headClipPath = document.getElementById('cat-head-clip-path');
+
+      if (activeExpr === 'expr_airplane') {
+        headNormal.style.display = 'none';
+        headAirplane.style.display = 'block';
+        headClipPath.setAttribute('d', headAirplane.getAttribute('d'));
+      } else {
+        headNormal.style.display = 'block';
+        headAirplane.style.display = 'none';
+        headClipPath.setAttribute('d', headNormal.getAttribute('d'));
+      }
+
+      const detEl = document.getElementById('expr-determined-brows');
+      if (detEl) detEl.style.display = (activeExpr === 'expr_determined') ? 'block' : 'none';
+
+      const animeSparkleL = document.getElementById('anime-sparkle-left');
+      const animeSparkleR = document.getElementById('anime-sparkle-right');
+      const isAnime = (activeExpr === 'expr_anime');
+      if (animeSparkleL) animeSparkleL.style.display = isAnime ? 'block' : 'none';
+      if (animeSparkleR) animeSparkleR.style.display = isAnime ? 'block' : 'none';
+    }
+
+    function applyEyeColorAndPupils() {
+      const leftEye = document.getElementById('eye-bg-left');
+      const rightEye = document.getElementById('eye-bg-right');
+      if (leftEye) leftEye.setAttribute('fill', activeEyeColor);
+      if (rightEye) rightEye.setAttribute('fill', activeEyeColor);
+
+      ['pupil-normal', 'pupil-slit', 'pupil-sparkle'].forEach(cls => {
+        document.querySelectorAll('.' + cls).forEach(el => el.style.display = 'none');
+      });
+
+      if (activePupil === 'pupil_slit') {
+        document.querySelectorAll('.pupil-slit').forEach(el => el.style.display = 'block');
+      } else if (activePupil === 'pupil_sparkle' || activeExpr === 'expr_anime') {
+        document.querySelectorAll('.pupil-sparkle').forEach(el => el.style.display = 'block');
+      } else {
+        document.querySelectorAll('.pupil-normal').forEach(el => el.style.display = 'block');
+      }
+    }
+
+    function applyEquippedCosmetics() {
+      ['bowtie', 'glasses', 'flower', 'crown'].forEach(id => {
+        const el = document.getElementById(`cosmetic-${id}`);
+        if (el) el.style.display = equippedItems.includes(id) ? 'block' : 'none';
+      });
+
+      const bowtieLeft = document.getElementById('bowtie-left');
+      const bowtieRight = document.getElementById('bowtie-right');
+      if (bowtieLeft && bowtieRight) {
+        const c = itemColors['bowtie'] || '#2b2725';
+        bowtieLeft.setAttribute('fill', c);
+        bowtieRight.setAttribute('fill', c);
+      }
+
+      const glassesLeft = document.getElementById('glasses-left');
+      const glassesRight = document.getElementById('glasses-right');
+      const glassesBridge = document.getElementById('glasses-bridge');
+      const glassesLegLeft = document.getElementById('glasses-leg-left');
+      const glassesLegRight = document.getElementById('glasses-leg-right');
+      if (glassesLeft && glassesRight) {
+        const c = itemColors['glasses'] || '#2b2725';
+        glassesLeft.setAttribute('stroke', c);
+        glassesRight.setAttribute('stroke', c);
+        if (glassesBridge) glassesBridge.setAttribute('stroke', c);
+        if (glassesLegLeft) glassesLegLeft.setAttribute('stroke', c);
+        if (glassesLegRight) glassesLegRight.setAttribute('stroke', c);
+      }
+
+      const flowerCenter = document.getElementById('flower-center');
+      if (flowerCenter) flowerCenter.setAttribute('fill', itemColors['flower'] || '#c48b36');
+
+      const crownBody = document.getElementById('crown-body');
+      if (crownBody) crownBody.setAttribute('fill', itemColors['crown'] || '#ecd29b');
+    }
+
+    function applyManualTheme() {
+      document.body.classList.remove('theme-cafe', 'theme-night');
+      const cat = getCatalog();
+      const found = (cat.temas || []).find(t => t.id === activeTheme);
+      if (found && found.class) document.body.classList.add(found.class);
+    }
+
+    /* MINIJOGO */
+    let gameInterval = null;
+    function openMinigame(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('game-modal').classList.add('open');
+      startMinigame();
+    }
+    function closeMinigame(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('game-modal').classList.remove('open');
+      clearInterval(gameInterval);
+      document.getElementById('game-arena').innerHTML = '';
+    }
+
+    function startMinigame() {
+      const arena = document.getElementById('game-arena');
+      arena.innerHTML = '';
+      clearInterval(gameInterval);
+
+      gameInterval = setInterval(() => {
+        if (!document.getElementById('game-modal').classList.contains('open')) return;
+
+        const paw = document.createElement('div');
+        paw.className = 'clickable-paw';
+        paw.innerText = ['🐾', '🧶', '🐟', '✨'][Math.floor(Math.random() * 4)];
+        paw.style.left = `${Math.random() * 80 + 5}%`;
+        paw.style.top = `${Math.random() * 70 + 10}%`;
+
+        paw.onclick = () => {
+          userPawCoins += 1;
+          catStats.happiness = Math.min(100, catStats.happiness + 2);
+          saveStats();
+          playPaperSound();
+          paw.remove();
+        };
+
+        arena.appendChild(paw);
+        setTimeout(() => paw.remove(), 900);
+      }, 700);
+    }
+
+    function handleCatClick(e) {
+      const letterGroup = document.getElementById('cat-letter-group');
+      if (letterGroup && letterGroup.style.display !== 'none') {
+        openLetter(e);
+      } else {
+        petTheCat(e);
+      }
+    }
+
+    let petTimeout = null;
+    function petTheCat(event) {
+      if (event) event.stopPropagation();
+      playMeowSound();
+
+      catStats.happiness = Math.min(100, catStats.happiness + 4);
+      catStats.health = Math.min(100, catStats.health + 1);
+      saveStats();
+
+      document.getElementById('regular-eyes').style.display = 'none';
+      document.getElementById('happy-eyes').style.display = 'block';
+      document.getElementById('cat-wrapper').classList.add('petting');
+
+      const rect = document.getElementById('cat-wrapper').getBoundingClientRect();
+      createFloatingParticles(rect.left + rect.width / 2, rect.top + 50, 6);
+
+      clearTimeout(petTimeout);
+      petTimeout = setTimeout(() => {
+        document.getElementById('regular-eyes').style.display = 'block';
+        document.getElementById('happy-eyes').style.display = 'none';
+        document.getElementById('cat-wrapper').classList.remove('petting');
+        updateCatVisualExpression();
+      }, 1000);
+    }
+
+    function openLetter(event) {
+      if (event) event.stopPropagation();
+      const period = getPeriodName();
+      const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+      const cartaCfg = cfg.carta || {};
+
+      document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro você!";
+      document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo amor ♡";
+
+      playPaperSound();
+      document.getElementById('letter-modal').classList.add('open');
+      createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
+
+      localStorage.setItem('cat_last_opened_period', getCurrentPeriodKey());
+      updateLetterHoldingState();
+    }
+
+    function closeLetter(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('letter-modal').classList.remove('open');
+    }
+
+    function getPeriodName() {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 12) return "manha";
+      if (hour >= 12 && hour < 18) return "tarde";
+      if (hour >= 18 && hour < 24) return "noite";
+      return "madrugada";
+    }
+
+    function getCurrentPeriodKey() {
+      return `${new Date().toISOString().split('T')[0]}_${getPeriodName()}`;
+    }
+
+    let speechBubbleTimer = null;
+    function updateLetterHoldingState() {
+      const currentPeriod = getCurrentPeriodKey();
+      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
+      const letterGroup = document.getElementById('cat-letter-group');
+      const idlePaws = document.getElementById('idle-paws');
+      const bubble = document.getElementById('speech-bubble');
+
+      const period = getPeriodName();
+      const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+
+      if (lastOpenedPeriod === currentPeriod) {
+        letterGroup.style.display = 'none';
+        idlePaws.style.display = 'block';
+        
+        bubble.classList.remove('fade-out');
+        bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Você pode reler a cartinha no menu lateral! 💌";
+        
+        clearTimeout(speechBubbleTimer);
+        speechBubbleTimer = setTimeout(() => {
+          bubble.classList.add('fade-out');
+        }, 4000);
+      } else {
+        letterGroup.style.display = 'block';
+        idlePaws.style.display = 'none';
+        bubble.classList.remove('fade-out');
+        bubble.innerText = config.balao || "Psst... toque no gatinho para abrir a cartinha! 🐾";
+      }
+    }
+
+    function exportDataBackup() {
+      const backupData = {
+        cat_coins: userCoins,
+        cat_paw_coins: userPawCoins,
+        cat_stats: catStats,
+        cat_inventory: userInventory,
+        cat_unlocked: unlockedItems,
+        cat_equipped: equippedItems,
+        cat_item_colors: itemColors,
+        cat_active_eye_color: activeEyeColor,
+        cat_active_pupil: activePupil,
+        cat_active_breed: activeBreed,
+        cat_active_mouth: activeMouth,
+        cat_active_expr: activeExpr,
+        cat_active_theme: activeTheme,
+        cat_active_effect: activeEffect,
+        cat_effect_color: effectColor,
+        cat_last_reward_date: localStorage.getItem('cat_last_reward_date'),
+        cat_last_opened_period: localStorage.getItem('cat_last_opened_period'),
+        backup_date: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_gatinho.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.cat_coins !== undefined) userCoins = data.cat_coins;
+          if (data.cat_paw_coins !== undefined) userPawCoins = data.cat_paw_coins;
+          if (data.cat_stats) catStats = data.cat_stats;
+          if (data.cat_inventory) userInventory = data.cat_inventory;
+          if (Array.isArray(data.cat_unlocked)) unlockedItems = data.cat_unlocked;
+          if (Array.isArray(data.cat_equipped)) equippedItems = data.cat_equipped;
+          if (data.cat_item_colors) itemColors = data.cat_item_colors;
+          if (data.cat_active_eye_color) activeEyeColor = data.cat_active_eye_color;
+          if (data.cat_active_pupil) activePupil = data.cat_active_pupil;
+          if (data.cat_active_breed) activeBreed = data.cat_active_breed;
+          if (data.cat_active_mouth) activeMouth = data.cat_active_mouth;
+          if (data.cat_active_expr) activeExpr = data.cat_active_expr;
+          if (data.cat_active_theme) activeTheme = data.cat_active_theme;
+          if (data.cat_active_effect) activeEffect = data.cat_active_effect;
+          if (data.cat_effect_color) effectColor = data.cat_effect_color;
+
+          saveStats();
+          updateLetterHoldingState();
+          renderInventorySlots();
+          renderCurrentShopTab();
+          alert('Backup restaurado com sucesso!');
+        } catch (err) {
+          alert('Erro ao carregar o arquivo de backup.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function openChangelog(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('changelog-modal').classList.add('open');
+    }
+    function closeChangelog(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('changelog-modal').classList.remove('open');
+    }
+
+    let autoTimeEnabled = localStorage.getItem('cat_auto_time') !== 'false';
+    function updateTimeTheme() {
+      if (!autoTimeEnabled) return;
+      const hour = new Date().getHours();
+      document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
+      if (hour >= 5 && hour < 12) document.body.classList.add('time-morning');
+      else if (hour >= 12 && hour < 18) document.body.classList.add('time-afternoon');
+      else if (hour >= 18 && hour < 24) document.body.classList.add('time-evening');
+      else document.body.classList.add('time-dawn');
+    }
+
+    function toggleAutoTime() {
+      autoTimeEnabled = !autoTimeEnabled;
+      localStorage.setItem('cat_auto_time', autoTimeEnabled);
+      const btn = document.getElementById('auto-time-btn');
+      if (autoTimeEnabled) {
+        btn.classList.add('active');
+        updateTimeTheme();
+      } else {
+        btn.classList.remove('active');
+        document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
+      }
+    }
+
+    let catAudio = null;
+    try { catAudio = new Audio('gato_1.mp3'); } catch(e){}
+    function playMeowSound() { if(catAudio) { catAudio.currentTime = 0; catAudio.play().catch(()=>{}); } }
+    function playPaperSound() {}
+
+    /* =========================================================
+       6. CANVAS FX: EFEITOS DE CARINHO
+    ========================================================= */
+    const canvas = document.getElementById('fx-canvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    const particles = [];
+
+    function createFloatingParticles(x, y, count = 5) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x + (Math.random() * 40 - 20),
+          y: y + (Math.random() * 20 - 10),
+          vx: Math.random() * 2 - 1,
+          vy: -(Math.random() * 2 + 1.5),
+          rot: Math.random() * Math.PI * 2,
+          vrot: (Math.random() - 0.5) * 0.08,
+          size: Math.random() * 12 + 12,
+          alpha: 0.95,
+          decay: Math.random() * 0.015 + 0.012,
+          type: activeEffect,
+          color: effectColor
+        });
+      }
+    }
+
+    function drawParticle(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+
+      if (p.type === 'heart') {
+        const topH = p.size * 0.3;
+        ctx.beginPath();
+        ctx.moveTo(0, topH);
+        ctx.bezierCurveTo(0, 0, -p.size/2, 0, -p.size/2, topH);
+        ctx.bezierCurveTo(-p.size/2, (p.size+topH)/2, 0, p.size, 0, p.size);
+        ctx.bezierCurveTo(0, p.size, p.size/2, (p.size+topH)/2, p.size/2, topH);
+        ctx.bezierCurveTo(p.size/2, 0, 0, 0, 0, topH);
+        ctx.fill();
+      } else if (p.type === 'leaf') {
+        const w = p.size * 0.6;
+        const h = p.size * 1.3;
+        ctx.beginPath();
+        ctx.moveTo(0, -h/2);
+        ctx.bezierCurveTo(w, -h/4, w*0.8, h/3, 0, h/2);
+        ctx.bezierCurveTo(-w*0.8, h/3, -w, -h/4, 0, -h/2);
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(43, 39, 37, 0.4)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, -h/2 + 2);
+        ctx.lineTo(0, h/2 - 2);
+        ctx.stroke();
+      } else if (p.type === 'star') {
+        ctx.beginPath();
+        for (let i = 0; i < 4; i++) {
+          ctx.rotate(Math.PI / 2);
+          ctx.lineTo(p.size * 0.7, 0);
+          ctx.lineTo(p.size * 0.22, p.size * 0.22);
+        }
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        drawParticle(pt);
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.rot += pt.vrot;
+        pt.alpha -= pt.decay;
+        if (pt.alpha <= 0) particles.splice(i, 1);
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      applyStatusVisibility();
+      renderStatusBars();
+      renderInventorySlots();
+      updateCatStatsOverTime();
+      updateLetterHoldingState();
+      applyEquippedCosmetics();
+      updateWalletUI();
+
+      if (autoTimeEnabled) {
+        document.getElementById('auto-time-btn').classList.add('active');
+        updateTimeTheme();
+      }
+
+      setTimeout(() => {
+        const initialActive = document.querySelector('.bottom-nav-btn.active-focus');
+        if (initialActive) centerNavButton(initialActive);
+      }, 50);
+
+      setInterval(updateCatStatsOverTime, 30000);
+    });
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uma Cartinha Para Você 🐾</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <script src="mensagens.js"></script>
+  <script src="cosmeticos.js"></script>
+  <style>
+    :root {
+      --bg-paper: #f4ede1;
+      --paper-grid: #ded4c1;
+      --charcoal: #2b2725;
+      --pencil: #443e3a;
+      --pencil-light: #6e645e;
+      --amber: #c48b36;
+      --amber-soft: #ecd29b;
+      --card-bg: #fffdf9;
+      --wood-dark: #63381b;
+      --wood-light: #ab6f40;
+    }
+
+    body.time-morning {
+      --bg-paper: #fbf6ec;
+      --paper-grid: #e6dcce;
+      --charcoal: #2b2725;
+      --card-bg: #ffffff;
+      --amber: #c88832;
+    }
+    body.time-afternoon {
+      --bg-paper: #f2e7d3;
+      --paper-grid: #d9caae;
+      --charcoal: #282422;
+      --card-bg: #fffaf0;
+      --amber: #b87a26;
+    }
+    body.time-evening {
+      --bg-paper: #322d2a;
+      --paper-grid: #423c38;
+      --charcoal: #f3ece1;
+      --pencil-light: #b0a49c;
+      --card-bg: #262220;
+      --amber: #d89f4b;
+    }
+    body.time-dawn {
+      --bg-paper: #1e1b19;
+      --paper-grid: #2c2724;
+      --charcoal: #e6ded4;
+      --pencil-light: #948b84;
+      --card-bg: #151312;
+      --amber: #cfa156;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-paper);
+      background-image: 
+        radial-gradient(circle, var(--paper-grid) 1.2px, transparent 1.2px),
+        linear-gradient(to right, rgba(120, 110, 100, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120, 110, 100, 0.1) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px, 24px 24px;
+      font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      position: relative;
+      user-select: none;
+      transition: background-color 0.5s ease, color 0.5s ease;
+      padding-bottom: 110px;
+    }
+
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* PAINEL LATERAL SUPERIOR ESQUERDO */
+    .side-nav-container {
+      position: fixed;
+      top: 10px;
+      left: 0;
+      display: flex;
+      align-items: flex-start;
+      z-index: 30;
+    }
+
+    .side-nav-box {
+      background: rgba(255, 253, 249, 0.95);
+      backdrop-filter: blur(4px);
+      border: 2px solid var(--charcoal);
+      border-left: none;
+      border-radius: 0 16px 16px 0;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 3px 4px 0 rgba(0,0,0,0.12);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), margin-right 0.35s ease;
+      transform-origin: left center;
+    }
+
+    .side-nav-container.collapsed .side-nav-box {
+      transform: translateX(-100%);
+      margin-right: -100%;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .side-nav-toggle-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-left: none;
+      border-radius: 0 12px 12px 0;
+      padding: 8px 7px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--charcoal);
+      box-shadow: 2px 3px 0 rgba(0,0,0,0.12);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 31;
+    }
+
+    .side-btn {
+      background: var(--card-bg);
+      border: 1.5px solid var(--charcoal);
+      border-radius: 14px;
+      padding: 5px 10px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .side-btn:active { transform: scale(0.95); }
+    .side-btn.active {
+      background: #faf4e6;
+      border-color: var(--amber);
+    }
+
+    /* GAVETA DE STATUS NO TOPO */
+    .status-container {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 18;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .status-container.hidden {
+      transform: translateX(-50%) translateY(-62px);
+    }
+
+    .status-squares-row {
+      display: flex;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .status-square {
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid var(--charcoal);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-fill {
+      position: absolute;
+      inset: 0;
+      background: var(--amber);
+      transition: height 0.4s ease, background-color 0.4s ease;
+      z-index: 1;
+      bottom: 0;
+      top: auto;
+    }
+
+    .status-icon-svg {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      z-index: 2;
+      stroke: var(--charcoal);
+      fill: none;
+      transition: stroke 0.3s ease;
+    }
+
+    .status-toggle-tab {
+      background: var(--card-bg);
+      border: 1.5px solid var(--charcoal);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 1px 16px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      width: 100%;
+      max-width: 480px;
+      margin-top: 75px;
+    }
+
+    .speech-bubble {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-radius: 26px;
+      padding: 8px 18px;
+      font-size: 1.15rem;
+      color: var(--charcoal);
+      box-shadow: 3px 4px 0px rgba(0, 0, 0, 0.15);
+      margin-bottom: 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease, opacity 0.4s ease, max-height 0.4s ease;
+      max-height: 80px;
+      opacity: 1;
+    }
+    .speech-bubble.fade-out {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border: none;
+    }
+
+    .cat-wrapper {
+      position: relative;
+      width: 230px;
+      height: 230px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .cat-wrapper.drag-over {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 8px rgba(196, 139, 54, 0.5));
+    }
+
+    .cat-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(2px 5px 3px rgba(43, 39, 37, 0.12));
+    }
+
+    .anim-body-group {
+      transform-origin: 100px 145px;
+      animation: catBreathe 3.5s ease-in-out infinite alternate;
+    }
+    @keyframes catBreathe {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.025, 0.985); }
+    }
+
+    .anim-tail {
+      transform-origin: 134px 152px;
+      animation: tailWag 3.2s ease-in-out infinite alternate;
+    }
+    @keyframes tailWag {
+      0% { transform: rotate(-5deg); }
+      50% { transform: rotate(4deg); }
+      100% { transform: rotate(-8deg); }
+    }
+
+    .anim-eye-blink {
+      transform-origin: 95px 98px;
+      animation: catBlink 4.5s infinite;
+    }
+    @keyframes catBlink {
+      0%, 94%, 98%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.08); }
+    }
+
+    .anim-ears {
+      transform-origin: 100px 65px;
+      animation: earFlick 6s infinite ease-in-out;
+    }
+    @keyframes earFlick {
+      0%, 93%, 97%, 100% { transform: rotate(0deg); }
+      95% { transform: rotate(-2deg); }
+    }
+
     /* BARRA INFERIOR MODERNA COM DESTAQUE DINÂMICO */
    /* BARRA INFERIOR COM ROLAGEM HORIZONTAL E CENTRALIZAÇÃO */
 /* Container que esconde o excesso nas bordas e centraliza a esteira */
