@@ -175,55 +175,54 @@
     }
 
 
-    /* PAINEL LATERAL SUPERIOR ESQUERDO RETRÁTIL */
-
+  /* PAINEL LATERAL SUPERIOR ESQUERDO RETRÁTIL */
     .side-nav-container {
-
       position: fixed;
-
       top: 10px;
-
       left: 0;
-
       display: flex;
-
       align-items: flex-start;
-
       z-index: 30;
-
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-
     }
-
-    .side-nav-container.collapsed {
-
-      transform: translateX(-100%);
-
-    }
-
 
     .side-nav-box {
-
       background: rgba(255, 253, 249, 0.95);
-
       backdrop-filter: blur(4px);
-
       border: 2px solid var(--charcoal);
-
       border-left: none;
-
       border-radius: 0 16px 16px 0;
-
       padding: 6px 10px;
-
       display: flex;
-
       flex-direction: column;
-
       gap: 6px;
-
       box-shadow: 3px 4px 0 rgba(0,0,0,0.12);
+      width: 150px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
+    /* Apenas a caixinha recua para a esquerda; a aba com a seta permanece visível */
+    .side-nav-container.collapsed .side-nav-box {
+      transform: translateX(-100%);
+      margin-right: -150px;
+    }
+
+    .side-nav-toggle-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--charcoal);
+      border-left: none;
+      border-radius: 0 12px 12px 0;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--charcoal);
+      box-shadow: 2px 3px 0 rgba(0,0,0,0.12);
+      margin-top: 10px;
+      transition: background 0.2s;
+      user-select: none;
+    }
+    .side-nav-toggle-btn:hover {
+      background: var(--paper-grid);
     }
 
 
@@ -1573,8 +1572,8 @@
   <canvas id="fx-canvas"></canvas>
 
 
-<!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO --> 
-  <div class="side-nav-container" id="side-nav-container"> 
+<!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO (INICIA OCULTO) -->
+  <div class="side-nav-container collapsed" id="side-nav-container">
     <div class="side-nav-box"> 
       <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()"> 
         <span id="auto-time-icon">⏰</span> 
@@ -1593,14 +1592,13 @@
         <span>✉️ Ler Carta</span> 
       </button> 
     </div> 
-    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral"> 
-      <span id="side-nav-arrow">◀</span> 
-    </div> 
+    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral">
+      <span id="side-nav-arrow">▶</span>
+    </div>
   </div>
 
-  <!-- STATUS MINIMALISTA (CENTRO TOPO) -->
-
-  <div class="status-container" id="status-container">
+<!-- STATUS MINIMALISTA (CENTRO TOPO - INICIA OCULTO) -->
+  <div class="status-container hidden" id="status-container">
 
     <div class="status-squares-row">
 
@@ -1667,9 +1665,7 @@
     </div>
 
     <div class="status-toggle-tab" onclick="toggleStatusVisibility()" title="Ocultar/Exibir Status">
-
-      <span id="status-arrow-icon">▲</span>
-
+      <span id="status-arrow-icon">▼</span>
     </div>
 
   </div>
@@ -2485,45 +2481,26 @@
     }
 
 
-    /* =========================================================
-
+ /* =========================================================
        2. CONTROLE DE MENUS: LATERAL ESQUERDO VS STATUS TOPO
-
     ========================================================= */
-
-    let sideNavOpen = true;
-
-    let statusVisible = false;
-
+    let sideNavOpen = false;   // Inicia fechado
+    let statusVisible = false; // Inicia fechado
 
     function toggleSideNav() {
-
       sideNavOpen = !sideNavOpen;
-
       const nav = document.getElementById('side-nav-container');
-
       const arrow = document.getElementById('side-nav-arrow');
-
       if (sideNavOpen) {
-
         nav.classList.remove('collapsed');
-
         arrow.innerText = '◀';
-
-        // Quando abre o menu lateral, oculta a barra de status
-
+        // Se abriu a lateral, fecha a barra de status do topo
         statusVisible = false;
-
         applyStatusVisibility();
-
       } else {
-
         nav.classList.add('collapsed');
-
         arrow.innerText = '▶';
-
       }
-
     }
 
 
@@ -4757,34 +4734,37 @@
     animate();
 
 
-    window.addEventListener('DOMContentLoaded', () => {
-
+window.addEventListener('DOMContentLoaded', () => {
+      // Garante que tudo inicie recolhido
+      statusVisible = false;
       applyStatusVisibility();
 
-      renderStatusBars();
+      sideNavOpen = false;
+      const sideNav = document.getElementById('side-nav-container');
+      const sideArrow = document.getElementById('side-nav-arrow');
+      if (sideNav) sideNav.classList.add('collapsed');
+      if (sideArrow) sideArrow.innerText = '▶';
 
-      renderInventorySlots();
-
-      updateCatStatsOverTime();
-
-      updateLetterHoldingState();
-
-      applyEquippedCosmetics();
-
-      updateWalletUI();
-
-
-      if (autoTimeEnabled) {
-
-        document.getElementById('auto-time-btn').classList.add('active');
-
-        updateTimeTheme();
-
+      const tray = document.getElementById('inventory-tray');
+      if (tray) {
+        tray.classList.remove('visible');
+        tray.style.display = 'none';
       }
 
+      renderStatusBars();
+      renderInventorySlots();
+      updateCatStatsOverTime();
+      updateLetterHoldingState();
+      applyEquippedCosmetics();
+      updateWalletUI();
+
+      if (autoTimeEnabled) {
+        const autoBtn = document.getElementById('auto-time-btn');
+        if (autoBtn) autoBtn.classList.add('active');
+        updateTimeTheme();
+      }
 
       setInterval(updateCatStatsOverTime, 30000);
-
     });
 
   </script>
