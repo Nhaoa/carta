@@ -333,6 +333,7 @@
 
     /* BARRA INFERIOR MODERNA COM DESTAQUE DINÂMICO */
    /* BARRA INFERIOR COM ROLAGEM HORIZONTAL E CENTRALIZAÇÃO */
+/* Container que esconde o excesso nas bordas e centraliza a esteira */
 .bottom-nav-bar {
   position: fixed;
   bottom: 0;
@@ -341,33 +342,29 @@
   background: var(--card-bg);
   border-top: 2.5px solid var(--charcoal);
   padding: 10px 0;
-  display: flex;
-  align-items: center;
   z-index: 50;
   box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.1);
   min-height: 76px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Oculta scrollbar no Firefox */
-}
-.bottom-nav-bar::-webkit-scrollbar {
-  display: none; /* Oculta scrollbar no Chrome/Safari */
+  overflow: hidden; /* Mantém o foco sem barras visíveis */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Espaçador flexível nas pontas para permitir que o 1º e o último cheguem ao centro */
-.bottom-nav-bar::before,
-.bottom-nav-bar::after {
-  content: '';
-  flex: 0 0 calc(50vw - 45px);
+/* Trilho que desliza suavemente para reposicionar os botões */
+.bottom-nav-track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
 }
 
 .bottom-nav-btn {
   background: transparent;
   border: 1.5px solid transparent;
   border-radius: 18px;
-  padding: 6px 16px;
+  padding: 6px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -376,13 +373,41 @@
   font-family: inherit;
   color: var(--charcoal);
   cursor: pointer;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              opacity 0.3s ease, 
-              background-color 0.3s ease, 
-              box-shadow 0.3s ease;
-  opacity: 0.6;
-  transform: scale(0.88);
-  flex: 0 0 auto; /* Impede que os botões encolham ao adicionar mais itens */
+  opacity: 0.55;
+  transform: scale(0.85);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.bottom-nav-btn span.icon {
+  font-size: 1.35rem;
+  transition: transform 0.3s ease;
+}
+
+.bottom-nav-btn span.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Botão centralizado em foco */
+.bottom-nav-btn.active-focus {
+  opacity: 1;
+  transform: translateY(-6px) scale(1.15);
+  background: #faeed7;
+  border-color: var(--amber);
+  box-shadow: 0 6px 14px rgba(196, 139, 54, 0.28), 0 2px 0 var(--charcoal);
+  padding: 8px 18px;
+}
+
+.bottom-nav-btn.active-focus span.icon {
+  transform: scale(1.12);
+}
+
+.bottom-nav-btn.active-focus span.label {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #7a480e;
 }
 
 .bottom-nav-btn span.icon {
@@ -1170,7 +1195,8 @@
   </main>
 
   <!-- BARRA INFERIOR MODERNA: BOTÃO ATIVO COM FOCO/DESTACADO -->
-  <nav class="bottom-nav-bar" id="bottom-nav-bar">
+<nav class="bottom-nav-bar" id="bottom-nav-bar">
+  <div class="bottom-nav-track" id="bottom-nav-track">
     <button class="bottom-nav-btn active-focus" id="nav-btn-foods" onclick="handleBottomNavClick(this, openFoodStall)">
       <span class="icon">🏪</span>
       <span class="label">Comidas</span>
@@ -1183,7 +1209,8 @@
       <span class="icon">✨</span>
       <span class="label">Loja VIP</span>
     </button>
-  </nav>
+  </div>
+</nav>
 
   <!-- MODAL: CARTEIRA TEMÁTICA DE COURO -->
   <div class="modal-backdrop" id="wallet-modal" onclick="closeWalletModal(event)">
