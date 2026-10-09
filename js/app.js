@@ -151,19 +151,24 @@ function toggleAutoTime() {
   }
 }
 
-/* CARROSSEL DA BARRA INFERIOR */
+/* =========================================================
+   CARROSSEL DA BARRA INFERIOR (DOCK COM FOCO CENTRAL)
+========================================================= */
 const navCarousel = document.getElementById('bottom-nav-carousel');
 const navButtons = document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn');
 
 function updateNavFocus() {
-  if (!navCarousel) return;
-  const carouselCenter = navCarousel.scrollLeft + navCarousel.clientWidth / 2;
+  if (!navCarousel || navButtons.length === 0) return;
+  const screenCenter = window.innerWidth / 2;
+
   let closestBtn = null;
   let minDistance = Infinity;
 
   navButtons.forEach((btn) => {
-    const btnCenter = btn.offsetLeft + btn.clientWidth / 2;
-    const dist = Math.abs(carouselCenter - btnCenter);
+    const rect = btn.getBoundingClientRect();
+    const btnCenter = rect.left + rect.width / 2;
+    const dist = Math.abs(screenCenter - btnCenter);
+
     if (dist < minDistance) {
       minDistance = dist;
       closestBtn = btn;
@@ -171,8 +176,11 @@ function updateNavFocus() {
   });
 
   navButtons.forEach((btn) => {
-    if (btn === closestBtn) btn.classList.add('active-focus');
-    else btn.classList.remove('active-focus');
+    if (btn === closestBtn) {
+      btn.classList.add('active-focus');
+    } else {
+      btn.classList.remove('active-focus');
+    }
   });
 }
 
@@ -187,15 +195,21 @@ function scrollNavToIndex(index, smooth = true) {
 }
 
 function handleNavClick(index, callback, event) {
-  if (event) event.stopPropagation();
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
   const btn = navButtons[index];
-  if (!btn.classList.contains('active-focus')) {
-    scrollNavToIndex(index, true);
+  
+  // Se o botão tocado já for o central em foco, abre direto o menu/jogo
+  if (btn && btn.classList.contains('active-focus')) {
+    if (typeof callback === 'function') callback(event);
     return;
   }
-  if (typeof callback === 'function') {
-    callback(event);
-  }
+
+  // Se não estiver em foco, centraliza nele e atualiza o estado
+  scrollNavToIndex(index, true);
+  setTimeout(updateNavFocus, 180);
 }
 
 if (navCarousel) {
@@ -207,7 +221,6 @@ if (navCarousel) {
     }
   }, { passive: true });
 }
-
 /* LOJA VIP: MODAL E PREVIEWS */
 function openShop(e) {
   if (e) e.stopPropagation();
@@ -565,7 +578,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     scrollNavToIndex(1, false);
     updateNavFocus();
-  }, 100);
+  }, 150);
 
   setTimeout(() => {
     const hint = document.getElementById('nav-swipe-hint');
