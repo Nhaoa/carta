@@ -247,24 +247,32 @@ body {
 
 .cats-duo-stage {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: flex-end;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
+  max-width: 420px;
   margin-bottom: 8px;
 }
 
 .cat-wrapper {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
+  flex: 0 0 170px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s;
 }
+
 .cat-wrapper.partner-cat {
+  width: 155px;
+  height: 155px;
+  flex: 0 0 155px;
   transform: scale(0.92);
 }
 .cat-wrapper.drag-over {
