@@ -1573,48 +1573,30 @@
   <canvas id="fx-canvas"></canvas>
 
 
-  <!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO -->
-
-  <div class="side-nav-container" id="side-nav-container">
-
-    <div class="side-nav-box">
-
-      <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()">
-
-        <span id="auto-time-icon">⏰</span>
-
-        <span id="auto-time-text">Tema Auto</span>
-
-      </button>
-
-      <button class="side-btn" onclick="openChangelog(event)">
-
-        <span>📜 Novidades</span>
-
-      </button>
-
-      <button class="side-btn" onclick="openWalletModal(event)">
-
-        <span>👛 Carteira</span>
-
-      </button>
-
-      <button class="side-btn" onclick="focusInventoryTray(event)">
-
-        <span>🎒 Mochila</span>
-
-      </button>
-
-    </div>
-
-    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral">
-
-      <span id="side-nav-arrow">◀</span>
-
-    </div>
-
+<!-- PAINEL RETRÁTIL SUPERIOR ESQUERDO --> 
+  <div class="side-nav-container" id="side-nav-container"> 
+    <div class="side-nav-box"> 
+      <button class="side-btn" id="auto-time-btn" onclick="toggleAutoTime()"> 
+        <span id="auto-time-icon">⏰</span> 
+        <span id="auto-time-text">Tema Auto</span> 
+      </button> 
+      <button class="side-btn" onclick="openChangelog(event)"> 
+        <span>📜 Novidades</span> 
+      </button> 
+      <button class="side-btn" onclick="openWalletModal(event)"> 
+        <span>👛 Carteira</span> 
+      </button> 
+      <button class="side-btn" id="backpack-toggle-btn" onclick="toggleBackpack(event)"> 
+        <span>🎒 Mochila</span> 
+      </button> 
+      <button class="side-btn" onclick="openLetter(event)"> 
+        <span>✉️ Ler Carta</span> 
+      </button> 
+    </div> 
+    <div class="side-nav-toggle-btn" onclick="toggleSideNav()" title="Ocultar/Exibir Menu Lateral"> 
+      <span id="side-nav-arrow">◀</span> 
+    </div> 
   </div>
-
 
   <!-- STATUS MINIMALISTA (CENTRO TOPO) -->
 
@@ -2681,7 +2663,46 @@
       }
 
     }
+/* ========================================================= 
+       RESGATE DIÁRIO MANUAL (CARTEIRA) & TOGGLE DA MOCHILA
+    ========================================================= */ 
+    function checkDailyRewardManual() {
+      if (isStatusCritical()) {
+        alert("O gatinho está muito debilitado ou com fome para pescar hoje... Cuide dele primeiro! 😿");
+        return;
+      }
+      const today = new Date().toDateString();
+      const lastClaim = localStorage.getItem('cat_last_reward_date');
 
+      if (lastClaim !== today) {
+        userCoins += 1;
+        localStorage.setItem('cat_last_reward_date', today);
+        saveStats();
+        playPaperSound();
+        alert("🎁 Você resgatou 1 Peixinho Diário com sucesso! 🐟");
+      } else {
+        alert("Você já resgatou o peixinho de hoje! Volte amanhã 🐾");
+      }
+    }
+
+    function toggleBackpack(e) {
+      if (e) e.stopPropagation();
+      const tray = document.getElementById('inventory-tray');
+      const btn = document.getElementById('backpack-toggle-btn');
+      if (!tray) return;
+
+      if (!tray.classList.contains('visible') && tray.style.display !== 'block') {
+        tray.classList.add('visible');
+        tray.style.display = 'block';
+        if (btn) btn.classList.add('active');
+        renderInventorySlots();
+        tray.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        tray.classList.remove('visible');
+        tray.style.display = 'none';
+        if (btn) btn.classList.remove('active');
+      }
+    }
 
     /* =========================================================
 
@@ -2983,43 +3004,26 @@
     }
 
 
-    function buyFoodItem(foodId) {
+   function buyFoodItem(foodId) { 
+      const food = FOOD_ITEMS.find(f => f.id === foodId); 
+      if (!food) return; 
 
-      const food = FOOD_ITEMS.find(f => f.id === foodId);
+      if (userPawCoins >= food.price) { 
+        userPawCoins -= food.price; 
+        userInventory[foodId] = (userInventory[foodId] || 0) + 1; 
+        saveStats(); 
+        playPaperSound(); 
+        renderInventorySlots(); 
+        updateWalletUI(); 
+        createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 6); 
 
-      if (!food) return;
-
-
-      if (userPawCoins >= food.price) {
-
-        userPawCoins -= food.price;
-
-        userInventory[foodId] = (userInventory[foodId] || 0) + 1;
-
-        saveStats();
-
-        playPaperSound();
-
-        renderInventorySlots();
-
-        createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 6);
-
-
-        triggerVendorHappyAnimation();
-
-        const thanks = VENDOR_THANKS[Math.floor(Math.random() * VENDOR_THANKS.length)];
-
-        setVendorSpeech(thanks);
-
-      } else {
-
-        setVendorSpeech("Miau... faltam patinhas! Jogue no 'Brincar' lá fora! 🐾");
-
-      }
-
+        triggerVendorHappyAnimation(); 
+        const thanks = VENDOR_THANKS[Math.floor(Math.random() * VENDOR_THANKS.length)]; 
+        setVendorSpeech(thanks); 
+      } else { 
+        setVendorSpeech("Miau... faltam patinhas! Jogue no 'Brincar' lá fora! 🐾"); 
+      } 
     }
-
-
     /* INVENTÁRIO */
 
     function renderInventorySlots() {
@@ -3213,57 +3217,42 @@
     }
 
 
-    function feedCat(foodId) {
+    function feedCat(foodId) { 
+      if (!userInventory[foodId] || userInventory[foodId] <= 0) return; 
 
-      if (!userInventory[foodId] || userInventory[foodId] <= 0) return;
+      const food = FOOD_ITEMS.find(f => f.id === foodId); 
+      if (!food) return; 
 
+      userInventory[foodId]--; 
+      if (userInventory[foodId] <= 0) delete userInventory[foodId]; 
 
-      const food = FOOD_ITEMS.find(f => f.id === foodId);
+      catStats.hunger = Math.min(100, catStats.hunger + food.hunger); 
+      catStats.health = Math.min(100, catStats.health + food.health); 
+      catStats.energy = Math.min(100, catStats.energy + food.energy); 
+      catStats.happiness = Math.min(100, catStats.happiness + food.joy); 
 
-      if (!food) return;
+      playPaperSound(); 
+      playMeowSound(); 
+      saveStats(); 
+      renderInventorySlots(); 
 
+      const mouthVariants = ['mouth-cat-path', 'mouth-tongue-path', 'mouth-vampire-path', 'mouth-smile-path', 'mouth-sad', 'mouth-normal'];
+      mouthVariants.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
 
-      userInventory[foodId]--;
+      const hungryMouth = document.getElementById('mouth-hungry'); 
+      if (hungryMouth) hungryMouth.style.display = 'block'; 
 
-      if (userInventory[foodId] <= 0) delete userInventory[foodId];
+      const rect = catWrapper.getBoundingClientRect(); 
+      createFloatingParticles(rect.left + rect.width / 2, rect.top + 60, 8); 
 
-
-      catStats.hunger = Math.min(100, catStats.hunger + food.hunger);
-
-      catStats.health = Math.min(100, catStats.health + food.health);
-
-      catStats.energy = Math.min(100, catStats.energy + food.energy);
-
-      catStats.happiness = Math.min(100, catStats.happiness + food.joy);
-
-
-      playPaperSound();
-
-      playMeowSound();
-
-      saveStats();
-
-      renderInventorySlots();
-
-
-      const hungryMouth = document.getElementById('mouth-hungry');
-
-      hungryMouth.style.display = 'block';
-
-
-      const rect = catWrapper.getBoundingClientRect();
-
-      createFloatingParticles(rect.left + rect.width / 2, rect.top + 60, 8);
-
-
-      setTimeout(() => {
-
-        hungryMouth.style.display = 'none';
-
-        updateCatVisualExpression();
-
-      }, 700);
-
+      setTimeout(() => { 
+        if (hungryMouth) hungryMouth.style.display = 'none'; 
+        updateCatVisualExpression(); 
+        applyMouthAndExpressions();
+      }, 1000); 
     }
 
 
@@ -4360,49 +4349,42 @@
     }
 
 
-    function updateLetterHoldingState() {
+  function updateLetterHoldingState() { 
+      const currentPeriod = getCurrentPeriodKey(); 
+      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period'); 
+      const letterGroup = document.getElementById('cat-letter-group'); 
+      const idlePaws = document.getElementById('idle-paws'); 
+      const bubble = document.getElementById('speech-bubble'); 
 
-      const currentPeriod = getCurrentPeriodKey();
+      const period = getPeriodName(); 
+      const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {}; 
 
-      const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
-
-      const letterGroup = document.getElementById('cat-letter-group');
-
-      const idlePaws = document.getElementById('idle-paws');
-
-      const bubble = document.getElementById('speech-bubble');
-
-
-      const period = getPeriodName();
-
-      const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
-
-
-      if (lastOpenedPeriod === currentPeriod) {
-
-        letterGroup.style.display = 'none';
-
-        idlePaws.style.display = 'block';
-
-        if (!isStatusCritical()) {
-
-          bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Toque no balão para reler a cartinha! 💌";
-
+      if (lastOpenedPeriod === currentPeriod) { 
+        if (letterGroup) letterGroup.style.display = 'none'; 
+        if (idlePaws) idlePaws.style.display = 'block'; 
+        if (!isStatusCritical() && bubble) { 
+          bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Você pode reler a cartinha no menu ao lado! 💌"; 
+          bubble.style.display = 'block';
+          bubble.classList.remove('fade-out');
+          setTimeout(() => {
+            bubble.classList.add('fade-out');
+            setTimeout(() => { bubble.style.display = 'none'; }, 400);
+          }, 6000);
+        } 
+      } else { 
+        if (letterGroup) letterGroup.style.display = 'block'; 
+        if (idlePaws) idlePaws.style.display = 'none'; 
+        if (bubble) {
+          bubble.innerText = config.balao || "Psst... toque no gatinho para abrir a cartinha! 🐾"; 
+          bubble.style.display = 'block';
+          bubble.classList.remove('fade-out');
+          setTimeout(() => {
+            bubble.classList.add('fade-out');
+            setTimeout(() => { bubble.style.display = 'none'; }, 400);
+          }, 6000);
         }
-
-      } else {
-
-        letterGroup.style.display = 'block';
-
-        idlePaws.style.display = 'none';
-
-        bubble.innerText = config.balao || "Psst... toque no gatinho para abrir a cartinha! 🐾";
-
-      }
-
+      } 
     }
-
-
     function exportDataBackup() {
 
       const backupData = {
