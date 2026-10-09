@@ -1,4 +1,112 @@
 /* =========================================================
+   EFEITOS VISUAIS E ÁUDIO DINÂMICO
+========================================================= */
+
+window.initFXCanvas = function() {
+  const canvas = document.getElementById('fx-canvas');
+  if (!canvas) return;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+};
+
+window.createFloatingParticles = function(x, y, count = 12) {
+  const canvas = document.getElementById('fx-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  const emojis = ['💖', '✨', '🐾', '🎀', '🌸', '💫'];
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: x || window.innerWidth / 2,
+      y: y || window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 1.2) * 5,
+      alpha: 1,
+      char: emojis[Math.floor(Math.random() * emojis.length)],
+      size: 16 + Math.random() * 12
+    });
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let active = false;
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha -= 0.02;
+      if (p.alpha > 0) {
+        active = true;
+        ctx.globalAlpha = p.alpha;
+        ctx.font = `${p.size}px sans-serif`;
+        ctx.fillText(p.char, p.x, p.y);
+      }
+    });
+    ctx.globalAlpha = 1;
+    if (active) requestAnimationFrame(frame);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  requestAnimationFrame(frame);
+};
+
+// Web Audio API: Efeitos sonoros sem precisar de MP3 externo
+let audioCtx = null;
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+window.playMeowSound = function() {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(520, now);
+    osc.frequency.exponentialRampToValueAtTime(780, now + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(440, now + 0.35);
+
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.35);
+  } catch (e) {}
+};
+
+window.playPaperSound = function() {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const now = ctx.currentTime;
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.1);
+
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.1);
+  } catch (e) {}
+};/* =========================================================
    EFEITOS VISUAIS E ÁUDIO
 ========================================================= */
 
