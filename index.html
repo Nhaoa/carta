@@ -1496,30 +1496,42 @@
       }
     }
 
-    /* CONTROLE DE FOCO DOS BOTÕES INFERIORES */
-/* CONTROLE DE FOCO E CENTRALIZAÇÃO AUTOMÁTICA */
+function centerNavButton(targetBtn) {
+  const track = document.getElementById('bottom-nav-track');
+  const bar = document.getElementById('bottom-nav-bar');
+  if (!track || !bar || !targetBtn) return;
+
+  // Centro do botão em relação ao trilho
+  const btnCenterInTrack = targetBtn.offsetLeft + targetBtn.offsetWidth / 2;
+  // Centro natural do trilho
+  const trackCenter = track.offsetWidth / 2;
+
+  // Deslocamento necessário para trazer o botão clicado ao centro absoluto
+  const offset = trackCenter - btnCenterInTrack;
+  track.style.transform = `translateX(${offset}px)`;
+}
+
 function handleBottomNavClick(clickedBtn, actionCallback) {
-  // 1. Atualiza classes de foco
   document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
     btn.classList.remove('active-focus');
   });
   clickedBtn.classList.add('active-focus');
 
-  // 2. Centraliza o botão na barra
-  const navBar = document.getElementById('bottom-nav-bar');
-  if (navBar) {
-    const navWidth = navBar.clientWidth;
-    const btnLeft = clickedBtn.offsetLeft;
-    const btnWidth = clickedBtn.offsetWidth;
+  // Aguarda a aplicação do scale antes de alinhar
+  requestAnimationFrame(() => {
+    centerNavButton(clickedBtn);
+  });
 
-    // Calcula o scroll necessário para deixar o centro do botão no centro da barra
-    const targetScroll = btnLeft - (navWidth / 2) + (btnWidth / 2);
-
-    navBar.scrollTo({
-      left: targetScroll,
-      behavior: 'smooth'
-    });
+  if (typeof actionCallback === 'function') {
+    actionCallback();
   }
+}
+
+// Alinha no centro logo ao carregar a página
+window.addEventListener('resize', () => {
+  const activeBtn = document.querySelector('.bottom-nav-btn.active-focus');
+  if (activeBtn) centerNavButton(activeBtn);
+});
 
   // 3. Executa a ação do botão (abrir modal/jogo/loja)
   if (typeof actionCallback === 'function') {
@@ -2689,7 +2701,10 @@ function handleBottomNavClick(clickedBtn, actionCallback) {
       updateLetterHoldingState();
       applyEquippedCosmetics();
       updateWalletUI();
-
+      setTimeout(() => {
+  const initialActive = document.querySelector('.bottom-nav-btn.active-focus');
+  if (initialActive) centerNavButton(initialActive);
+}, 50);
       if (autoTimeEnabled) {
         document.getElementById('auto-time-btn').classList.add('active');
         updateTimeTheme();
