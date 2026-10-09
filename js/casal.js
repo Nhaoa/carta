@@ -80,36 +80,83 @@ function registerCoupleCheckin() {
 }
 
 // Suporte ao toque por NFC
+/* Substitua em js/casal.js */
+
+// Iniciar leitura NFC com diagnóstico claro de erro
 async function startNFCSharing() {
   if (!('NDEFReader' in window)) {
-    alert('NFC não suportado neste navegador. Use o código de texto!');
+    alert('NFC não suportado neste navegador. Utilize o QR Code ou o link direto!');
+    return;
+  }
+
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    alert('Aviso: O navegador bloqueia o NFC sem HTTPS seguro. Use o site hospedado em HTTPS ou use o QR Code!');
     return;
   }
 
   try {
     const ndef = new NDEFReader();
-    await ndef.write({
-      records: [{ recordType: 'text', data: 'CAT_DNA:' + exportMyCatDNA() }]
-    });
-
-    alert('Aproxime o verso do celular da sua parceira para conectar...');
-
+    // Inicia a leitura direto no gesto do clique
     await ndef.scan();
+
+    alert('📡 Sensor ativado! Aproxime uma tag NFC ou o celular do seu amor...');
+
     ndef.onreading = (event) => {
       const decoder = new TextDecoder();
       for (const record of event.message.records) {
         const text = decoder.decode(record.data);
-        if (text.startsWith('CAT_DNA:')) {
-          const incomingDNA = text.replace('CAT_DNA:', '');
+        if (text.includes('CAT_DNA:')) {
+          const incomingDNA = text.split('CAT_DNA:')[1];
           importPartnerDNA(incomingDNA);
           break;
         }
       }
     };
   } catch (err) {
-    alert('Erro ou permissão negada para o NFC.');
+    if (err.name === 'NotAllowedError') {
+      alert('Permissão de NFC negada nas permissões do site no navegador.');
+    } else {
+      alert(`Não foi possível ativar o sensor: ${err.message || err.name}`);
+    }
   }
 }
+
+// Compartilhar link direto por WhatsApp
+function sharePartnerLink() {
+  const dna = exportMyCatDNA();
+  const url = `${window.location.origin}${window.location.pathname}?parceiro=${dna}`;
+  const msg = encodeURIComponent(`Amor, aqui está o vínculo do meu gatinho para você abrir no jogo! 🐾💖\n${url}`);
+  window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+}
+
+// Exibir QR Code na tela para o outro escanear
+function showPartnerQRCode() {
+  const dna = exportMyCatDNA();
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(dna)}`;
+  
+  const container = document.getElementById('couple-status-container');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div style="text-align: center; padding: 10px;">
+      <p style="font-weight: bold; margin-bottom: 8px; color: #542c13;">Aponte a câmera dela para o QR Code:</p>
+      <img src="${qrUrl}" alt="QR Code do Gatinho" style="border: 2.5px solid var(--charcoal); border-radius: 12px; margin-bottom: 10px; background: white; padding: 6px;" />
+      <button class="action-btn" style="width: 100%; justify-content: center;" onclick="renderCoupleTabUI()">⬅ Voltar</button>
+    </div>
+  `;
+}
+
+// Auto-conectar se abriu por link compartilhado (?parceiro=...)
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const dnaParam = params.get('parceiro');
+  if (dnaParam) {
+    setTimeout(() => {
+      importPartnerDNA(dnaParam);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }, 600);
+  }
+});
 
 // Renderiza a interface do modal do casal
 function renderCoupleTabUI() {
