@@ -1,4 +1,60 @@
 /* =========================================================
+   EFEITOS VISUAIS E ÁUDIO
+========================================================= */
+
+window.initFXCanvas = function() {
+  const canvas = document.getElementById('fx-canvas');
+  if (!canvas) return;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+};
+
+window.createFloatingParticles = function(x, y, count = 12) {
+  const canvas = document.getElementById('fx-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  const emojis = ['💖', '✨', '🐾', '🎀'];
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: x || window.innerWidth / 2,
+      y: y || window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 1.2) * 5,
+      alpha: 1,
+      char: emojis[Math.floor(Math.random() * emojis.length)],
+      size: 16 + Math.random() * 12
+    });
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let active = false;
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha -= 0.02;
+      if (p.alpha > 0) {
+        active = true;
+        ctx.globalAlpha = p.alpha;
+        ctx.font = `${p.size}px sans-serif`;
+        ctx.fillText(p.char, p.x, p.y);
+      }
+    });
+    ctx.globalAlpha = 1;
+    if (active) requestAnimationFrame(frame);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  requestAnimationFrame(frame);
+};
+
+window.playPaperSound = function() {};
+window.playMeowSound = function() {};/* =========================================================
    CANVAS 2D: EFEITOS DE CARINHO COM FOLHAS ANATÔMICAS,
    CORAÇÕES E ESTRELAS
 ========================================================= */
