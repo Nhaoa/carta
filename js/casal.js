@@ -14,7 +14,7 @@ let coupleStreak = JSON.parse(localStorage.getItem('cat_couple_streak') || JSON.
   draws: 0
 }));
 
-// Exporta o DNA do próprio gatinho em string compacta
+// Exporta o DNA do próprio gatinho em string compacta (Base64)
 function exportMyCatDNA() {
   const dnaObj = {
     name: localStorage.getItem('cat_name') || 'Mimi',
@@ -79,9 +79,6 @@ function registerCoupleCheckin() {
   localStorage.setItem('cat_couple_streak', JSON.stringify(coupleStreak));
 }
 
-// Suporte ao toque por NFC
-/* Substitua em js/casal.js */
-
 // Iniciar leitura NFC com diagnóstico claro de erro
 async function startNFCSharing() {
   if (!('NDEFReader' in window)) {
@@ -96,7 +93,6 @@ async function startNFCSharing() {
 
   try {
     const ndef = new NDEFReader();
-    // Inicia a leitura direto no gesto do clique
     await ndef.scan();
 
     alert('📡 Sensor ativado! Aproxime uma tag NFC ou o celular do seu amor...');
@@ -114,7 +110,7 @@ async function startNFCSharing() {
     };
   } catch (err) {
     if (err.name === 'NotAllowedError') {
-      alert('Permissão de NFC negada nas permissões do site no navegador.');
+      alert('Permissão de NFC negada nas configurações do site no navegador.');
     } else {
       alert(`Não foi possível ativar o sensor: ${err.message || err.name}`);
     }
@@ -168,9 +164,11 @@ function renderCoupleTabUI() {
       <div style="text-align: center; padding: 14px 6px;">
         <p style="font-size: 1.05rem; margin-bottom: 12px; color: var(--pencil);">Vocês ainda não vincularam os gatinhos!</p>
         <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="action-btn" style="justify-content: center; background: #eef7e8;" onclick="sharePartnerLink()">💬 Enviar Link para Ela (WhatsApp)</button>
+          <button class="action-btn" style="justify-content: center;" onclick="showPartnerQRCode()">📷 Mostrar QR Code para Ela</button>
           <button class="action-btn" style="justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Meu Código DNA</button>
           <button class="action-btn" style="justify-content: center;" onclick="promptPartnerCode()">📥 Inserir Código Dela</button>
-          <button class="action-btn" style="justify-content: center; background: #faede1;" onclick="startNFCSharing()">📲 Conectar por Toque NFC</button>
+          <button class="action-btn" style="justify-content: center; font-size: 0.82rem;" onclick="startNFCSharing()">📲 Tentar Toque NFC</button>
         </div>
       </div>
     `;
@@ -218,14 +216,20 @@ function renderCoupleTabUI() {
       </div>
 
       <div style="display: flex; gap: 8px; margin-top: 10px;">
-        <button class="action-btn" style="flex: 1; font-size: 0.8rem; justify-content: center;" onclick="copyMyDNACode()">📋 Atualizar Meu Código</button>
+        <button class="action-btn" style="flex: 1; font-size: 0.8rem; justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Meu Código</button>
         <button class="action-btn" style="flex: 1; font-size: 0.8rem; justify-content: center;" onclick="promptPartnerCode()">🔄 Atualizar Código Dela</button>
       </div>
     </div>
   `;
 
   renderMiniCatInside('couple-my-cat-preview', {
-    breed: activeBreed, eyeColor: activeEyeColor, pupil: activePupil, mouth: activeMouth, expr: activeExpr, equipped: equippedItems, itemColors: itemColors
+    breed: activeBreed,
+    eyeColor: activeEyeColor,
+    pupil: activePupil,
+    mouth: activeMouth,
+    expr: activeExpr,
+    equipped: equippedItems,
+    itemColors: itemColors
   });
   renderMiniCatInside('couple-partner-cat-preview', partnerData);
 }
@@ -254,43 +258,88 @@ function renderMiniCatInside(containerId, catAttrs) {
   const clone = mainSvg.cloneNode(true);
   clone.removeAttribute('id');
 
-  // Ajusta cores e pelagens do clone
-  const tail = clone.querySelector('#cat-tail');
-  const body = clone.querySelector('#cat-body');
-  const head = clone.querySelector('#cat-head-normal');
+  // Ajusta cores dos olhos
   const eyeL = clone.querySelector('#eye-bg-left');
   const eyeR = clone.querySelector('#eye-bg-right');
-
   if (eyeL) eyeL.setAttribute('fill', catAttrs.eyeColor || '#2b2725');
   if (eyeR) eyeR.setAttribute('fill', catAttrs.eyeColor || '#2b2725');
 
-  // Aplica pelagem
+  // Base do corpo e rabo
+  const body = clone.querySelector('#cat-body');
+  const head = clone.querySelector('#cat-head-normal');
+  const tail = clone.querySelector('#cat-tail');
+  const tailStripes = clone.querySelector('#tail-stripes');
+
+  if (body) body.setAttribute('fill', '#fffdf9');
+  if (head) head.setAttribute('fill', '#fffdf9');
+  if (tail) {
+    tail.setAttribute('fill', '#fffdf9');
+    tail.setAttribute('stroke', '#2b2725');
+  }
+  if (tailStripes) tailStripes.style.display = 'none';
+
+  // Esconde todas as pelagens antes de ativar a correta
   ['breed-siamese', 'breed-tuxedo', 'breed-orange', 'body-tuxedo', 'body-orange'].forEach(id => {
     const el = clone.querySelector('#' + id);
     if (el) el.style.display = 'none';
   });
 
+  // Raças
   if (catAttrs.breed === 'breed_siamese') {
     if (body) body.setAttribute('fill', '#ebdcc9');
     if (head) head.setAttribute('fill', '#ebdcc9');
     if (tail) tail.setAttribute('fill', '#3d281d');
     const s = clone.querySelector('#breed-siamese');
     if (s) s.style.display = 'block';
+  } else if (catAttrs.breed === 'breed_tuxedo') {
+    if (tail) tail.setAttribute('fill', '#2b2725');
+    const tHead = clone.querySelector('#breed-tuxedo');
+    const tBody = clone.querySelector('#body-tuxedo');
+    if (tHead) tHead.style.display = 'block';
+    if (tBody) tBody.style.display = 'block';
   } else if (catAttrs.breed === 'breed_orange') {
     if (body) body.setAttribute('fill', '#e58e45');
     if (head) head.setAttribute('fill', '#e58e45');
-    if (tail) tail.setAttribute('fill', '#e58e45');
-    const o = clone.querySelector('#breed-orange');
-    const bo = clone.querySelector('#body-orange');
-    if (o) o.style.display = 'block';
-    if (bo) bo.style.display = 'block';
+    if (tail) {
+      tail.setAttribute('fill', '#e58e45');
+      tail.setAttribute('stroke', '#b3581d');
+    }
+    if (tailStripes) tailStripes.style.display = 'block';
+    const oHead = clone.querySelector('#breed-orange');
+    const oBody = clone.querySelector('#body-orange');
+    if (oHead) oHead.style.display = 'block';
+    if (oBody) oBody.style.display = 'block';
   }
 
-  // Acessórios
+  // Acessórios e cores
+  const colors = catAttrs.itemColors || {};
   ['bowtie', 'glasses', 'flower', 'crown'].forEach(acc => {
     const el = clone.querySelector('#cosmetic-' + acc);
-    if (el) el.style.display = (catAttrs.equipped && catAttrs.equipped.includes(acc)) ? 'block' : 'none';
+    const isEquipped = catAttrs.equipped && catAttrs.equipped.includes(acc);
+    if (el) el.style.display = isEquipped ? 'block' : 'none';
   });
+
+  const bL = clone.querySelector('#bowtie-left');
+  const bR = clone.querySelector('#bowtie-right');
+  if (bL && bR && colors['bowtie']) {
+    bL.setAttribute('fill', colors['bowtie']);
+    bR.setAttribute('fill', colors['bowtie']);
+  }
+
+  const gL = clone.querySelector('#glasses-left');
+  const gR = clone.querySelector('#glasses-right');
+  const gB = clone.querySelector('#glasses-bridge');
+  if (gL && gR && colors['glasses']) {
+    gL.setAttribute('stroke', colors['glasses']);
+    gR.setAttribute('stroke', colors['glasses']);
+    if (gB) gB.setAttribute('stroke', colors['glasses']);
+  }
+
+  const fC = clone.querySelector('#flower-center');
+  if (fC && colors['flower']) fC.setAttribute('fill', colors['flower']);
+
+  const cB = clone.querySelector('#crown-body');
+  if (cB && colors['crown']) cB.setAttribute('fill', colors['crown']);
 
   container.innerHTML = '';
   container.appendChild(clone);
