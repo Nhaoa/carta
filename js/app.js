@@ -1,4 +1,200 @@
 /* =========================================================
+   APP PRINCIPAL: INICIALIZAÇÃO, TEMAS, DOCK E NAVEGAÇÃO
+========================================================= */
+
+let isAutoTimeTheme = localStorage.getItem('cat_theme_auto') !== 'false';
+let currentManualTimeIndex = 0;
+const TIME_THEMES = ['morning', 'afternoon', 'evening', 'dawn'];
+const TIME_ICONS = { morning: '🌅', afternoon: '☀️', evening: '🌆', dawn: '🌙' };
+const TIME_NAMES = { morning: 'Manhã', afternoon: 'Tarde', evening: 'Noite', dawn: 'Madrugada' };
+
+function applyTimeTheme(themeName) {
+  document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
+  document.body.classList.add(`time-${themeName}`);
+
+  const icon = document.getElementById('auto-time-icon');
+  const text = document.getElementById('auto-time-text');
+  if (icon && text) {
+    if (isAutoTimeTheme) {
+      icon.innerText = '⏰';
+      text.innerText = `Auto (${TIME_NAMES[themeName]})`;
+    } else {
+      icon.innerText = TIME_ICONS[themeName];
+      text.innerText = TIME_NAMES[themeName];
+    }
+  }
+}
+
+function updateAutoTimeTheme() {
+  if (!isAutoTimeTheme) return;
+  const hour = new Date().getHours();
+  let theme = 'morning';
+  if (hour >= 5 && hour < 12) theme = 'morning';
+  else if (hour >= 12 && hour < 18) theme = 'afternoon';
+  else if (hour >= 18 && hour < 22) theme = 'evening';
+  else theme = 'dawn';
+  applyTimeTheme(theme);
+}
+
+function toggleAutoTime() {
+  if (isAutoTimeTheme) {
+    isAutoTimeTheme = false;
+    currentManualTimeIndex = 0;
+    applyTimeTheme(TIME_THEMES[currentManualTimeIndex]);
+  } else {
+    currentManualTimeIndex++;
+    if (currentManualTimeIndex >= TIME_THEMES.length) {
+      isAutoTimeTheme = true;
+      updateAutoTimeTheme();
+    } else {
+      applyTimeTheme(TIME_THEMES[currentManualTimeIndex]);
+    }
+  }
+  localStorage.setItem('cat_theme_auto', isAutoTimeTheme);
+}
+
+function toggleSideNav() {
+  const sideNav = document.getElementById('side-nav-container');
+  const arrow = document.getElementById('side-nav-arrow');
+  if (!sideNav) return;
+
+  const isCollapsed = sideNav.classList.toggle('collapsed');
+  if (arrow) {
+    arrow.innerText = isCollapsed ? '▶' : '◀';
+  }
+}
+
+function toggleStatusVisibility() {
+  const statusContainer = document.getElementById('status-container');
+  const arrow = document.getElementById('status-arrow-icon');
+  if (!statusContainer) return;
+
+  const isHidden = statusContainer.classList.toggle('hidden');
+  if (arrow) {
+    arrow.innerText = isHidden ? '▼' : '▲';
+  }
+}
+
+function openWalletModal(e) {
+  if (e) e.stopPropagation();
+  const coinVal = document.getElementById('wallet-coin-val');
+  const pawVal = document.getElementById('wallet-paw-val');
+  if (coinVal) coinVal.innerText = catStats.fishCoins || 0;
+  if (pawVal) pawVal.innerText = catStats.pawCoins || 0;
+
+  const modal = document.getElementById('wallet-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeWalletModal(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('wallet-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function openChangelog(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('changelog-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeChangelog(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('changelog-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+/* =========================================================
+   BARRA INFERIOR (DOCK) COM ROLAGEM E FOCO CENTRAL
+========================================================= */
+const navCarousel = document.getElementById('bottom-nav-carousel');
+const navButtons = document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn');
+
+function updateNavFocus() {
+  if (!navCarousel || navButtons.length === 0) return;
+  const screenCenter = window.innerWidth / 2;
+
+  let closestBtn = null;
+  let minDistance = Infinity;
+
+  navButtons.forEach((btn) => {
+    const rect = btn.getBoundingClientRect();
+    const btnCenter = rect.left + rect.width / 2;
+    const dist = Math.abs(screenCenter - btnCenter);
+
+    if (dist < minDistance) {
+      minDistance = dist;
+      closestBtn = btn;
+    }
+  });
+
+  navButtons.forEach((btn) => {
+    if (btn === closestBtn) {
+      btn.classList.add('active-focus');
+    } else {
+      btn.classList.remove('active-focus');
+    }
+  });
+}
+
+function scrollNavToIndex(index, smooth = true) {
+  if (!navCarousel || !navButtons[index]) return;
+  const btn = navButtons[index];
+  const targetLeft = btn.offsetLeft - (navCarousel.clientWidth / 2) + (btn.clientWidth / 2);
+  navCarousel.scrollTo({
+    left: targetLeft,
+    behavior: smooth ? 'smooth' : 'auto'
+  });
+}
+
+function handleNavClick(index, callback, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  const btn = navButtons[index];
+  
+  if (btn && btn.classList.contains('active-focus')) {
+    if (typeof callback === 'function') callback(event);
+    return;
+  }
+
+  scrollNavToIndex(index, true);
+  setTimeout(updateNavFocus, 180);
+}
+
+if (navCarousel) {
+  navCarousel.addEventListener('scroll', () => {
+    updateNavFocus();
+    const hint = document.getElementById('nav-swipe-hint');
+    if (hint && !hint.classList.contains('fade-out')) {
+      hint.classList.add('fade-out');
+    }
+  }, { passive: true });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadStats();
+  initFXCanvas();
+  renderCatAppearence();
+  updateAutoTimeTheme();
+  setInterval(updateAutoTimeTheme, 60000);
+
+  setTimeout(() => {
+    scrollNavToIndex(1, false);
+    updateNavFocus();
+  }, 100);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+      const tray = document.getElementById('inventory-tray');
+      if (tray && tray.classList.contains('visible')) {
+        toggleBackpack();
+      }
+    }
+  });
+});/* =========================================================
    CONTROLE GERAL, MENUS RETRÁTEIS, CARROSSEL E INICIALIZAÇÃO
 ========================================================= */
 
