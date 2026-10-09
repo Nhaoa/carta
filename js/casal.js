@@ -1,4 +1,148 @@
 /* =========================================================
+   SISTEMA DE CASAL
+========================================================= */
+
+window.partnerData = null;
+try {
+  const raw = localStorage.getItem('cat_partner_data');
+  if (raw && raw !== 'null') window.partnerData = JSON.parse(raw);
+} catch (e) { window.partnerData = null; }
+
+window.coupleStreak = JSON.parse(localStorage.getItem('cat_couple_streak') || JSON.stringify({
+  current: 0,
+  max: 0,
+  totalDays: 0,
+  lastCheckinDate: null,
+  ribbonCoins: 0,
+  winsPlayer: 0,
+  winsPartner: 0,
+  draws: 0
+}));
+
+window.exportMyCatDNA = function() {
+  const dnaObj = {
+    name: localStorage.getItem('cat_name') || 'Mimi',
+    peerId: window.myPeerId || localStorage.getItem('cat_my_peer_id'),
+    breed: window.activeBreed,
+    eyeColor: window.activeEyeColor,
+    stats: window.catStats
+  };
+  return btoa(encodeURIComponent(JSON.stringify(dnaObj)));
+};
+
+window.importPartnerDNA = function(dnaString) {
+  try {
+    const raw = decodeURIComponent(atob(dnaString.trim()));
+    const parsed = JSON.parse(raw);
+    window.partnerData = parsed;
+    localStorage.setItem('cat_partner_data', JSON.stringify(window.partnerData));
+    window.renderPartnerCatStage();
+    window.renderCoupleTabUI();
+    alert('🐾 Vínculo estabelecido com sucesso!');
+  } catch (err) {
+    alert('Código inválido!');
+  }
+};
+
+window.renderPartnerCatStage = function() {
+  const wrapper = document.getElementById('partner-cat-wrapper');
+  const slot = document.getElementById('partner-svg-slot');
+  if (!wrapper || !slot) return;
+
+  if (!window.partnerData) {
+    wrapper.style.display = 'none';
+    slot.innerHTML = '';
+    return;
+  }
+
+  wrapper.style.display = 'flex';
+  const mainSvg = document.getElementById('main-cat-svg');
+  if (!mainSvg) return;
+  slot.innerHTML = '';
+  const clone = mainSvg.cloneNode(true);
+  clone.removeAttribute('id');
+  slot.appendChild(clone);
+};
+
+window.renderCoupleTabUI = function() {
+  const container = document.getElementById('couple-status-container');
+  if (!container) return;
+
+  if (!window.partnerData) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 14px 6px;">
+        <p style="margin-bottom: 12px;">Vocês ainda não vincularam os gatinhos!</p>
+        <button class="action-btn" style="width: 100%; justify-content: center; margin-bottom: 8px;" onclick="promptPartnerCode()">📥 Inserir Código Dela</button>
+        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Meu Código</button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="couple-card-stitch">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <b>Conectados! 🐾</b>
+        <span id="couple-online-indicator">⚪ Conectando</span>
+      </div>
+      <div class="couple-stats-grid">
+        <div class="couple-stat-item">
+          <span class="stat-icon">🔥</span>
+          <span class="stat-value">${window.coupleStreak.current} dias</span>
+          <span class="stat-label">Streak</span>
+        </div>
+        <div class="couple-stat-item">
+          <span class="stat-icon">🎀</span>
+          <span class="stat-value">${window.coupleStreak.ribbonCoins}</span>
+          <span class="stat-label">Laços</span>
+        </div>
+      </div>
+      <button class="action-btn" style="width: 100%; justify-content: center; margin-top: 8px;" onclick="sendRemotePet()">💌 Mandar Carinho</button>
+      <button class="unlink-btn" onclick="unlinkCouple()">💔 Desvincular</button>
+    </div>
+  `;
+};
+
+window.promptPartnerCode = function() {
+  const code = prompt('Cole aqui o código DNA do parceiro:');
+  if (code) window.importPartnerDNA(code);
+};
+
+window.copyMyDNACode = function() {
+  const dna = window.exportMyCatDNA();
+  navigator.clipboard.writeText(dna).then(() => alert('Código copiado!')).catch(() => prompt('Copie:', dna));
+};
+
+window.sendRemotePet = function() {
+  if (typeof sendMultiplayerPacket === 'function' && sendMultiplayerPacket({ type: 'CARINHO' })) {
+    alert('🐾 Carinho enviado ao vivo!');
+  } else {
+    alert('Parceira offline no momento!');
+  }
+};
+
+window.unlinkCouple = function() {
+  if (confirm('Desvincular os gatinhos?')) {
+    window.partnerData = null;
+    localStorage.removeItem('cat_partner_data');
+    window.renderPartnerCatStage();
+    window.renderCoupleTabUI();
+  }
+};
+
+window.openCoupleModal = function(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('couple-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  window.renderCoupleTabUI();
+};
+
+window.closeCoupleModal = function(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('couple-modal');
+  if (modal) modal.classList.remove('open');
+};/* =========================================================
    SISTEMA DE CASAL: PERFIL, VÍNCULO, STREAK, NFC, QR CODE
    E SINCRONIZAÇÃO DE STATUS
 ========================================================= */
