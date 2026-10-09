@@ -94,6 +94,7 @@
     </div>
 
     <!-- CONTAINER DOS GATOS LADO A LADO -->
+    <!-- CONTAINER DOS GATOS LADO A LADO -->
     <div class="cats-duo-stage" id="cats-duo-stage">
       <!-- Gatinho Principal (Você) -->
       <div class="cat-wrapper" id="cat-wrapper" onclick="handleCatClick(event)">
@@ -261,8 +262,14 @@
             </g>
           </g>
         </svg>
-      </div> <!-- fim cat-wrapper -->
-    </div> <!-- fim cats-duo-stage -->
+      </div>
+
+      <!-- Gatinho Parceiro (Fixo no HTML, controlado pelo JS) -->
+      <div class="cat-wrapper partner-cat" id="partner-cat-wrapper" style="display: none;" onclick="openCoupleModal(event)">
+        <span class="cat-label-tag" id="partner-label-tag">Parceira</span>
+        <div id="partner-svg-slot" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;"></div>
+      </div>
+    </div>
 
     <!-- MOCHILA DE COMIDINHAS COM SCROLL E TEXTURA DE COURO -->
     <div class="inventory-tray" id="inventory-tray">
