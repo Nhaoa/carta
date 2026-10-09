@@ -1,387 +1,169 @@
 /* =========================================================
-   APP PRINCIPAL, LOJA VIP COMPLETA, CARTA E NAVEGAÇÃO
+   CONTROLE GERAL, MENUS RETRÁTEIS, CARROSSEL E INICIALIZAÇÃO
 ========================================================= */
 
-let isAutoTimeTheme = localStorage.getItem('cat_theme_auto') !== 'false';
-let currentManualTimeIndex = 0;
-const TIME_THEMES = ['morning', 'afternoon', 'evening', 'dawn'];
-const TIME_ICONS = { morning: '🌅', afternoon: '☀️', evening: '🌆', dawn: '🌙' };
-const TIME_NAMES = { morning: 'Manhã', afternoon: 'Tarde', evening: 'Noite', dawn: 'Madrugada' };
+let sideNavOpen = false;
+let statusVisible = false;
+let autoTimeEnabled = localStorage.getItem('cat_auto_time') !== 'false';
 
-function applyTimeTheme(themeName) {
-  document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
-  document.body.classList.add(`time-${themeName}`);
+let catAudio = null;
+try { catAudio = new Audio('gato_1.mp3'); } catch(e){}
+function playMeowSound() { if(catAudio) { catAudio.currentTime = 0; catAudio.play().catch(()=>{}); } }
+function playPaperSound() {}
 
-  const icon = document.getElementById('auto-time-icon');
-  const text = document.getElementById('auto-time-text');
-  if (icon && text) {
-    if (isAutoTimeTheme) {
-      icon.innerText = '⏰';
-      text.innerText = `Auto (${TIME_NAMES[themeName]})`;
-    } else {
-      icon.innerText = TIME_ICONS[themeName];
-      text.innerText = TIME_NAMES[themeName];
-    }
-  }
-}
-
-function updateAutoTimeTheme() {
-  if (!isAutoTimeTheme) return;
-  const hour = new Date().getHours();
-  let theme = 'morning';
-  if (hour >= 5 && hour < 12) theme = 'morning';
-  else if (hour >= 12 && hour < 18) theme = 'afternoon';
-  else if (hour >= 18 && hour < 22) theme = 'evening';
-  else theme = 'dawn';
-  applyTimeTheme(theme);
-}
-
-window.toggleAutoTime = function() {
-  if (isAutoTimeTheme) {
-    isAutoTimeTheme = false;
-    currentManualTimeIndex = 0;
-    applyTimeTheme(TIME_THEMES[currentManualTimeIndex]);
-  } else {
-    currentManualTimeIndex++;
-    if (currentManualTimeIndex >= TIME_THEMES.length) {
-      isAutoTimeTheme = true;
-      updateAutoTimeTheme();
-    } else {
-      applyTimeTheme(TIME_THEMES[currentManualTimeIndex]);
-    }
-  }
-  localStorage.setItem('cat_theme_auto', isAutoTimeTheme);
-};
-
-window.toggleSideNav = function() {
-  const sideNav = document.getElementById('side-nav-container');
+function toggleSideNav() {
+  sideNavOpen = !sideNavOpen;
+  const nav = document.getElementById('side-nav-container');
   const arrow = document.getElementById('side-nav-arrow');
-  if (!sideNav) return;
-  const isCollapsed = sideNav.classList.toggle('collapsed');
-  if (arrow) arrow.innerText = isCollapsed ? '▶' : '◀';
-};
+  if (sideNavOpen) {
+    nav.classList.remove('collapsed');
+    arrow.innerText = '◀';
+    statusVisible = false;
+    applyStatusVisibility();
+  } else {
+    nav.classList.add('collapsed');
+    arrow.innerText = '▶';
+  }
+}
 
-window.toggleStatusVisibility = function() {
-  const statusContainer = document.getElementById('status-container');
+function toggleStatusVisibility() {
+  statusVisible = !statusVisible;
+  if (statusVisible) {
+    sideNavOpen = false;
+    document.getElementById('side-nav-container').classList.add('collapsed');
+    document.getElementById('side-nav-arrow').innerText = '▶';
+  }
+  applyStatusVisibility();
+}
+
+function applyStatusVisibility() {
+  const container = document.getElementById('status-container');
   const arrow = document.getElementById('status-arrow-icon');
-  if (!statusContainer) return;
-  const isHidden = statusContainer.classList.toggle('hidden');
-  if (arrow) arrow.innerText = isHidden ? '▼' : '▲';
-};
-
-window.openWalletModal = function(e) {
-  if (e) e.stopPropagation();
-  const coinVal = document.getElementById('wallet-coin-val');
-  const pawVal = document.getElementById('wallet-paw-val');
-  if (coinVal) coinVal.innerText = window.catStats.fishCoins || 0;
-  if (pawVal) pawVal.innerText = window.catStats.pawCoins || 0;
-  const modal = document.getElementById('wallet-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeWalletModal = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('wallet-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.checkDailyRewardManual = function() {
-  const today = new Date().toDateString();
-  if (window.catStats.lastRewardDate === today) {
-    alert('Você já resgatou o seu peixinho diário de hoje! Volte amanhã. 🐟');
-    return;
+  if (statusVisible) {
+    container.classList.remove('hidden');
+    arrow.innerText = '▲';
+  } else {
+    container.classList.add('hidden');
+    arrow.innerText = '▼';
   }
-  window.catStats.lastRewardDate = today;
-  window.catStats.fishCoins = (window.catStats.fishCoins || 0) + 1;
-  window.saveStats();
-  window.openWalletModal();
-  alert('🎉 Parabéns! Ganhou +1 Peixinho 🐟!');
-};
-
-window.openChangelog = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('changelog-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeChangelog = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('changelog-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-// Ler carta: retira a carta das patinhas do gato
-window.openLetter = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('letter-modal');
-  const content = document.getElementById('letter-content');
-  if (content) {
-    content.innerText = (typeof MENSAGENS_CARTA !== 'undefined' && MENSAGENS_CARTA.length > 0)
-      ? MENSAGENS_CARTA[Math.floor(Math.random() * MENSAGENS_CARTA.length)]
-      : "Cada segundo com você é o momento mais doce do meu dia! 💖🐾";
-  }
-  if (modal) modal.classList.add('open');
-  if (typeof window.setCatHoldingLetter === 'function') {
-    window.setCatHoldingLetter(false);
-  }
-};
-
-// Fechar carta: o gato volta a segurar a carta
-window.closeLetter = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('letter-modal');
-  if (modal) modal.classList.remove('open');
-  if (typeof window.setCatHoldingLetter === 'function') {
-    window.setCatHoldingLetter(true);
-  }
-};
-
-/* =========================================================
-   LOJA VIP COMPLETA COM VISUALIZAÇÃO AO VIVO E ABAS
-========================================================= */
-
-window.openShop = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('shop-modal');
-  if (!modal) return;
-  modal.classList.add('open');
-  renderShopMiniPreview();
-  window.switchShopTab('acessorios');
-};
-
-window.closeShop = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('shop-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-function renderShopMiniPreview() {
-  const box = document.getElementById('shop-mini-cat-container');
-  const mainSvg = document.getElementById('main-cat-svg');
-  if (!box || !mainSvg) return;
-  box.innerHTML = '';
-  const clone = mainSvg.cloneNode(true);
-  clone.removeAttribute('id');
-  box.appendChild(clone);
 }
 
-window.switchShopTab = function(tabName) {
-  document.querySelectorAll('.shop-tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('onclick').includes(tabName));
-  });
+function openLetter(event) {
+  if (event) event.stopPropagation();
+  const period = getPeriodName();
+  const cfg = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+  const cartaCfg = cfg.carta || {};
 
-  const area = document.getElementById('shop-content-area');
-  if (!area) return;
+  document.getElementById('letter-content').innerText = cartaCfg.texto || "Adoro você!";
+  document.getElementById('letter-footer').innerText = cartaCfg.rodape || "Com todo amor ♡";
 
-  if (tabName === 'acessorios') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderCosmeticCard('Gravata Borboleta', 'bowtie', '🎀')}
-        ${renderCosmeticCard('Óculos Redondo', 'glasses', '👓')}
-        ${renderCosmeticCard('Florzinha', 'flower', '🌸')}
-        ${renderCosmeticCard('Coroa Dourada', 'crown', '👑')}
-      </div>
-    `;
-  } else if (tabName === 'racas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Gato Branco', 'breed_white', '🤍', 'breed', 0)}
-        ${renderOptionCard('Gato Siamês', 'breed_siamese', '🤎', 'breed', 1)}
-        ${renderOptionCard('Gato Frajola', 'breed_tuxedo', '🖤', 'breed', 1)}
-        ${renderOptionCard('Gato Laranja', 'breed_orange', '🧡', 'breed', 1)}
-      </div>
-    `;
-  } else if (tabName === 'olhos') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Olhos Ônix', '#2b2725', '⚫', 'eye', 0)}
-        ${renderOptionCard('Olhos Âmbar', '#c48b36', '🟡', 'eye', 1)}
-        ${renderOptionCard('Olhos Esmeralda', '#27ae60', '🟢', 'eye', 1)}
-        ${renderOptionCard('Olhos Safira', '#2980b9', '🔵', 'eye', 1)}
-      </div>
-    `;
-  } else if (tabName === 'pupilas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Normal', 'pupil_normal', '👀', 'pupil', 0)}
-        ${renderOptionCard('Fenda Felina', 'pupil_slit', '👁️', 'pupil', 1)}
-        ${renderOptionCard('Brilho Sparkle', 'pupil_sparkle', '✨', 'pupil', 1)}
-        ${renderOptionCard('Anime Estrela', 'pupil_anime', '⭐', 'pupil', 1)}
-      </div>
-    `;
-  } else if (tabName === 'bocas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Miau Clássico', 'mouth_cat', '🐱', 'mouth', 0)}
-        ${renderOptionCard('Linguinha :P', 'mouth_tongue', '👅', 'mouth', 1)}
-        ${renderOptionCard('Presas Vampiro', 'mouth_vampire', '🧛', 'mouth', 1)}
-        ${renderOptionCard('Sorridente', 'mouth_smile', '😊', 'mouth', 1)}
-      </div>
-    `;
-  } else if (tabName === 'expressoes') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Neutra', 'none', '😐', 'expr', 0)}
-        ${renderOptionCard('Determinado', 'expr_determined', '😼', 'expr', 1)}
-        ${renderOptionCard('Orelhas de Avião', 'expr_airplane', '✈️', 'expr', 1)}
-      </div>
-    `;
-  } else if (tabName === 'temas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('morning')">🌅 Manhã</button>
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('afternoon')">☀️ Tarde</button>
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('evening')">🌆 Noite</button>
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('dawn')">🌙 Madrugada</button>
-      </div>
-    `;
-  } else if (tabName === 'efeitos') {
-    area.innerHTML = `
-      <div style="text-align: center; padding: 12px;">
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="createFloatingParticles(window.innerWidth/2, window.innerHeight/2, 25)">
-          ✨ Disparar Chuva de Brilhos
-        </button>
-      </div>
-    `;
-  } else if (tabName === 'backup') {
-    area.innerHTML = `
-      <div style="text-align: center; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-        <button class="action-btn" style="justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Código DNA do Gatinho</button>
-        <button class="action-btn" style="justify-content: center;" onclick="promptPartnerCode()">📥 Restaurar DNA via Código</button>
-      </div>
-    `;
-  }
-};
+  playPaperSound();
+  document.getElementById('letter-modal').classList.add('open');
+  createFloatingParticles(window.innerWidth / 2, window.innerHeight / 2, 12);
 
-function renderCosmeticCard(name, id, icon) {
-  const isEq = window.equippedItems.includes(id);
-  return `
-    <div class="shop-card">
-      <span style="font-size: 2rem;">${icon}</span>
-      <span class="shop-card-name">${name}</span>
-      <button class="action-btn" style="font-size: 0.8rem; margin: 4px 0;" onclick="toggleEquip('${id}')">
-        ${isEq ? '✓ Equipado' : 'Equipar'}
-      </button>
-      <button class="palette-btn" onclick="openColorPalette('${id}')">🎨 Mudar Cor</button>
-    </div>
-  `;
+  localStorage.setItem('cat_last_opened_period', getCurrentPeriodKey());
+  updateLetterHoldingState();
 }
 
-function renderOptionCard(name, val, icon, type, cost) {
-  return `
-    <div class="shop-card">
-      <span style="font-size: 2rem;">${icon}</span>
-      <span class="shop-card-name">${name}</span>
-      <span class="shop-card-price">${cost > 0 ? cost + ' 🐟' : 'Grátis'}</span>
-      <button class="action-btn" style="font-size: 0.8rem;" onclick="applyShopCustomization('${type}', '${val}', ${cost})">
-        Aplicar
-      </button>
-    </div>
-  `;
+function closeLetter(event) {
+  if (event) event.stopPropagation();
+  document.getElementById('letter-modal').classList.remove('open');
 }
 
-window.toggleEquip = function(id) {
-  const idx = window.equippedItems.indexOf(id);
-  if (idx > -1) window.equippedItems.splice(idx, 1);
-  else window.equippedItems.push(id);
-  localStorage.setItem('cat_equipped', JSON.stringify(window.equippedItems));
-  window.renderCatAppearence();
-  renderShopMiniPreview();
-  window.switchShopTab('acessorios');
-};
+function getPeriodName() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return "manha";
+  if (hour >= 12 && hour < 18) return "tarde";
+  if (hour >= 18 && hour < 24) return "noite";
+  return "madrugada";
+}
 
-window.applyShopCustomization = function(type, val, cost) {
-  if (cost > 0 && window.catStats.fishCoins < cost) {
-    alert('Peixinhos insuficientes!');
-    return;
+function getCurrentPeriodKey() {
+  return `${new Date().toISOString().split('T')[0]}_${getPeriodName()}`;
+}
+
+function updateLetterHoldingState() {
+  const currentPeriod = getCurrentPeriodKey();
+  const lastOpenedPeriod = localStorage.getItem('cat_last_opened_period');
+  const letterGroup = document.getElementById('cat-letter-group');
+  const idlePaws = document.getElementById('idle-paws');
+  const bubble = document.getElementById('speech-bubble');
+
+  const period = getPeriodName();
+  const config = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS[period]) || {};
+
+  if (lastOpenedPeriod === currentPeriod) {
+    if (letterGroup) letterGroup.style.display = 'none';
+    if (idlePaws) idlePaws.style.display = 'block';
+    if (!isStatusCritical() && bubble) {
+      bubble.innerText = (window.CONFIG_MENSAGENS && window.CONFIG_MENSAGENS.balaoSemCarta) || "Você pode reler a cartinha no menu ao lado! 💌";
+      bubble.style.display = 'block';
+      bubble.classList.remove('fade-out');
+      setTimeout(() => {
+        bubble.classList.add('fade-out');
+        setTimeout(() => { bubble.style.display = 'none'; }, 400);
+      }, 6000);
+    }
+  } else {
+    if (letterGroup) letterGroup.style.display = 'block';
+    if (idlePaws) idlePaws.style.display = 'none';
+    if (bubble) {
+      bubble.innerText = config.balao || "Psst... toque no gatinho para abrir a cartinha! 🐾";
+      bubble.style.display = 'block';
+      bubble.classList.remove('fade-out');
+      setTimeout(() => {
+        bubble.classList.add('fade-out');
+        setTimeout(() => { bubble.style.display = 'none'; }, 400);
+      }, 6000);
+    }
   }
-  if (cost > 0) {
-    window.catStats.fishCoins -= cost;
-    window.saveStats();
-  }
+}
 
-  if (type === 'breed') {
-    window.activeBreed = val;
-    localStorage.setItem('cat_breed', val);
-  } else if (type === 'eye') {
-    window.activeEyeColor = val;
-    localStorage.setItem('cat_eyecolor', val);
-  } else if (type === 'pupil') {
-    window.activePupil = val;
-    localStorage.setItem('cat_pupil', val);
-  } else if (type === 'mouth') {
-    window.activeMouth = val;
-    localStorage.setItem('cat_mouth', val);
-  } else if (type === 'expr') {
-    window.activeExpr = val;
-    localStorage.setItem('cat_expr', val);
-  }
-
-  window.renderCatAppearence();
-  renderShopMiniPreview();
-  alert('Visual atualizado com sucesso! 🐾');
-};
-
-let currentColorItem = null;
-window.openColorPalette = function(itemKey) {
-  currentColorItem = itemKey;
-  const modal = document.getElementById('color-modal');
-  const grid = document.getElementById('color-picker-grid');
-  if (!modal || !grid) return;
-
-  const colors = [
-    { name: 'Rubi', hex: '#c0392b' }, { name: 'Âmbar', hex: '#e67e22' },
-    { name: 'Ouro', hex: '#f1c40f' }, { name: 'Esmeralda', hex: '#27ae60' },
-    { name: 'Céu', hex: '#3498db' }, { name: 'Índigo', hex: '#2980b9' },
-    { name: 'Ametista', hex: '#8e44ad' }, { name: 'Rosa', hex: '#e84393' },
-    { name: 'Carvão', hex: '#2b2725' }, { name: 'Pérola', hex: '#ffffff' }
-  ];
-
-  grid.innerHTML = colors.map(c => `
-    <div class="color-swatch-card" onclick="selectItemColor('${c.hex}')">
-      <div class="color-swatch-circle" style="background: ${c.hex};"></div>
-      <span class="color-swatch-name">${c.name}</span>
-    </div>
-  `).join('');
-
-  modal.classList.add('open');
-};
-
-window.closeColorModal = function(e) {
+function openChangelog(e) {
   if (e) e.stopPropagation();
-  const modal = document.getElementById('color-modal');
-  if (modal) modal.classList.remove('open');
-};
+  document.getElementById('changelog-modal').classList.add('open');
+}
+function closeChangelog(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('changelog-modal').classList.remove('open');
+}
 
-window.selectItemColor = function(hex) {
-  if (currentColorItem) {
-    window.itemColors[currentColorItem] = hex;
-    localStorage.setItem('cat_item_colors', JSON.stringify(window.itemColors));
-    window.renderCatAppearence();
-    renderShopMiniPreview();
-    window.closeColorModal();
+function updateTimeTheme() {
+  if (!autoTimeEnabled) return;
+  const hour = new Date().getHours();
+  document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
+  if (hour >= 5 && hour < 12) document.body.classList.add('time-morning');
+  else if (hour >= 12 && hour < 18) document.body.classList.add('time-afternoon');
+  else if (hour >= 18 && hour < 24) document.body.classList.add('time-evening');
+  else document.body.classList.add('time-dawn');
+}
+
+function toggleAutoTime() {
+  autoTimeEnabled = !autoTimeEnabled;
+  localStorage.setItem('cat_auto_time', autoTimeEnabled);
+  const btn = document.getElementById('auto-time-btn');
+  if (autoTimeEnabled) {
+    if (btn) btn.classList.add('active');
+    updateTimeTheme();
+  } else {
+    if (btn) btn.classList.remove('active');
+    document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
   }
-};
+}
 
-/* =========================================================
-   DOCK INFERIOR (CARROSSEL COM ROLAGEM E FOCO)
-========================================================= */
-
+/* CARROSSEL DA BARRA INFERIOR */
 const navCarousel = document.getElementById('bottom-nav-carousel');
 const navButtons = document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn');
 
 function updateNavFocus() {
-  if (!navCarousel || navButtons.length === 0) return;
-  const screenCenter = window.innerWidth / 2;
-
+  if (!navCarousel) return;
+  const carouselCenter = navCarousel.scrollLeft + navCarousel.clientWidth / 2;
   let closestBtn = null;
   let minDistance = Infinity;
 
   navButtons.forEach((btn) => {
-    const rect = btn.getBoundingClientRect();
-    const btnCenter = rect.left + rect.width / 2;
-    const dist = Math.abs(screenCenter - btnCenter);
-
+    const btnCenter = btn.offsetLeft + btn.clientWidth / 2;
+    const dist = Math.abs(carouselCenter - btnCenter);
     if (dist < minDistance) {
       minDistance = dist;
       closestBtn = btn;
@@ -389,579 +171,411 @@ function updateNavFocus() {
   });
 
   navButtons.forEach((btn) => {
-    btn.classList.toggle('active-focus', btn === closestBtn);
-  });
-}
-
-window.scrollNavToIndex = function(index, smooth = true) {
-  if (!navCarousel || !navButtons[index]) return;
-  const btn = navButtons[index];
-  const targetLeft = btn.offsetLeft - (navCarousel.clientWidth / 2) + (btn.clientWidth / 2);
-  navCarousel.scrollTo({ left: targetLeft, behavior: smooth ? 'smooth' : 'auto' });
-};
-
-window.handleNavClick = function(index, callback, event) {
-  if (event) event.stopPropagation();
-  const btn = navButtons[index];
-
-  if (btn && btn.classList.contains('active-focus')) {
-    if (typeof callback === 'function') callback(event);
-    return;
-  }
-
-  window.scrollNavToIndex(index, true);
-  setTimeout(updateNavFocus, 180);
-};
-
-if (navCarousel) {
-  navCarousel.addEventListener('scroll', () => {
-    updateNavFocus();
-    const hint = document.getElementById('nav-swipe-hint');
-    if (hint) hint.classList.add('fade-out');
-  }, { passive: true });
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  window.loadStats();
-  window.initFXCanvas();
-  window.renderCatAppearence();
-  updateAutoTimeTheme();
-  setInterval(updateAutoTimeTheme, 60000);
-
-  setTimeout(() => {
-    window.scrollNavToIndex(1, false);
-    updateNavFocus();
-  }, 120);
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
-      const tray = document.getElementById('inventory-tray');
-      if (tray && tray.classList.contains('visible')) window.toggleBackpack();
-    }
-  });
-});/* =========================================================
-   APP PRINCIPAL, LOJA VIP COMPLETA, NAVEGAÇÃO E TEMAS
-========================================================= */
-
-let isAutoTimeTheme = localStorage.getItem('cat_theme_auto') !== 'false';
-let currentManualTimeIndex = 0;
-const TIME_THEMES = ['morning', 'afternoon', 'evening', 'dawn'];
-const TIME_ICONS = { morning: '🌅', afternoon: '☀️', evening: '🌆', dawn: '🌙' };
-const TIME_NAMES = { morning: 'Manhã', afternoon: 'Tarde', evening: 'Noite', dawn: 'Madrugada' };
-
-function applyTimeTheme(themeName) {
-  document.body.classList.remove('time-morning', 'time-afternoon', 'time-evening', 'time-dawn');
-  document.body.classList.add(`time-${themeName}`);
-
-  const icon = document.getElementById('auto-time-icon');
-  const text = document.getElementById('auto-time-text');
-  if (icon && text) {
-    if (isAutoTimeTheme) {
-      icon.innerText = '⏰';
-      text.innerText = `Auto (${TIME_NAMES[themeName]})`;
-    } else {
-      icon.innerText = TIME_ICONS[themeName];
-      text.innerText = TIME_NAMES[themeName];
-    }
-  }
-}
-
-function updateAutoTimeTheme() {
-  if (!isAutoTimeTheme) return;
-  const hour = new Date().getHours();
-  let theme = 'morning';
-  if (hour >= 5 && hour < 12) theme = 'morning';
-  else if (hour >= 12 && hour < 18) theme = 'afternoon';
-  else if (hour >= 18 && hour < 22) theme = 'evening';
-  else theme = 'dawn';
-  applyTimeTheme(theme);
-}
-
-window.toggleAutoTime = function() {
-  if (isAutoTimeTheme) {
-    isAutoTimeTheme = false;
-    currentManualTimeIndex = 0;
-    applyTimeTheme(TIME_THEMES[currentManualTimeIndex]);
-  } else {
-    currentManualTimeIndex++;
-    if (currentManualTimeIndex >= TIME_THEMES.length) {
-      isAutoTimeTheme = true;
-      updateAutoTimeTheme();
-    } else {
-      applyTimeTheme(TIME_THEMES[currentManualTimeIndex]);
-    }
-  }
-  localStorage.setItem('cat_theme_auto', isAutoTimeTheme);
-};
-
-window.toggleSideNav = function() {
-  const sideNav = document.getElementById('side-nav-container');
-  const arrow = document.getElementById('side-nav-arrow');
-  if (!sideNav) return;
-  const isCollapsed = sideNav.classList.toggle('collapsed');
-  if (arrow) arrow.innerText = isCollapsed ? '▶' : '◀';
-};
-
-window.toggleStatusVisibility = function() {
-  const statusContainer = document.getElementById('status-container');
-  const arrow = document.getElementById('status-arrow-icon');
-  if (!statusContainer) return;
-  const isHidden = statusContainer.classList.toggle('hidden');
-  if (arrow) arrow.innerText = isHidden ? '▼' : '▲';
-};
-
-window.openWalletModal = function(e) {
-  if (e) e.stopPropagation();
-  const coinVal = document.getElementById('wallet-coin-val');
-  const pawVal = document.getElementById('wallet-paw-val');
-  if (coinVal) coinVal.innerText = window.catStats.fishCoins || 0;
-  if (pawVal) pawVal.innerText = window.catStats.pawCoins || 0;
-  const modal = document.getElementById('wallet-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeWalletModal = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('wallet-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.checkDailyRewardManual = function() {
-  const today = new Date().toDateString();
-  if (window.catStats.lastRewardDate === today) {
-    alert('Você já resgatou seu peixinho de hoje! Volte amanhã. 🐟');
-    return;
-  }
-  window.catStats.lastRewardDate = today;
-  window.catStats.fishCoins = (window.catStats.fishCoins || 0) + 1;
-  window.saveStats();
-  window.openWalletModal();
-  alert('🎉 Parabéns! Você ganhou +1 Peixinho 🐟!');
-};
-
-window.openChangelog = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('changelog-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeChangelog = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('changelog-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.openLetter = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('letter-modal');
-  const content = document.getElementById('letter-content');
-  if (content) {
-    content.innerText = (typeof MENSAGENS_CARTA !== 'undefined' && MENSAGENS_CARTA.length > 0)
-      ? MENSAGENS_CARTA[Math.floor(Math.random() * MENSAGENS_CARTA.length)]
-      : "Cada segundo com você é o momento mais doce do meu dia! 💖🐾";
-  }
-  if (modal) modal.classList.add('open');
-};
-
-window.closeLetter = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('letter-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-/* =========================================================
-   LOJA VIP COMPLETA COM VISUALIZAÇÃO AO VIVO E ABAS
-========================================================= */
-
-window.openShop = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('shop-modal');
-  if (!modal) return;
-  modal.classList.add('open');
-  renderShopMiniPreview();
-  window.switchShopTab('acessorios');
-};
-
-window.closeShop = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('shop-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-function renderShopMiniPreview() {
-  const box = document.getElementById('shop-mini-cat-container');
-  const mainSvg = document.getElementById('main-cat-svg');
-  if (!box || !mainSvg) return;
-  box.innerHTML = '';
-  const clone = mainSvg.cloneNode(true);
-  clone.removeAttribute('id');
-  box.appendChild(clone);
-}
-
-window.switchShopTab = function(tabName) {
-  document.querySelectorAll('.shop-tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('onclick').includes(tabName));
-  });
-
-  const area = document.getElementById('shop-content-area');
-  if (!area) return;
-
-  if (tabName === 'acessorios') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderCosmeticCard('Gravata Borboleta', 'bowtie', '🎀')}
-        ${renderCosmeticCard('Óculos Redondo', 'glasses', '👓')}
-        ${renderCosmeticCard('Florzinha', 'flower', '🌸')}
-        ${renderCosmeticCard('Coroa Dourada', 'crown', '👑')}
-      </div>
-    `;
-  } else if (tabName === 'racas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Gato Branco', 'breed_white', '🤍', 'breed', 0)}
-        ${renderOptionCard('Gato Siamês', 'breed_siamese', '🤎', 'breed', 1)}
-        ${renderOptionCard('Gato Frajola', 'breed_tuxedo', '🖤', 'breed', 1)}
-        ${renderOptionCard('Gato Laranja', 'breed_orange', '🧡', 'breed', 1)}
-      </div>
-    `;
-  } else if (tabName === 'olhos') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Olhos Ônix', '#2b2725', '⚫', 'eye', 0)}
-        ${renderOptionCard('Olhos Âmbar', '#c48b36', '🟡', 'eye', 1)}
-        ${renderOptionCard('Olhos Esmeralda', '#27ae60', '🟢', 'eye', 1)}
-        ${renderOptionCard('Olhos Safira', '#2980b9', '🔵', 'eye', 1)}
-      </div>
-    `;
-  } else if (tabName === 'pupilas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Normal', 'pupil_normal', '👀', 'pupil', 0)}
-        ${renderOptionCard('Fenda Felina', 'pupil_slit', '👁️', 'pupil', 1)}
-        ${renderOptionCard('Brilho Sparkle', 'pupil_sparkle', '✨', 'pupil', 1)}
-        ${renderOptionCard('Anime Estrela', 'pupil_anime', '⭐', 'pupil', 1)}
-      </div>
-    `;
-  } else if (tabName === 'bocas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Miau Clássico', 'mouth_cat', '🐱', 'mouth', 0)}
-        ${renderOptionCard('Linguinha :P', 'mouth_tongue', '👅', 'mouth', 1)}
-        ${renderOptionCard('Presas Vampiro', 'mouth_vampire', '🧛', 'mouth', 1)}
-        ${renderOptionCard('Sorridente', 'mouth_smile', '😊', 'mouth', 1)}
-      </div>
-    `;
-  } else if (tabName === 'expressoes') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        ${renderOptionCard('Neutra', 'none', '😐', 'expr', 0)}
-        ${renderOptionCard('Determinado', 'expr_determined', '😼', 'expr', 1)}
-        ${renderOptionCard('Orelhas de Avião', 'expr_airplane', '✈️', 'expr', 1)}
-      </div>
-    `;
-  } else if (tabName === 'temas') {
-    area.innerHTML = `
-      <div class="shop-items-grid">
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('morning')">🌅 Manhã</button>
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('afternoon')">☀️ Tarde</button>
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('evening')">🌆 Noite</button>
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="applyTimeTheme('dawn')">🌙 Madrugada</button>
-      </div>
-    `;
-  } else if (tabName === 'efeitos') {
-    area.innerHTML = `
-      <div style="text-align: center; padding: 12px;">
-        <button class="action-btn" style="width: 100%; justify-content: center;" onclick="createFloatingParticles(window.innerWidth/2, window.innerHeight/2, 25)">
-          ✨ Disparar Chuva de Brilhos
-        </button>
-      </div>
-    `;
-  } else if (tabName === 'backup') {
-    area.innerHTML = `
-      <div style="text-align: center; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-        <button class="action-btn" style="justify-content: center;" onclick="copyMyDNACode()">📋 Copiar Código DNA do Gatinho</button>
-        <button class="action-btn" style="justify-content: center;" onclick="promptPartnerCode()">📥 Restaurar DNA via Código</button>
-      </div>
-    `;
-  }
-};
-
-function renderCosmeticCard(name, id, icon) {
-  const isEq = window.equippedItems.includes(id);
-  return `
-    <div class="shop-card">
-      <span style="font-size: 2rem;">${icon}</span>
-      <span class="shop-card-name">${name}</span>
-      <button class="action-btn" style="font-size: 0.8rem; margin: 4px 0;" onclick="toggleEquip('${id}')">
-        ${isEq ? '✓ Equipado' : 'Equipar'}
-      </button>
-      <button class="palette-btn" onclick="openColorPalette('${id}')">🎨 Mudar Cor</button>
-    </div>
-  `;
-}
-
-function renderOptionCard(name, val, icon, type, cost) {
-  return `
-    <div class="shop-card">
-      <span style="font-size: 2rem;">${icon}</span>
-      <span class="shop-card-name">${name}</span>
-      <span class="shop-card-price">${cost > 0 ? cost + ' 🐟' : 'Grátis'}</span>
-      <button class="action-btn" style="font-size: 0.8rem;" onclick="applyShopCustomization('${type}', '${val}', ${cost})">
-        Aplicar
-      </button>
-    </div>
-  `;
-}
-
-window.toggleEquip = function(id) {
-  const idx = window.equippedItems.indexOf(id);
-  if (idx > -1) window.equippedItems.splice(idx, 1);
-  else window.equippedItems.push(id);
-  localStorage.setItem('cat_equipped', JSON.stringify(window.equippedItems));
-  window.renderCatAppearence();
-  renderShopMiniPreview();
-  window.switchShopTab('acessorios');
-};
-
-window.applyShopCustomization = function(type, val, cost) {
-  if (cost > 0 && window.catStats.fishCoins < cost) {
-    alert('Peixinhos insuficientes!');
-    return;
-  }
-  if (cost > 0) {
-    window.catStats.fishCoins -= cost;
-    window.saveStats();
-  }
-
-  if (type === 'breed') {
-    window.activeBreed = val;
-    localStorage.setItem('cat_breed', val);
-  } else if (type === 'eye') {
-    window.activeEyeColor = val;
-    localStorage.setItem('cat_eyecolor', val);
-  } else if (type === 'pupil') {
-    window.activePupil = val;
-    localStorage.setItem('cat_pupil', val);
-  } else if (type === 'mouth') {
-    window.activeMouth = val;
-    localStorage.setItem('cat_mouth', val);
-  } else if (type === 'expr') {
-    window.activeExpr = val;
-    localStorage.setItem('cat_expr', val);
-  }
-
-  window.renderCatAppearence();
-  renderShopMiniPreview();
-  alert('Visual atualizado com sucesso! 🐾');
-};
-
-let currentColorItem = null;
-window.openColorPalette = function(itemKey) {
-  currentColorItem = itemKey;
-  const modal = document.getElementById('color-modal');
-  const grid = document.getElementById('color-picker-grid');
-  if (!modal || !grid) return;
-
-  const colors = [
-    { name: 'Rubi', hex: '#c0392b' }, { name: 'Âmbar', hex: '#e67e22' },
-    { name: 'Ouro', hex: '#f1c40f' }, { name: 'Esmeralda', hex: '#27ae60' },
-    { name: 'Céu', hex: '#3498db' }, { name: 'Índigo', hex: '#2980b9' },
-    { name: 'Ametista', hex: '#8e44ad' }, { name: 'Rosa', hex: '#e84393' },
-    { name: 'Carvão', hex: '#2b2725' }, { name: 'Pérola', hex: '#ffffff' }
-  ];
-
-  grid.innerHTML = colors.map(c => `
-    <div class="color-swatch-card" onclick="selectItemColor('${c.hex}')">
-      <div class="color-swatch-circle" style="background: ${c.hex};"></div>
-      <span class="color-swatch-name">${c.name}</span>
-    </div>
-  `).join('');
-
-  modal.classList.add('open');
-};
-
-window.closeColorModal = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('color-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.selectItemColor = function(hex) {
-  if (currentColorItem) {
-    window.itemColors[currentColorItem] = hex;
-    localStorage.setItem('cat_item_colors', JSON.stringify(window.itemColors));
-    window.renderCatAppearence();
-    renderShopMiniPreview();
-    window.closeColorModal();
-  }
-};
-
-/* =========================================================
-   DOCK COM FOCO CENTRAL
-========================================================= */
-
-const navCarousel = document.getElementById('bottom-nav-carousel');
-const navButtons = document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn');
-
-function updateNavFocus() {
-  if (!navCarousel || navButtons.length === 0) return;
-  const screenCenter = window.innerWidth / 2;
-
-  let closestBtn = null;
-  let minDistance = Infinity;
-
-  navButtons.forEach((btn) => {
-    const rect = btn.getBoundingClientRect();
-    const btnCenter = rect.left + rect.width / 2;
-    const dist = Math.abs(screenCenter - btnCenter);
-
-    if (dist < minDistance) {
-      minDistance = dist;
-      closestBtn = btn;
-    }
-  });
-
-  navButtons.forEach((btn) => {
-    btn.classList.toggle('active-focus', btn === closestBtn);
-  });
-}
-
-window.scrollNavToIndex = function(index, smooth = true) {
-  if (!navCarousel || !navButtons[index]) return;
-  const btn = navButtons[index];
-  const targetLeft = btn.offsetLeft - (navCarousel.clientWidth / 2) + (btn.clientWidth / 2);
-  navCarousel.scrollTo({ left: targetLeft, behavior: smooth ? 'smooth' : 'auto' });
-};
-
-window.handleNavClick = function(index, callback, event) {
-  if (event) event.stopPropagation();
-  const btn = navButtons[index];
-
-  if (btn && btn.classList.contains('active-focus')) {
-    if (typeof callback === 'function') callback(event);
-    return;
-  }
-
-  window.scrollNavToIndex(index, true);
-  setTimeout(updateNavFocus, 180);
-};
-
-if (navCarousel) {
-  navCarousel.addEventListener('scroll', () => {
-    updateNavFocus();
-    const hint = document.getElementById('nav-swipe-hint');
-    if (hint) hint.classList.add('fade-out');
-  }, { passive: true });
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  window.loadStats();
-  window.initFXCanvas();
-  window.renderCatAppearence();
-  updateAutoTimeTheme();
-  setInterval(updateAutoTimeTheme, 60000);
-
-  setTimeout(() => {
-    window.scrollNavToIndex(1, false);
-    updateNavFocus();
-  }, 120);
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
-      const tray = document.getElementById('inventory-tray');
-      if (tray && tray.classList.contains('visible')) window.toggleBackpack();
-    }
-  });
-});/* =========================================================
-   APP INICIALIZAÇÃO E NAVEGAÇÃO
-========================================================= */
-
-window.toggleSideNav = function() {
-  const sideNav = document.getElementById('side-nav-container');
-  const arrow = document.getElementById('side-nav-arrow');
-  if (!sideNav) return;
-  const isCollapsed = sideNav.classList.toggle('collapsed');
-  if (arrow) arrow.innerText = isCollapsed ? '▶' : '◀';
-};
-
-window.toggleStatusVisibility = function() {
-  const statusContainer = document.getElementById('status-container');
-  const arrow = document.getElementById('status-arrow-icon');
-  if (!statusContainer) return;
-  const isHidden = statusContainer.classList.toggle('hidden');
-  if (arrow) arrow.innerText = isHidden ? '▼' : '▲';
-};
-
-window.openWalletModal = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('wallet-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeWalletModal = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('wallet-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.openChangelog = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('changelog-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeChangelog = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('changelog-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.openLetter = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('letter-modal');
-  const content = document.getElementById('letter-content');
-  if (content) content.innerText = 'Para a pessoa mais especial do mundo: \n\nObrigado por estar sempre comigo! 💖🐾';
-  if (modal) modal.classList.add('open');
-};
-
-window.closeLetter = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('letter-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.openShop = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('shop-modal');
-  if (modal) modal.classList.add('open');
-};
-
-window.closeShop = function(e) {
-  if (e) e.stopPropagation();
-  const modal = document.getElementById('shop-modal');
-  if (modal) modal.classList.remove('open');
-};
-
-window.handleNavClick = function(index, callback, event) {
-  if (event) event.stopPropagation();
-  const navButtons = document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn');
-  navButtons.forEach((btn, i) => {
-    if (i === index) btn.classList.add('active-focus');
+    if (btn === closestBtn) btn.classList.add('active-focus');
     else btn.classList.remove('active-focus');
   });
+}
 
-  if (typeof callback === 'function') callback(event);
-};
+function scrollNavToIndex(index, smooth = true) {
+  if (!navCarousel || !navButtons[index]) return;
+  const btn = navButtons[index];
+  const targetLeft = btn.offsetLeft - (navCarousel.clientWidth / 2) + (btn.clientWidth / 2);
+  navCarousel.scrollTo({
+    left: targetLeft,
+    behavior: smooth ? 'smooth' : 'auto'
+  });
+}
 
-window.toggleAutoTime = function() {
-  document.body.classList.toggle('time-night');
-};
+function handleNavClick(index, callback, event) {
+  if (event) event.stopPropagation();
+  const btn = navButtons[index];
+  if (!btn.classList.contains('active-focus')) {
+    scrollNavToIndex(index, true);
+    return;
+  }
+  if (typeof callback === 'function') {
+    callback(event);
+  }
+}
 
+if (navCarousel) {
+  navCarousel.addEventListener('scroll', () => {
+    updateNavFocus();
+    const hint = document.getElementById('nav-swipe-hint');
+    if (hint && !hint.classList.contains('fade-out')) {
+      hint.classList.add('fade-out');
+    }
+  }, { passive: true });
+}
+
+/* LOJA VIP: MODAL E PREVIEWS */
+function openShop(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('shop-modal').classList.add('open');
+  renderCurrentShopTab();
+  updateMiniPreview();
+}
+function closeShop(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('shop-modal').classList.remove('open');
+}
+
+function updateMiniPreview() {
+  const container = document.getElementById('shop-mini-cat-container');
+  const mainSvg = document.getElementById('main-cat-svg');
+  if (container && mainSvg) {
+    container.innerHTML = mainSvg.outerHTML;
+  }
+}
+
+function switchShopTab(tabKey) {
+  currentShopTab = tabKey;
+  document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = Array.from(document.querySelectorAll('.shop-tab-btn')).find(b => b.getAttribute('onclick').includes(tabKey));
+  if (activeBtn) activeBtn.classList.add('active');
+  renderCurrentShopTab();
+}
+
+function renderCurrentShopTab() {
+  const area = document.getElementById('shop-content-area');
+  if (!area) return;
+  area.innerHTML = '';
+  const cat = getCatalog();
+
+  if (currentShopTab === 'acessorios') {
+    const grid = document.createElement('div');
+    grid.className = 'shop-items-grid';
+    (cat.acessorios || []).forEach(item => {
+      const isUnlocked = unlockedItems.includes(item.id);
+      const isEquipped = equippedItems.includes(item.id);
+      const currentColor = itemColors[item.id] || '#2b2725';
+      const card = document.createElement('div');
+      card.className = 'shop-card';
+
+      const svgRendered = (item.svg || '').replace(/COLOR/g, currentColor);
+      card.innerHTML = `
+        <div class="shop-card-svg-preview">${svgRendered}</div>
+        <div class="shop-card-name">${item.nome}</div>
+        <div class="shop-card-price">${isUnlocked ? 'Desbloqueado' : `${item.preco} 🐟`}</div>
+        ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${item.id}', 'accessory', event)">🎨 Mudar Cor</button>` : ''}
+        <button class="action-btn" style="width: 100%; padding: 4px; font-size: 0.85rem; justify-content: center; ${isEquipped ? 'background: var(--amber); color: #fff;' : ''}" onclick="handleAccessoryClick('${item.id}', ${item.preco})">
+          ${isUnlocked ? (isEquipped ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+        </button>
+      `;
+      grid.appendChild(card);
+    });
+    area.appendChild(grid);
+  } else if (currentShopTab === 'bocas') {
+    renderGenericTabGrid(area, cat.bocas || [], m => activeMouth === m.id, m => {
+      if (unlockedItems.includes(m.id)) {
+        activeMouth = m.id;
+      } else if (userCoins >= m.preco) {
+        userCoins -= m.preco;
+        unlockedItems.push(m.id);
+        activeMouth = m.id;
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    });
+  } else if (currentShopTab === 'expressoes') {
+    renderGenericTabGrid(area, cat.expressoes || [], ex => activeExpr === ex.id, ex => {
+      if (unlockedItems.includes(ex.id)) {
+        activeExpr = ex.id;
+      } else if (userCoins >= ex.preco) {
+        userCoins -= ex.preco;
+        unlockedItems.push(ex.id);
+        activeExpr = ex.id;
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    });
+  } else if (currentShopTab === 'pupilas') {
+    renderGenericTabGrid(area, cat.pupilas || [], p => activePupil === p.id, p => {
+      if (unlockedItems.includes(p.id)) {
+        activePupil = p.id;
+      } else if (userCoins >= p.preco) {
+        userCoins -= p.preco;
+        unlockedItems.push(p.id);
+        activePupil = p.id;
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    });
+  } else if (currentShopTab === 'olhos') {
+    renderGenericTabGrid(area, cat.olhos || [], o => activeEyeColor === o.hex, o => {
+      if (unlockedItems.includes(o.id)) {
+        activeEyeColor = o.hex;
+      } else if (userCoins >= o.preco) {
+        userCoins -= o.preco;
+        unlockedItems.push(o.id);
+        activeEyeColor = o.hex;
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    });
+  } else if (currentShopTab === 'racas') {
+    renderGenericTabGrid(area, cat.racas || [], r => activeBreed === r.id, r => {
+      if (unlockedItems.includes(r.id)) {
+        activeBreed = r.id;
+      } else if (userCoins >= r.preco) {
+        userCoins -= r.preco;
+        unlockedItems.push(r.id);
+        activeBreed = r.id;
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    });
+  } else if (currentShopTab === 'temas') {
+    renderGenericTabGrid(area, cat.temas || [], t => activeTheme === t.id, t => {
+      if (unlockedItems.includes(t.id)) {
+        activeTheme = t.id;
+        if (autoTimeEnabled) toggleAutoTime();
+      } else if (userCoins >= t.preco) {
+        userCoins -= t.preco;
+        unlockedItems.push(t.id);
+        activeTheme = t.id;
+        if (autoTimeEnabled) toggleAutoTime();
+        playPaperSound();
+      } else {
+        alert('Peixinhos insuficientes! 🐟');
+        return;
+      }
+      saveStats();
+      renderCurrentShopTab();
+    });
+  } else if (currentShopTab === 'efeitos') {
+    const grid = document.createElement('div');
+    grid.className = 'shop-items-grid';
+    (cat.efeitos || []).forEach(e => {
+      const isUnlocked = unlockedItems.includes(e.id);
+      const isSelected = (activeEffect === e.type);
+      const card = document.createElement('div');
+      card.className = 'shop-card';
+
+      card.innerHTML = `
+        <div style="font-size: 2rem; margin: 2px 0;">${e.icone}</div>
+        <div class="shop-card-name">${e.nome}</div>
+        <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${e.preco} 🐟`}</div>
+        ${isUnlocked ? `<button class="palette-btn" onclick="openColorModal('${e.id}', 'effect', event)">🎨 Cor do Efeito</button>` : ''}
+        <button class="action-btn" style="width: 100%; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
+          ${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+        </button>
+      `;
+
+      card.querySelector('button.action-btn').onclick = () => {
+        if (isUnlocked) {
+          activeEffect = e.type;
+        } else if (userCoins >= e.preco) {
+          userCoins -= e.preco;
+          unlockedItems.push(e.id);
+          activeEffect = e.type;
+          playPaperSound();
+        } else {
+          alert('Peixinhos insuficientes! 🐟');
+          return;
+        }
+        saveStats();
+        renderCurrentShopTab();
+      };
+
+      grid.appendChild(card);
+    });
+    area.appendChild(grid);
+  } else if (currentShopTab === 'backup') {
+    area.innerHTML = `
+      <div style="padding: 10px 4px; text-align: center;">
+        <p style="font-size: 1rem; margin-bottom: 12px; color: var(--pencil-light);">Guarde seus dados com segurança:</p>
+        <div style="display: flex; gap: 10px;">
+          <button class="action-btn" style="flex: 1; justify-content: center;" onclick="exportDataBackup()">📥 Salvar Backup</button>
+          <button class="action-btn" style="flex: 1; justify-content: center;" onclick="document.getElementById('import-file-input').click()">📤 Restaurar</button>
+          <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataBackup(event)">
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderGenericTabGrid(container, items, isSelectedFn, onSelect) {
+  const grid = document.createElement('div');
+  grid.className = 'shop-items-grid';
+  items.forEach(item => {
+    const isUnlocked = unlockedItems.includes(item.id);
+    const isSelected = isSelectedFn(item);
+    const card = document.createElement('div');
+    card.className = 'shop-card';
+
+    let visualPreview = '';
+    if (item.svg) {
+      visualPreview = `<div class="shop-card-svg-preview">${item.svg}</div>`;
+    } else if (item.hex) {
+      visualPreview = `<div style="width: 32px; height: 32px; border-radius: 50%; background: ${item.hex}; border: 1.5px solid var(--charcoal); margin: 6px 0;"></div>`;
+    } else {
+      visualPreview = `<div style="font-size: 1.8rem; margin: 2px 0;">${item.icone || '✨'}</div>`;
+    }
+
+    card.innerHTML = `
+      ${visualPreview}
+      <div class="shop-card-name">${item.nome}</div>
+      <div class="shop-card-price">${isUnlocked ? 'Disponível' : `${item.preco} 🐟`}</div>
+      <button class="action-btn" style="width: 100%; margin-top: 4px; padding: 4px; font-size: 0.85rem; justify-content: center; ${isSelected ? 'background: var(--amber); color: #fff;' : ''}">
+        ${isUnlocked ? (isSelected ? 'Equipado ✓' : 'Usar') : 'Comprar'}
+      </button>
+    `;
+    card.querySelector('button').onclick = () => onSelect(item);
+    grid.appendChild(card);
+  });
+  container.appendChild(grid);
+}
+
+function handleAccessoryClick(id, preco) {
+  if (unlockedItems.includes(id)) {
+    equippedItems = equippedItems.includes(id) ? equippedItems.filter(x => x !== id) : [...equippedItems, id];
+  } else if (userCoins >= preco) {
+    userCoins -= preco;
+    unlockedItems.push(id);
+    equippedItems.push(id);
+    playPaperSound();
+  } else {
+    alert('Peixinhos insuficientes! 🐟');
+    return;
+  }
+  saveStats();
+  renderCurrentShopTab();
+}
+
+let colorTargetItemId = null;
+let colorTargetType = 'accessory';
+
+function openColorModal(targetId, type, event) {
+  if (event) event.stopPropagation();
+  colorTargetItemId = targetId;
+  colorTargetType = type;
+  const modal = document.getElementById('color-modal');
+  const grid = document.getElementById('color-picker-grid');
+  grid.innerHTML = '';
+
+  const cat = getCatalog();
+  const tintas = cat.tintas || [];
+  const currentColor = (type === 'effect') ? effectColor : (itemColors[targetId] || '#2b2725');
+
+  tintas.forEach(t => {
+    const colorKey = `${targetId}_color_${t.id}`;
+    const isUnlocked = unlockedItems.includes(colorKey) || (t.id === 'c_ambar' && type === 'effect') || (t.id === 'c_preto' && targetId !== 'flower' && targetId !== 'crown') || (t.id === 'c_ambar' && (targetId === 'flower' || targetId === 'crown'));
+    const isActive = currentColor === t.hex;
+
+    const card = document.createElement('div');
+    card.className = `color-swatch-card ${isActive ? 'active' : ''}`;
+    card.innerHTML = `
+      <div class="color-swatch-circle" style="background: ${t.hex}"></div>
+      <div class="color-swatch-name">${t.nome}</div>
+      <div style="font-size: 0.7rem; color: var(--amber); margin-top: 2px;">${isUnlocked ? '✓' : '1 🐟'}</div>
+    `;
+
+    card.onclick = (e) => {
+      e.stopPropagation();
+      if (isUnlocked) {
+        if (colorTargetType === 'effect') effectColor = t.hex;
+        else itemColors[colorTargetItemId] = t.hex;
+        saveStats();
+        closeColorModal();
+        renderCurrentShopTab();
+      } else if (userCoins >= 1) {
+        userCoins -= 1;
+        unlockedItems.push(colorKey);
+        if (colorTargetType === 'effect') effectColor = t.hex;
+        else itemColors[colorTargetItemId] = t.hex;
+        playPaperSound();
+        saveStats();
+        closeColorModal();
+        renderCurrentShopTab();
+      } else {
+        alert('Você precisa de 1 peixinho para comprar esta tinta! 🐟');
+      }
+    };
+
+    grid.appendChild(card);
+  });
+
+  modal.classList.add('open');
+}
+
+function closeColorModal(event) {
+  if (event) event.stopPropagation();
+  document.getElementById('color-modal').classList.remove('open');
+}
+
+function applyManualTheme() {
+  document.body.classList.remove('theme-cafe', 'theme-night');
+  const cat = getCatalog();
+  const found = (cat.temas || []).find(t => t.id === activeTheme);
+  if (found && found.class) document.body.classList.add(found.class);
+}
+
+/* INICIALIZAÇÃO DA APLICAÇÃO */
 window.addEventListener('DOMContentLoaded', () => {
-  window.loadStats();
-  window.initFXCanvas();
-  window.renderCatAppearence();
-  window.renderPartnerCatStage();
+  statusVisible = false;
+  applyStatusVisibility();
+
+  sideNavOpen = false;
+  const sideNav = document.getElementById('side-nav-container');
+  const sideArrow = document.getElementById('side-nav-arrow');
+  if (sideNav) sideNav.classList.add('collapsed');
+  if (sideArrow) sideArrow.innerText = '▶';
+
+  const tray = document.getElementById('inventory-tray');
+  if (tray) {
+    tray.classList.remove('visible');
+    tray.style.display = 'none';
+  }
+
+  renderStatusBars();
+  renderInventorySlots();
+  updateCatStatsOverTime();
+  updateLetterHoldingState();
+  applyEquippedCosmetics();
+  updateWalletUI();
+
+  if (autoTimeEnabled) {
+    const autoBtn = document.getElementById('auto-time-btn');
+    if (autoBtn) autoBtn.classList.add('active');
+    updateTimeTheme();
+  }
+
+  setTimeout(() => {
+    scrollNavToIndex(1, false);
+    updateNavFocus();
+  }, 100);
+
+  setTimeout(() => {
+    const hint = document.getElementById('nav-swipe-hint');
+    if (hint) {
+      hint.classList.add('fade-out');
+      setTimeout(() => { hint.style.display = 'none'; }, 500);
+    }
+  }, 4500);
+
+  // Renderiza parceiro ao carregar
+  renderPartnerCatStage();
+
+  setInterval(updateCatStatsOverTime, 30000);
 });
