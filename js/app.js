@@ -534,6 +534,7 @@ function applyManualTheme() {
 /* INICIALIZAÇÃO DA APLICAÇÃO */
 window.addEventListener('DOMContentLoaded', () => {
   statusVisible = false;
+  renderPartnerCatStage();
   applyStatusVisibility();
 
   sideNavOpen = false;
