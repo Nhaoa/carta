@@ -599,62 +599,119 @@
 
 
     /* BARRA INFERIOR */
-
-    .bottom-nav-bar {
-
+    /* BARRA INFERIOR - CARROSSEL INTERATIVO COM FOCO CENTRAL */
+    .bottom-nav-wrapper {
       position: fixed;
-
       bottom: 0;
-
       left: 0;
-
       right: 0;
-
-      background: var(--card-bg);
-
-      border-top: 2.5px solid var(--charcoal);
-
-      padding: 8px 14px;
-
       display: flex;
-
-      justify-content: space-around;
-
+      flex-direction: column;
       align-items: center;
-
       z-index: 50;
-
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
-
+      pointer-events: none;
     }
 
-
-    .bottom-nav-btn {
-
-      background: transparent;
-
-      border: none;
-
+    /* Dica visual com setas pulsantes e texto (some após 4.5 segundos) */
+    .nav-swipe-hint {
       display: flex;
-
-      flex-direction: column;
-
       align-items: center;
-
-      gap: 2px;
-
-      font-family: inherit;
-
-      font-size: 0.95rem;
-
+      gap: 8px;
+      font-size: 0.85rem;
       font-weight: bold;
-
       color: var(--charcoal);
+      background: rgba(255, 253, 249, 0.92);
+      border: 1.5px solid var(--charcoal);
+      padding: 3px 12px;
+      border-radius: 14px;
+      margin-bottom: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .nav-swipe-hint.fade-out {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+    .hint-arrow {
+      animation: hintBounce 1.2s infinite alternate ease-in-out;
+      font-size: 0.95rem;
+    }
+    .hint-arrow.left { transform-origin: right center; }
+    .hint-arrow.right { transform-origin: left center; }
+    @keyframes hintBounce {
+      0% { transform: scale(0.9); }
+      100% { transform: scale(1.3); }
+    }
 
+    /* Barra cilíndrica de madeira/couro com scroll suave */
+    .bottom-nav-bar {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(180deg, #fffcf5 0%, #faede1 100%);
+      border: 2.5px solid var(--charcoal);
+      border-bottom: none;
+      border-radius: 26px 26px 0 0;
+      padding: 10px 0 8px;
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 -6px 18px rgba(0,0,0,0.12);
+      pointer-events: auto;
+    }
+    .bottom-nav-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Espaçadores laterais para permitir que qualquer item chegue perfeitamente ao centro */
+    .nav-spacer {
+      flex: 0 0 calc(50% - 45px);
+    }
+
+    /* Botões deslizantes com escala dinâmica */
+    .bottom-nav-btn {
+      flex: 0 0 90px;
+      background: transparent;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: var(--pencil-light);
       cursor: pointer;
+      scroll-snap-align: center;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s, filter 0.25s, opacity 0.25s;
+      opacity: 0.5;
+      transform: scale(0.78);
+      user-select: none;
+      outline: none;
+    }
 
-      transition: transform 0.15s;
+    .bottom-nav-btn span.icon {
+      font-size: 1.6rem;
+      transition: transform 0.25s;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+    }
 
+    /* Item em foco central (destacado e com halo temático) */
+    .bottom-nav-btn.active-focus {
+      opacity: 1;
+      color: var(--charcoal);
+      transform: scale(1.15) translateY(-3px);
+      filter: drop-shadow(0 4px 6px rgba(196, 139, 54, 0.35));
+    }
+    .bottom-nav-btn.active-focus span.icon {
+      transform: scale(1.1);
     }
 
     .bottom-nav-btn:active { transform: scale(0.92); }
@@ -2138,33 +2195,30 @@
 
   <!-- BARRA INFERIOR -->
 
-  <nav class="bottom-nav-bar">
-
-    <button class="bottom-nav-btn" onclick="openFoodStall(event)">
-
-      <span class="icon">🏪</span>
-
-      <span>Comidas</span>
-
-    </button>
-
-    <button class="bottom-nav-btn" onclick="openMinigame(event)">
-
-      <span class="icon">🎮</span>
-
-      <span>Brincar</span>
-
-    </button>
-
-    <button class="bottom-nav-btn" onclick="openShop(event)">
-
-      <span class="icon">✨</span>
-
-      <span>Loja VIP</span>
-
-    </button>
-
-  </nav>
+  <!-- BARRA INFERIOR - CARROSSEL COM FOCO CENTRAL -->
+  <div class="bottom-nav-wrapper">
+    <div class="nav-swipe-hint" id="nav-swipe-hint">
+      <span class="hint-arrow left">◀</span>
+      <span>Deslize para trocar</span>
+      <span class="hint-arrow right">▶</span>
+    </div>
+    <nav class="bottom-nav-bar" id="bottom-nav-carousel">
+      <div class="nav-spacer"></div>
+      <button class="bottom-nav-btn" data-index="0" onclick="handleNavClick(0, openFoodStall, event)">
+        <span class="icon">🏪</span>
+        <span>Comidas</span>
+      </button>
+      <button class="bottom-nav-btn active-focus" data-index="1" onclick="handleNavClick(1, openMinigame, event)">
+        <span class="icon">🎮</span>
+        <span>Brincar</span>
+      </button>
+      <button class="bottom-nav-btn" data-index="2" onclick="handleNavClick(2, openShop, event)">
+        <span class="icon">✨</span>
+        <span>Loja VIP</span>
+      </button>
+      <div class="nav-spacer"></div>
+    </nav>
+  </div>
 
 
   <!-- MODAL: CARTEIRA TEMÁTICA DE COURO -->
@@ -4892,7 +4946,93 @@ window.addEventListener('DOMContentLoaded', () => {
 
       setInterval(updateCatStatsOverTime, 30000);
     });
+   /* =========================================================
+       7. CARROSSEL DE BOTÕES DA BARRA INFERIOR (FOCO CENTRAL)
+    ========================================================= */
+    const navCarousel = document.getElementById('bottom-nav-carousel');
+    const navButtons = document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn');
+    let navScrollTimeout = null;
 
+    function updateNavFocus() {
+      if (!navCarousel) return;
+      const carouselCenter = navCarousel.scrollLeft + navCarousel.clientWidth / 2;
+
+      let closestBtn = null;
+      let minDistance = Infinity;
+
+      navButtons.forEach((btn) => {
+        const btnCenter = btn.offsetLeft + btn.clientWidth / 2;
+        const dist = Math.abs(carouselCenter - btnCenter);
+
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestBtn = btn;
+        }
+      });
+
+      navButtons.forEach((btn) => {
+        if (btn === closestBtn) {
+          btn.classList.add('active-focus');
+        } else {
+          btn.classList.remove('active-focus');
+        }
+      });
+    }
+
+    function scrollNavToIndex(index, smooth = true) {
+      if (!navCarousel || !navButtons[index]) return;
+      const btn = navButtons[index];
+      const targetLeft = btn.offsetLeft - (navCarousel.clientWidth / 2) + (btn.clientWidth / 2);
+      navCarousel.scrollTo({
+        left: targetLeft,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
+    }
+
+    function handleNavClick(index, callback, event) {
+      if (event) event.stopPropagation();
+      const btn = navButtons[index];
+      
+      // Se não estiver no centro, primeiro centraliza
+      if (!btn.classList.contains('active-focus')) {
+        scrollNavToIndex(index, true);
+        return;
+      }
+      
+      // Se já está no centro (em foco), abre a ação correspondente
+      if (typeof callback === 'function') {
+        callback(event);
+      }
+    }
+
+    if (navCarousel) {
+      navCarousel.addEventListener('scroll', () => {
+        updateNavFocus();
+        // Oculta a dica imediatamente ao interagir com a barra
+        const hint = document.getElementById('nav-swipe-hint');
+        if (hint && !hint.classList.contains('fade-out')) {
+          hint.classList.add('fade-out');
+        }
+      }, { passive: true });
+    }
+
+    // Inicialização do foco e temporizador da dica
+    window.addEventListener('DOMContentLoaded', () => {
+      // Inicia centralizado no botão 'Brincar' (índice 1)
+      setTimeout(() => {
+        scrollNavToIndex(1, false);
+        updateNavFocus();
+      }, 100);
+
+      // Desaparece com a dica suavemente após 4.5 segundos
+      setTimeout(() => {
+        const hint = document.getElementById('nav-swipe-hint');
+        if (hint) {
+          hint.classList.add('fade-out');
+          setTimeout(() => { hint.style.display = 'none'; }, 500);
+        }
+      }, 4500);
+    });
   </script>
 
 </body>
